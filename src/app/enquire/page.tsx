@@ -53,6 +53,20 @@ export default function EnquirePage() {
               Share the essentials. We&apos;ll respond with care — and clarity —
               within 24 hours.
             </p>
+            <ol className="mt-8 hidden space-y-3 text-sm text-taupe md:block">
+              <li>
+                <span className="text-champagne">01</span> Tell us what
+                you&apos;re imagining
+              </li>
+              <li>
+                <span className="text-champagne">02</span> We reply within 24
+                hours
+              </li>
+              <li>
+                <span className="text-champagne">03</span> We propose a clear
+                next step
+              </li>
+            </ol>
             <div className="mt-10 space-y-5 border-t border-white/10 pt-8 text-sm">
               <div>
                 <p className="text-[11px] uppercase tracking-[0.2em] text-taupe">

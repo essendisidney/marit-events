@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
-import { siteConfig } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Logo } from "@/components/Logo";
 
@@ -52,34 +51,16 @@ export function Hero() {
           <motion.p
             initial={{ opacity: 0, y: 14 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="mt-8 max-w-lg font-display text-[clamp(1.35rem,2.8vw,2rem)] leading-snug text-ivory/90"
+            transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            className="mt-8 max-w-xl font-display text-[clamp(1.5rem,3.2vw,2.35rem)] leading-snug text-ivory/92"
           >
             Where extraordinary celebrations come to life.
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 0.6 }}
-            className="mt-4 text-[10px] italic tracking-wide text-champagne/90 md:text-[12px]"
-          >
-            {siteConfig.slogan}
-          </motion.p>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.9, delay: 0.7 }}
-            className="mt-5 text-[10px] uppercase tracking-[0.24em] text-taupe md:text-[11px]"
-          >
-            Weddings · Corporate · Celebrations · Experiences
           </motion.p>
 
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.85 }}
+            transition={{ duration: 0.8, delay: 0.65 }}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
             <Link
@@ -95,34 +76,27 @@ export function Hero() {
               Explore Weddings
             </Link>
           </motion.div>
-
-          <motion.p
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 1, delay: 1 }}
-            className="mt-10 text-[11px] tracking-[0.1em] text-taupe/75"
-          >
-            {siteConfig.locationLine}
-          </motion.p>
         </div>
       </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1.3, duration: 1 }}
-        className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex"
-        aria-hidden
-      >
-        <span className="text-[9px] uppercase tracking-[0.3em] text-taupe/60">
-          Scroll
-        </span>
-        <motion.span
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
-          className="h-8 w-px bg-gradient-to-b from-champagne/80 to-transparent"
-        />
-      </motion.div>
+      {!reduce ? (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.2, duration: 1 }}
+          className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex"
+          aria-hidden
+        >
+          <span className="text-[9px] uppercase tracking-[0.3em] text-taupe/60">
+            Scroll
+          </span>
+          <motion.span
+            animate={{ y: [0, 6, 0] }}
+            transition={{ duration: 1.8, repeat: Infinity, ease: "easeInOut" }}
+            className="h-8 w-px bg-gradient-to-b from-champagne/80 to-transparent"
+          />
+        </motion.div>
+      ) : null}
     </section>
   );
 }

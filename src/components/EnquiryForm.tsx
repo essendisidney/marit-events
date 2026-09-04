@@ -12,6 +12,15 @@ import {
 type EnquiryType = (typeof enquiryTypes)[number];
 type SubmitMode = "whatsapp" | "email";
 
+const guestChips = ["Under 50", "50–100", "100–200", "200+"] as const;
+const budgetChips = [
+  "To discuss",
+  "Under $5k",
+  "$5k–15k",
+  "$15k–40k",
+  "$40k+",
+] as const;
+
 export function EnquiryForm() {
   const searchParams = useSearchParams();
   const initialType = useMemo(
@@ -22,16 +31,20 @@ export function EnquiryForm() {
 
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
+  const [handoffBlocked, setHandoffBlocked] = useState(false);
+  const [brief, setBrief] = useState("");
   const [type, setType] = useState<EnquiryType>(initialType);
   const [mode, setMode] = useState<SubmitMode>("whatsapp");
+  const [guests, setGuests] = useState("");
+  const [budget, setBudget] = useState("");
 
   function buildPayload(form: FormData) {
     return {
       type: String(form.get("type") || type),
       location: String(form.get("location") || ""),
       date: String(form.get("date") || ""),
-      guests: String(form.get("guests") || ""),
-      budget: String(form.get("budget") || ""),
+      guests: String(form.get("guests") || guests || ""),
+      budget: String(form.get("budget") || budget || ""),
       vision: String(form.get("vision") || ""),
       name: String(form.get("name") || ""),
       email: String(form.get("email") || ""),
@@ -56,6 +69,9 @@ export function EnquiryForm() {
       `Phone/WhatsApp: ${payload.phone}`,
     ].join("\n");
 
+    setBrief(lines);
+    let blocked = false;
+
     if (mode === "email") {
       const subject = encodeURIComponent(
         `Marit Events enquiry — ${payload.type} — ${payload.name}`
@@ -63,9 +79,15 @@ export function EnquiryForm() {
       const body = encodeURIComponent(lines);
       window.location.href = `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
     } else {
-      window.open(whatsappUrl(lines), "_blank", "noopener,noreferrer");
+      const win = window.open(
+        whatsappUrl(lines),
+        "_blank",
+        "noopener,noreferrer"
+      );
+      if (!win) blocked = true;
     }
 
+    setHandoffBlocked(blocked);
     setSubmitted(true);
     setSending(false);
   }
@@ -94,22 +116,55 @@ export function EnquiryForm() {
             step — discovery call or WhatsApp.
           </li>
         </ol>
-        <div className="mt-8 flex flex-col items-center gap-3">
-          <a
-            href={whatsappUrl()}
-            target="_blank"
-            rel="noreferrer"
-            className="text-[11px] uppercase tracking-[0.2em] text-champagne link-underline"
-          >
-            Continue on WhatsApp
-          </a>
-          <a
-            href={`mailto:${siteConfig.email}`}
-            className="text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
-          >
-            Or email {siteConfig.email}
-          </a>
-        </div>
+
+        {handoffBlocked ? (
+          <div className="mx-auto mt-8 max-w-md border border-champagne/30 bg-obsidian/40 p-5 text-left">
+            <p className="text-sm text-ivory/85">
+              Your message didn&apos;t open automatically. Use a direct link or
+              copy your brief:
+            </p>
+            <div className="mt-4 flex flex-col gap-3">
+              <a
+                href={whatsappUrl(brief)}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[11px] uppercase tracking-[0.2em] text-champagne link-underline"
+              >
+                Open WhatsApp →
+              </a>
+              <a
+                href={`mailto:${siteConfig.email}?subject=${encodeURIComponent("Marit Events enquiry")}&body=${encodeURIComponent(brief)}`}
+                className="text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
+              >
+                Open email →
+              </a>
+              <button
+                type="button"
+                className="text-left text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
+                onClick={() => navigator.clipboard?.writeText(brief)}
+              >
+                Copy brief
+              </button>
+            </div>
+          </div>
+        ) : (
+          <div className="mt-8 flex flex-col items-center gap-3">
+            <a
+              href={whatsappUrl(brief || undefined)}
+              target="_blank"
+              rel="noreferrer"
+              className="text-[11px] uppercase tracking-[0.2em] text-champagne link-underline"
+            >
+              Continue on WhatsApp
+            </a>
+            <a
+              href={`mailto:${siteConfig.email}`}
+              className="text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
+            >
+              Or email {siteConfig.email}
+            </a>
+          </div>
+        )}
       </div>
     );
   }
@@ -189,19 +244,54 @@ export function EnquiryForm() {
           required
           defaultValue={initialLocation}
         />
-        <div className="grid gap-6 md:grid-cols-2">
-          <Field label="Event date" name="date" type="date" />
-          <Field
-            label="Estimated guest count"
-            name="guests"
-            placeholder="e.g. 80"
-          />
+        <Field label="Event date" name="date" type="date" />
+
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-taupe/80">
+            Estimated guest count
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {guestChips.map((chip) => (
+              <button
+                key={chip}
+                type="button"
+                onClick={() => setGuests(chip)}
+                className={`border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition ${
+                  guests === chip
+                    ? "border-champagne text-champagne"
+                    : "border-white/15 text-taupe hover:border-white/30"
+                }`}
+              >
+                {chip}
+              </button>
+            ))}
+          </div>
+          <input type="hidden" name="guests" value={guests} />
         </div>
-        <Field
-          label="Estimated budget"
-          name="budget"
-          placeholder="Optional — a range is fine"
-        />
+
+        <div>
+          <p className="text-[11px] uppercase tracking-[0.18em] text-taupe/80">
+            Estimated budget
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {budgetChips.map((chip) => (
+              <button
+                type="button"
+                key={chip}
+                onClick={() => setBudget(chip)}
+                className={`border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition ${
+                  budget === chip
+                    ? "border-champagne text-champagne"
+                    : "border-white/15 text-taupe hover:border-white/30"
+                }`}
+              >
+                {chip}
+              </button>
+            ))}
+          </div>
+          <input type="hidden" name="budget" value={budget} />
+        </div>
+
         <Field
           label="Tell us about your vision"
           name="vision"

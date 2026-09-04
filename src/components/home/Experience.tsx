@@ -1,4 +1,4 @@
-import { maritExperience, processSteps } from "@/lib/site";
+import { maritExperience, processSteps, siteConfig } from "@/lib/site";
 import { ButtonLink, Reveal, SectionHeading } from "@/components/ui";
 
 export function BrandIntro() {
@@ -6,11 +6,18 @@ export function BrandIntro() {
     <section className="bg-obsidian px-5 py-24 md:px-8 md:py-36">
       <div className="mx-auto max-w-7xl">
         <Reveal>
-          <SectionHeading
-            eyebrow="The difference"
-            title="You imagine it. We orchestrate everything."
-            body="From the first conversation to the final guest departure, Marit manages the details behind the scenes so you can be fully present for the moment."
-          />
+          <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
+            The difference
+          </p>
+          <p className="mt-4 text-sm italic tracking-wide text-champagne/85 md:text-base">
+            {siteConfig.slogan}
+          </p>
+          <div className="mt-6">
+            <SectionHeading
+              title="You imagine it. We orchestrate everything."
+              body="From the first conversation to the final guest departure, Marit manages the details behind the scenes so you can be fully present for the moment."
+            />
+          </div>
         </Reveal>
 
         <div className="mt-20 grid gap-12 md:grid-cols-2 lg:grid-cols-4 lg:gap-8">

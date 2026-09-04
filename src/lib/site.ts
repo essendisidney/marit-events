@@ -93,14 +93,14 @@ export const trustStats = [
 
 export const destinations = [
   {
-    name: "Nairobi",
-    description: "Sophisticated venues, skyline evenings, city elegance.",
-    image: images.hospitality,
-  },
-  {
     name: "Diani",
     description: "Coastal light, white sand, celebrations by the Indian Ocean.",
     image: images.dianiSunset,
+  },
+  {
+    name: "Nairobi",
+    description: "Sophisticated venues, skyline evenings, city elegance.",
+    image: images.hospitality,
   },
   {
     name: "Mombasa",
@@ -216,6 +216,25 @@ export const enquireFaqs = [
   },
 ] as const;
 
+export const destinationFaqs = [
+  {
+    q: "Can you plan a Kenya wedding if we live abroad?",
+    a: "Yes. We become your on-the-ground team — venues, vendors, guest logistics and day-of orchestration — so distance stays calm, not chaotic.",
+  },
+  {
+    q: "Coast, city or wilderness — how do we choose?",
+    a: "It depends on your guest journey, season and the feeling you want. We'll help you weigh Diani light, Nairobi polish or Mara drama against travel and timeline.",
+  },
+  {
+    q: "Do you help with guest travel and stays?",
+    a: "We coordinate the celebration experience and can guide preferred stays, transfers and welcome touches so guests arrive settled.",
+  },
+  {
+    q: "How far ahead should destination couples enquire?",
+    a: "9–12 months is ideal for peak seasons. Shorter timelines are possible — share your window and we'll be honest about what's achievable.",
+  },
+] as const;
+
 export const primaryNav = [
   { href: "/experiences", label: "Experiences" },
   { href: "/weddings", label: "Weddings" },
@@ -242,6 +261,20 @@ export function whatsappUrl(message?: string) {
     message ?? "Hello Marit — I'd like to talk about planning an event."
   );
   return `https://wa.me/${siteConfig.whatsapp}?text=${text}`;
+}
+
+export function whatsappMessageForPath(pathname: string) {
+  if (pathname.startsWith("/weddings"))
+    return "Hello Marit — I'd like to talk about planning a wedding.";
+  if (pathname.startsWith("/destination"))
+    return "Hello Marit — I'd like to talk about a destination celebration in Kenya.";
+  if (pathname.startsWith("/corporate"))
+    return "Hello Marit — I'd like to talk about a corporate event.";
+  if (pathname.startsWith("/portfolio"))
+    return "Hello Marit — I saw your portfolio and would like to plan an event.";
+  if (pathname.startsWith("/enquire"))
+    return "Hello Marit — I'm ready to enquire about an event.";
+  return "Hello Marit — I'd like to talk about planning an event.";
 }
 
 export function canonical(path = "/") {

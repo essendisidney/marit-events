@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { whatsappUrl } from "@/lib/site";
+import { whatsappMessageForPath, whatsappUrl } from "@/lib/site";
 
 export function WhatsAppFloat() {
   const pathname = usePathname();
@@ -10,7 +10,7 @@ export function WhatsAppFloat() {
 
   return (
     <a
-      href={whatsappUrl()}
+      href={whatsappUrl(whatsappMessageForPath(pathname))}
       target="_blank"
       rel="noreferrer"
       aria-label="Chat with Marit Events on WhatsApp"
@@ -35,7 +35,7 @@ export function MobileStickyBar() {
         Enquire
       </Link>
       <a
-        href={whatsappUrl()}
+        href={whatsappUrl(whatsappMessageForPath(pathname))}
         target="_blank"
         rel="noreferrer"
         aria-label="Chat with Marit Events on WhatsApp"

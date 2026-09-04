@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { canonical, destinations, enquireHref } from "@/lib/site";
+import { canonical, destinationFaqs, destinations, enquireHref } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { PageCloser } from "@/components/PageCloser";
+import { Faq } from "@/components/Faq";
 
 export const metadata: Metadata = {
   title: "Destination",
@@ -119,7 +120,7 @@ export default function DestinationPage() {
                     {place.name}
                   </h3>
                   <p className="mt-2 text-sm text-taupe">{place.description}</p>
-                  <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-champagne opacity-0 transition group-hover:opacity-100">
+                  <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-champagne">
                     Enquire →
                   </p>
                 </div>
@@ -128,6 +129,11 @@ export default function DestinationPage() {
           ))}
         </div>
       </section>
+
+      <Faq
+        items={[...destinationFaqs]}
+        title="Destination celebrations with Marit"
+      />
 
       <PageCloser
         title="Ready for a Kenya celebration?"

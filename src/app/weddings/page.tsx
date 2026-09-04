@@ -20,16 +20,22 @@ const weddingMoments = [
     title: "Intimate",
     body: "Small gatherings with quiet luxury and personal pacing.",
     image: images.entranceDraped,
+    href: enquireHref({ type: "Wedding" }),
+    cta: "Begin enquiry",
   },
   {
     title: "Destination",
     body: "Kenya as the stage — coast, city or wilderness, fully hosted.",
     image: images.dianiSunset,
+    href: "/destination",
+    cta: "Explore destinations",
   },
   {
     title: "Heritage",
     body: "Culture and craft woven into an international standard.",
     image: images.weddingFormal,
+    href: enquireHref({ type: "Wedding" }),
+    cta: "Begin enquiry",
   },
 ];
 
@@ -64,6 +70,20 @@ export default function WeddingsPage() {
               Marit brings together the people, places and details that make
               your story unforgettable.
             </p>
+            <div className="mt-10 flex flex-wrap gap-4">
+              <Link
+                href={enquireHref({ type: "Wedding" })}
+                className="bg-champagne px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-obsidian transition hover:bg-champagne-soft"
+              >
+                Begin wedding enquiry
+              </Link>
+              <Link
+                href="/portfolio"
+                className="border border-ivory/35 px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-ivory transition hover:border-champagne hover:text-champagne"
+              >
+                View portfolio
+              </Link>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -110,7 +130,10 @@ export default function WeddingsPage() {
           <div className="mt-14 grid gap-6 md:grid-cols-3">
             {weddingMoments.map((item, i) => (
               <Reveal key={item.title} delay={0.06 * i}>
-                <article className="group relative aspect-[3/4] overflow-hidden">
+                <Link
+                  href={item.href}
+                  className="group relative block aspect-[3/4] overflow-hidden"
+                >
                   <Image
                     src={item.image}
                     alt={item.title}
@@ -124,8 +147,11 @@ export default function WeddingsPage() {
                       {item.title}
                     </h3>
                     <p className="mt-2 text-sm text-taupe">{item.body}</p>
+                    <p className="mt-4 text-[10px] uppercase tracking-[0.18em] text-champagne">
+                      {item.cta} →
+                    </p>
                   </div>
-                </article>
+                </Link>
               </Reveal>
             ))}
           </div>

@@ -24,16 +24,13 @@ export function WeddingsTeaser() {
             Weddings
           </p>
           <h2 className="mt-6 max-w-2xl font-display text-5xl leading-[1.02] text-ivory md:text-7xl">
-            Your day.
+            From quiet vows
             <br />
-            Your story.
-            <br />
-            Your moment.
+            to destination days.
           </h2>
           <p className="mt-6 max-w-md text-base leading-relaxed text-ivory/70 md:text-lg">
-            From intimate celebrations to spectacular destination weddings,
-            Marit brings together the people, places and details that make your
-            story unforgettable.
+            Intimate gatherings and spectacular Kenya celebrations — designed
+            around your story, orchestrated so you stay present.
           </p>
           <div className="mt-10">
             <ButtonLink href="/weddings" variant="ghost">
@@ -142,14 +139,30 @@ export function CelebrationsTeaser() {
 
 export function CorporateTeaser() {
   return (
-    <section className="border-y border-white/5 bg-obsidian-soft px-5 py-24 md:px-8 md:py-32">
-      <div className="mx-auto max-w-7xl">
+    <section className="relative overflow-hidden">
+      <div className="absolute inset-0">
+        <Image
+          src={images.celebrationGold}
+          alt="Marit Events corporate black and gold setup"
+          fill
+          className="object-cover object-center"
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 bg-obsidian/72" />
+        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/50 to-obsidian/30" />
+      </div>
+      <div className="relative mx-auto max-w-7xl px-5 py-28 md:px-8 md:py-40">
         <Reveal>
-          <SectionHeading
-            eyebrow="Corporate"
-            title="Business deserves a great experience too."
-            body="From boardroom to ballroom, we create events that move people, strengthen brands and leave an impression."
-          />
+          <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
+            Corporate
+          </p>
+          <h2 className="mt-6 max-w-2xl font-display text-5xl leading-[1.05] text-ivory md:text-6xl">
+            Presence without the noise.
+          </h2>
+          <p className="mt-6 max-w-md text-base leading-relaxed text-ivory/70 md:text-lg">
+            From boardroom to ballroom — brand experiences that look premium and
+            run with precision.
+          </p>
           <div className="mt-10">
             <ButtonLink href="/corporate" variant="ghost">
               Plan a Corporate Event
@@ -160,4 +173,3 @@ export function CorporateTeaser() {
     </section>
   );
 }
-

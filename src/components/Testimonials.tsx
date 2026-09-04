@@ -1,9 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
-import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { testimonials } from "@/lib/site";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+} from "framer-motion";
+import { enquireHref, testimonials } from "@/lib/site";
 import { Reveal, SectionHeading } from "@/components/ui";
 
 export function Testimonials() {
@@ -12,6 +17,22 @@ export function Testimonials() {
   const reduceMotion = useReducedMotion();
   const duration = reduceMotion ? 0 : 0.45;
   const bgDuration = reduceMotion ? 0 : 0.7;
+
+  useEffect(() => {
+    if (reduceMotion) return;
+    const id = window.setInterval(() => {
+      setActive((i) => (i + 1) % testimonials.length);
+    }, 7000);
+    return () => window.clearInterval(id);
+  }, [reduceMotion]);
+
+  const enquireType =
+    item.detail.toLowerCase().includes("corporate")
+      ? "Corporate Event"
+      : item.detail.toLowerCase().includes("coast") ||
+          item.detail.toLowerCase().includes("destination")
+        ? "Destination Event"
+        : "Wedding";
 
   return (
     <section className="relative overflow-hidden">
@@ -60,6 +81,13 @@ export function Testimonials() {
           <span className="mx-2 text-champagne/60">·</span>
           {item.detail}
         </p>
+        <Link
+          href={enquireHref({ type: enquireType })}
+          className="mt-8 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-champagne transition hover:gap-4"
+        >
+          Begin your enquiry
+          <span aria-hidden>→</span>
+        </Link>
         <div className="mt-10 flex items-center justify-center gap-2">
           {testimonials.map((_, i) => (
             <button
