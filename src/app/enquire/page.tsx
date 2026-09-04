@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import { Suspense } from "react";
 import { EnquiryForm } from "@/components/EnquiryForm";
-import { enquireFaqs, siteConfig, whatsappUrl } from "@/lib/site";
+import { canonical, enquireFaqs, siteConfig, whatsappUrl } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/Faq";
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
   title: "Plan Your Event",
   description:
     "Tell Marit Events about your celebration. We'll be in touch within 24 hours.",
+  alternates: { canonical: canonical("/enquire") },
 };
 
 export default function EnquirePage() {
@@ -89,7 +91,15 @@ export default function EnquirePage() {
           </Reveal>
 
           <Reveal delay={0.1}>
-            <EnquiryForm />
+            <Suspense
+              fallback={
+                <div className="border border-white/10 px-8 py-14 text-center text-taupe">
+                  Loading enquiry form…
+                </div>
+              }
+            >
+              <EnquiryForm />
+            </Suspense>
           </Reveal>
         </div>
       </section>

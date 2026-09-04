@@ -7,6 +7,7 @@ import {
   getRelatedJournalPosts,
   journalPosts,
 } from "@/lib/journal";
+import { canonical, siteConfig } from "@/lib/site";
 import { Reveal } from "@/components/ui";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -19,7 +20,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const post = getJournalPost(slug);
   if (!post) return {};
-  return { title: post.title, description: post.excerpt };
+  return {
+    title: post.title,
+    description: post.excerpt,
+    alternates: { canonical: canonical(`/journal/${slug}`) },
+    openGraph: {
+      title: post.title,
+      description: post.excerpt,
+      type: "article",
+      images: [{ url: post.image }],
+    },
+  };
 }
 
 export default async function JournalPostPage({ params }: Props) {
@@ -28,8 +39,25 @@ export default async function JournalPostPage({ params }: Props) {
   if (!post) notFound();
   const related = getRelatedJournalPosts(slug);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: post.title,
+    description: post.excerpt,
+    image: post.image.startsWith("http")
+      ? post.image
+      : `${siteConfig.url}${post.image}`,
+    datePublished: post.date,
+    author: { "@type": "Organization", name: siteConfig.name },
+    publisher: { "@type": "Organization", name: siteConfig.name },
+  };
+
   return (
     <article className="pt-24 md:pt-28">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }}
+      />
       <div className="mx-auto max-w-4xl px-5 md:px-8">
         <Reveal>
           <p className="text-[11px] uppercase tracking-[0.22em] text-champagne">

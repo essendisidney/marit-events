@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Hero } from "@/components/home/Hero";
 import {
   BrandIntro,
@@ -16,6 +17,11 @@ import {
 } from "@/components/home/PortfolioTrust";
 import { Testimonials } from "@/components/Testimonials";
 import { InstagramStrip } from "@/components/InstagramStrip";
+import { canonical } from "@/lib/site";
+
+export const metadata: Metadata = {
+  alternates: { canonical: canonical("/") },
+};
 
 export default function HomePage() {
   return (

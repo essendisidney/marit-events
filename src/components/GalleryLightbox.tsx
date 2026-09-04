@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export function GalleryLightbox({
@@ -12,9 +12,14 @@ export function GalleryLightbox({
   title: string;
 }) {
   const [index, setIndex] = useState<number | null>(null);
+  const closeRef = useRef<HTMLButtonElement>(null);
+  const lastFocus = useRef<HTMLElement | null>(null);
 
   useEffect(() => {
     if (index === null) return;
+    lastFocus.current = document.activeElement as HTMLElement;
+    closeRef.current?.focus();
+
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIndex(null);
       if (e.key === "ArrowRight")
@@ -23,12 +28,17 @@ export function GalleryLightbox({
         setIndex((i) =>
           i === null ? 0 : (i - 1 + images.length) % images.length
         );
+      if (e.key === "Tab" && closeRef.current) {
+        e.preventDefault();
+        closeRef.current.focus();
+      }
     };
     window.addEventListener("keydown", onKey);
     document.body.style.overflow = "hidden";
     return () => {
       window.removeEventListener("keydown", onKey);
       document.body.style.overflow = "";
+      lastFocus.current?.focus();
     };
   }, [index, images.length]);
 
@@ -72,6 +82,7 @@ export function GalleryLightbox({
             aria-label={`${title} gallery`}
           >
             <button
+              ref={closeRef}
               type="button"
               className="absolute right-5 top-5 text-[11px] uppercase tracking-[0.2em] text-taupe hover:text-ivory"
               onClick={() => setIndex(null)}

@@ -2,13 +2,16 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { testimonials } from "@/lib/site";
 import { Reveal, SectionHeading } from "@/components/ui";
 
 export function Testimonials() {
   const [active, setActive] = useState(0);
   const item = testimonials[active];
+  const reduceMotion = useReducedMotion();
+  const duration = reduceMotion ? 0 : 0.45;
+  const bgDuration = reduceMotion ? 0 : 0.7;
 
   return (
     <section className="relative overflow-hidden">
@@ -17,10 +20,10 @@ export function Testimonials() {
           <motion.div
             key={item.image}
             className="absolute inset-0"
-            initial={{ opacity: 0, scale: 1.04 }}
+            initial={reduceMotion ? false : { opacity: 0, scale: 1.04 }}
             animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.7 }}
+            exit={reduceMotion ? undefined : { opacity: 0 }}
+            transition={{ duration: bgDuration }}
           >
             <Image
               src={item.image}
@@ -43,10 +46,10 @@ export function Testimonials() {
         <AnimatePresence mode="wait">
           <motion.blockquote
             key={item.quote}
-            initial={{ opacity: 0, y: 16 }}
+            initial={reduceMotion ? false : { opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
-            transition={{ duration: 0.45 }}
+            exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
+            transition={{ duration }}
             className="mt-8 font-display text-3xl leading-snug text-ivory md:text-5xl"
           >
             “{item.quote}”
@@ -63,9 +66,12 @@ export function Testimonials() {
               key={i}
               type="button"
               aria-label={`Show testimonial ${i + 1}`}
+              aria-current={i === active}
               onClick={() => setActive(i)}
               className={`h-1.5 transition-all ${
-                i === active ? "w-8 bg-champagne" : "w-3 bg-white/25 hover:bg-white/40"
+                i === active
+                  ? "w-8 bg-champagne"
+                  : "w-3 bg-white/25 hover:bg-white/40"
               }`}
             />
           ))}

@@ -1,16 +1,18 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { weddingFaqs } from "@/lib/site";
+import { canonical, enquireHref, weddingFaqs } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/Faq";
 import { InstagramStrip } from "@/components/InstagramStrip";
+import { PageCloser } from "@/components/PageCloser";
 
 export const metadata: Metadata = {
   title: "Weddings",
   description:
     "Intimate celebrations to destination weddings — your day, your story, your moment with Marit Events.",
+  alternates: { canonical: canonical("/weddings") },
 };
 
 const weddingMoments = [
@@ -74,7 +76,7 @@ export default function WeddingsPage() {
               body="We listen first. Then we curate venues, suppliers and a timeline that feels effortless on the day. You arrive to a celebration that is unmistakably yours."
             />
             <Link
-              href="/enquire"
+              href={enquireHref({ type: "Wedding" })}
               className="mt-10 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
             >
               Begin your wedding enquiry
@@ -132,6 +134,13 @@ export default function WeddingsPage() {
 
       <Faq items={[...weddingFaqs]} title="Planning a wedding with Marit" />
       <InstagramStrip />
+      <PageCloser
+        title="Ready to begin your wedding story?"
+        primaryHref={enquireHref({ type: "Wedding" })}
+        primaryLabel="Enquire for a wedding"
+        secondaryHref="/portfolio"
+        secondaryLabel="View portfolio"
+      />
     </div>
   );
 }

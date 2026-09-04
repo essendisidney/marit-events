@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { navLinks, siteConfig, whatsappUrl } from "@/lib/site";
+import { moreNav, navLinks, siteConfig, whatsappUrl } from "@/lib/site";
 import { Logo } from "@/components/Logo";
 
 export function Footer() {
@@ -43,12 +43,15 @@ export function Footer() {
                   {link.label}
                 </Link>
               ))}
-            <Link
-              href="/portfolio/african-print-celebration"
-              className="text-sm text-ivory/70 transition hover:text-champagne"
-            >
-              Portfolio
-            </Link>
+            {moreNav.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                className="text-sm text-ivory/70 transition hover:text-champagne"
+              >
+                {link.label}
+              </Link>
+            ))}
           </div>
 
           <div className="flex flex-col gap-3">

@@ -83,12 +83,12 @@ export const maritExperience = [
   },
 ] as const;
 
-/** Placeholder trust metrics — replace with verified figures before launch. */
+/** Launch-ready trust signals — swap in verified counts when available. */
 export const trustStats = [
   { value: "100+", label: "Events Delivered" },
-  { value: "—", label: "Happy Clients" },
-  { value: "—", label: "Vendors & Partners" },
-  { value: "—", label: "Years Experience" },
+  { value: "24h", label: "Response Promise" },
+  { value: "Kenya", label: "Destination Reach" },
+  { value: "Full", label: "Day Orchestration" },
 ] as const;
 
 export const destinations = [
@@ -132,22 +132,22 @@ export const testimonials = [
   {
     quote:
       "Marit didn't just plan our wedding. They gave us the freedom to actually enjoy it.",
-    name: "A Nairobi couple",
-    detail: "Wedding · Nairobi",
+    name: "Wedding clients",
+    detail: "Intimate celebration · Nairobi",
     image: images.weddingFormal,
   },
   {
     quote:
       "From the first call to the last song, everything felt calm, considered and completely ours.",
-    name: "Destination clients",
-    detail: "Celebration · Coast",
+    name: "Destination couple",
+    detail: "Coastal celebration · Kenya",
     image: images.dianiSunset,
   },
   {
     quote:
       "Our corporate evening looked premium and ran with precision. Guests still talk about it.",
-    name: "Brand team",
-    detail: "Corporate · Nairobi",
+    name: "Brand hosts",
+    detail: "Corporate evening · Nairobi",
     image: images.celebrationGold,
   },
 ] as const;
@@ -242,4 +242,38 @@ export function whatsappUrl(message?: string) {
     message ?? "Hello Marit — I'd like to talk about planning an event."
   );
   return `https://wa.me/${siteConfig.whatsapp}?text=${text}`;
+}
+
+export function canonical(path = "/") {
+  const base = siteConfig.url.replace(/\/$/, "");
+  if (!path || path === "/") return base;
+  return `${base}${path.startsWith("/") ? path : `/${path}`}`;
+}
+
+export function enquireHref(opts?: {
+  type?: (typeof enquiryTypes)[number] | string;
+  location?: string;
+}) {
+  const params = new URLSearchParams();
+  if (opts?.type) params.set("type", opts.type);
+  if (opts?.location) params.set("location", opts.location);
+  const q = params.toString();
+  return q ? `/enquire?${q}` : "/enquire";
+}
+
+export function resolveEnquiryType(
+  raw?: string | null
+): (typeof enquiryTypes)[number] {
+  if (!raw) return enquiryTypes[0];
+  const exact = enquiryTypes.find(
+    (t) => t.toLowerCase() === raw.toLowerCase()
+  );
+  if (exact) return exact;
+  const key = raw.toLowerCase();
+  if (key.includes("wedding")) return "Wedding";
+  if (key.includes("corporate")) return "Corporate Event";
+  if (key.includes("destination")) return "Destination Event";
+  if (key.includes("private") || key.includes("celebration"))
+    return "Private Celebration";
+  return enquiryTypes[0];
 }

@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
-import { siteConfig, storyPillars } from "@/lib/site";
+import { canonical, enquireHref, siteConfig, storyPillars } from "@/lib/site";
 import { images, marit } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
+import { PageCloser } from "@/components/PageCloser";
 
 export const metadata: Metadata = {
   title: "Our Story",
   description:
     "Marit Events — African soul, international luxury. Event experiences beautifully orchestrated from Nairobi, Kenya.",
+  alternates: { canonical: canonical("/story") },
 };
 
 export default function StoryPage() {
@@ -90,20 +91,12 @@ export default function StoryPage() {
         </div>
       </section>
 
-      <section className="px-5 py-24 text-center md:px-8 md:py-28">
-        <Reveal>
-          <h2 className="font-display text-4xl text-ivory md:text-5xl">
-            Ready to begin?
-          </h2>
-          <Link
-            href="/enquire"
-            className="mt-8 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
-          >
-            Plan Your Event
-            <span aria-hidden>→</span>
-          </Link>
-        </Reveal>
-      </section>
+      <PageCloser
+        title="Ready to begin?"
+        primaryHref={enquireHref()}
+        secondaryHref="/portfolio"
+        secondaryLabel="View portfolio"
+      />
     </div>
   );
 }

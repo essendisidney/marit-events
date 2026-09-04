@@ -1,15 +1,17 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { corporateFaqs, corporateTypes } from "@/lib/site";
+import { canonical, corporateFaqs, corporateTypes, enquireHref } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/Faq";
+import { PageCloser } from "@/components/PageCloser";
 
 export const metadata: Metadata = {
   title: "Corporate",
   description:
     "Corporate events, conferences, launches and brand experiences — from boardroom to ballroom.",
+  alternates: { canonical: canonical("/corporate") },
 };
 
 export default function CorporatePage() {
@@ -60,7 +62,7 @@ export default function CorporatePage() {
           </div>
           <Reveal className="mt-14">
             <Link
-              href="/enquire"
+              href={enquireHref({ type: "Corporate Event" })}
               className="inline-block border border-champagne px-8 py-4 text-[11px] uppercase tracking-[0.2em] text-champagne transition hover:bg-champagne hover:text-obsidian"
             >
               Plan a Corporate Event →
@@ -103,6 +105,13 @@ export default function CorporatePage() {
       </section>
 
       <Faq items={[...corporateFaqs]} title="Corporate planning with Marit" />
+      <PageCloser
+        title="Ready to elevate your next corporate moment?"
+        primaryHref={enquireHref({ type: "Corporate Event" })}
+        primaryLabel="Plan a corporate event"
+        secondaryHref="/portfolio"
+        secondaryLabel="See our work"
+      />
     </div>
   );
 }

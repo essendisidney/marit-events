@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { maritExperience, processSteps } from "@/lib/site";
+import { canonical, enquireHref, maritExperience, processSteps } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
+import { PageCloser } from "@/components/PageCloser";
 
 export const metadata: Metadata = {
   title: "Experiences",
   description:
     "The Marit way — discover, design, orchestrate and experience celebrations without the chaos.",
+  alternates: { canonical: canonical("/experiences") },
 };
 
 export default function ExperiencesPage() {
@@ -92,7 +94,7 @@ export default function ExperiencesPage() {
           </div>
           <Reveal className="mt-14">
             <Link
-              href="/enquire"
+              href={enquireHref()}
               className="inline-block bg-obsidian px-8 py-4 text-[11px] uppercase tracking-[0.2em] text-ivory"
             >
               Plan Your Event →
@@ -100,6 +102,8 @@ export default function ExperiencesPage() {
           </Reveal>
         </div>
       </section>
+
+      <PageCloser />
     </div>
   );
 }

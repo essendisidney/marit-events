@@ -1,15 +1,28 @@
 "use client";
 
-import { FormEvent, useState } from "react";
-import { enquiryTypes, siteConfig, whatsappUrl } from "@/lib/site";
+import { FormEvent, useMemo, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import {
+  enquiryTypes,
+  resolveEnquiryType,
+  siteConfig,
+  whatsappUrl,
+} from "@/lib/site";
 
 type EnquiryType = (typeof enquiryTypes)[number];
 type SubmitMode = "whatsapp" | "email";
 
 export function EnquiryForm() {
+  const searchParams = useSearchParams();
+  const initialType = useMemo(
+    () => resolveEnquiryType(searchParams.get("type")),
+    [searchParams]
+  );
+  const initialLocation = searchParams.get("location") ?? "";
+
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
-  const [type, setType] = useState<EnquiryType>(enquiryTypes[0]);
+  const [type, setType] = useState<EnquiryType>(initialType);
   const [mode, setMode] = useState<SubmitMode>("whatsapp");
 
   function buildPayload(form: FormData) {
@@ -67,6 +80,20 @@ export function EnquiryForm() {
         <p className="mx-auto mt-4 max-w-sm text-taupe">
           {siteConfig.responseTime}
         </p>
+        <ol className="mx-auto mt-8 max-w-sm space-y-3 text-left text-sm text-taupe">
+          <li>
+            <span className="text-champagne">01</span> We review your brief with
+            care.
+          </li>
+          <li>
+            <span className="text-champagne">02</span> You hear from us within 24
+            hours.
+          </li>
+          <li>
+            <span className="text-champagne">03</span> We propose a clear next
+            step — discovery call or WhatsApp.
+          </li>
+        </ol>
         <div className="mt-8 flex flex-col items-center gap-3">
           <a
             href={whatsappUrl()}
@@ -89,6 +116,25 @@ export function EnquiryForm() {
 
   return (
     <form onSubmit={onSubmit} className="space-y-10">
+      {initialLocation || initialType !== enquiryTypes[0] ? (
+        <p className="border border-champagne/25 bg-champagne/5 px-4 py-3 text-sm text-ivory/80">
+          We&apos;ve started your enquiry
+          {initialType ? (
+            <>
+              {" "}
+              for <span className="text-champagne">{initialType}</span>
+            </>
+          ) : null}
+          {initialLocation ? (
+            <>
+              {" "}
+              in <span className="text-champagne">{initialLocation}</span>
+            </>
+          ) : null}
+          . Edit anything below.
+        </p>
+      ) : null}
+
       <fieldset>
         <legend className="flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-taupe">
           <span className="text-champagne">01</span>
@@ -141,6 +187,7 @@ export function EnquiryForm() {
           name="location"
           placeholder="Nairobi, Diani, abroad…"
           required
+          defaultValue={initialLocation}
         />
         <div className="grid gap-6 md:grid-cols-2">
           <Field label="Event date" name="date" type="date" />
@@ -231,6 +278,7 @@ function Field({
   required,
   textarea,
   placeholder,
+  defaultValue,
 }: {
   label: string;
   name: string;
@@ -238,6 +286,7 @@ function Field({
   required?: boolean;
   textarea?: boolean;
   placeholder?: string;
+  defaultValue?: string;
 }) {
   const classes =
     "mt-2 w-full border border-white/10 bg-transparent px-4 py-3.5 text-sm text-ivory outline-none transition duration-300 placeholder:text-taupe/35 focus:border-champagne/55";
@@ -254,6 +303,7 @@ function Field({
           required={required}
           rows={5}
           placeholder={placeholder}
+          defaultValue={defaultValue}
           className={`${classes} min-h-[8rem] resize-y`}
         />
       ) : (
@@ -262,6 +312,7 @@ function Field({
           type={type}
           required={required}
           placeholder={placeholder}
+          defaultValue={defaultValue}
           className={classes}
         />
       )}

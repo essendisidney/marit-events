@@ -2,12 +2,15 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { journalPosts } from "@/lib/journal";
+import { canonical } from "@/lib/site";
 import { Reveal, SectionHeading } from "@/components/ui";
+import { PageCloser } from "@/components/PageCloser";
 
 export const metadata: Metadata = {
   title: "Journal",
   description:
     "Guides to weddings in Kenya, destination celebrations and luxury event planning — from Marit Events.",
+  alternates: { canonical: canonical("/journal") },
 };
 
 export default function JournalPage() {
@@ -92,6 +95,12 @@ export default function JournalPage() {
           ))}
         </div>
       </section>
+
+      <PageCloser
+        title="Planning a celebration in Kenya?"
+        secondaryHref="/destination"
+        secondaryLabel="Destination Kenya"
+      />
     </div>
   );
 }

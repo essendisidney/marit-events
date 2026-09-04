@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { portfolio } from "@/lib/portfolio";
+import { canonical } from "@/lib/site";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { PortfolioGrid } from "@/components/PortfolioGrid";
+import { PageCloser } from "@/components/PageCloser";
 
 export const metadata: Metadata = {
   title: "Portfolio",
   description:
     "Recently orchestrated celebrations by Marit Events — weddings, proposals, corporate and private gatherings in Kenya.",
+  alternates: { canonical: canonical("/portfolio") },
 };
 
 export default function PortfolioPage() {
@@ -25,6 +28,11 @@ export default function PortfolioPage() {
       </section>
 
       <PortfolioGrid items={portfolio} />
+      <PageCloser
+        title="Want a celebration like these?"
+        secondaryHref="/weddings"
+        secondaryLabel="Explore weddings"
+      />
     </div>
   );
 }

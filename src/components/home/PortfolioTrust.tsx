@@ -92,7 +92,7 @@ export function TrustSection() {
           <SectionHeading
             eyebrow="Trust"
             title="Trusted to create the moments that matter."
-            body="Figures below are placeholders — swap in verified numbers, real names and photography before launch."
+            body="Nairobi-based. Destination-ready. Orchestrated end to end — so you stay present for the celebration."
           />
         </Reveal>
 
@@ -109,11 +109,11 @@ export function TrustSection() {
 
         <Reveal className="mt-20 max-w-3xl border-l border-champagne/40 pl-6 md:pl-10">
           <p className="text-[11px] uppercase tracking-[0.22em] text-champagne">
-            Trust signals
+            How we work
           </p>
           <p className="mt-4 font-display text-2xl leading-snug text-ivory md:text-3xl">
-            Replace placeholder figures with verified numbers, real client names
-            and photography before launch.
+            Listen first. Design with intent. Orchestrate quietly — from first
+            enquiry to the last goodbye.
           </p>
         </Reveal>
       </div>
@@ -121,30 +121,5 @@ export function TrustSection() {
   );
 }
 
-export function FinalCta() {
-  return (
-    <section className="relative overflow-hidden bg-ivory px-5 py-24 text-obsidian md:px-8 md:py-36">
-      <div className="pointer-events-none absolute inset-0 opacity-40" aria-hidden>
-        <div className="absolute left-1/2 top-0 h-px w-[min(80%,40rem)] -translate-x-1/2 bg-gradient-to-r from-transparent via-champagne to-transparent" />
-      </div>
-      <div className="relative mx-auto max-w-3xl text-center">
-        <Reveal>
-          <h2 className="font-display text-4xl leading-tight text-balance md:text-6xl">
-            Ready for a celebration without the chaos?
-          </h2>
-          <p className="mx-auto mt-6 max-w-md text-base text-obsidian/65">
-            Tell us what you&apos;re imagining. We&apos;ll take it from there.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-            <ButtonLink href="/enquire" variant="solid-dark">
-              Plan Your Event
-            </ButtonLink>
-            <ButtonLink href="/destination" variant="ghost-dark">
-              Destination Kenya
-            </ButtonLink>
-          </div>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
+export { PageCloser as FinalCta } from "@/components/PageCloser";
+

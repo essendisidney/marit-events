@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useId, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
 export type FaqItem = { q: string; a: string };
@@ -15,6 +15,20 @@ export function Faq({
   light?: boolean;
 }) {
   const [open, setOpen] = useState<number | null>(0);
+  const baseId = useId();
+
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: items.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
+  };
 
   return (
     <section
@@ -22,6 +36,10 @@ export function Faq({
         light ? "bg-ivory text-obsidian" : "bg-obsidian"
       }`}
     >
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
       <div className="mx-auto max-w-3xl">
         <p
           className={`text-[11px] uppercase tracking-[0.28em] ${
@@ -40,13 +58,17 @@ export function Faq({
         <div className="mt-12 divide-y divide-current/10 border-y border-current/10">
           {items.map((item, i) => {
             const isOpen = open === i;
+            const panelId = `${baseId}-panel-${i}`;
+            const buttonId = `${baseId}-button-${i}`;
             return (
               <div key={item.q}>
                 <button
                   type="button"
+                  id={buttonId}
                   className="flex w-full items-center justify-between gap-6 py-5 text-left"
                   onClick={() => setOpen(isOpen ? null : i)}
                   aria-expanded={isOpen}
+                  aria-controls={panelId}
                 >
                   <span
                     className={`font-display text-xl md:text-2xl ${
@@ -62,6 +84,9 @@ export function Faq({
                 <AnimatePresence initial={false}>
                   {isOpen ? (
                     <motion.div
+                      id={panelId}
+                      role="region"
+                      aria-labelledby={buttonId}
                       initial={{ height: 0, opacity: 0 }}
                       animate={{ height: "auto", opacity: 1 }}
                       exit={{ height: 0, opacity: 0 }}

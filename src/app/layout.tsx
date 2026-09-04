@@ -65,9 +65,6 @@ export const metadata: Metadata = {
     description: siteConfig.description,
     images: [siteConfig.ogImage],
   },
-  alternates: {
-    canonical: siteConfig.url,
-  },
 };
 
 export const viewport: Viewport = {

@@ -1,14 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { destinations } from "@/lib/site";
+import { canonical, destinations, enquireHref } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
+import { PageCloser } from "@/components/PageCloser";
 
 export const metadata: Metadata = {
   title: "Destination",
   description:
     "Get married in Kenya — destination weddings and celebrations from Nairobi to the coast and beyond.",
+  alternates: { canonical: canonical("/destination") },
 };
 
 export default function DestinationPage() {
@@ -34,7 +36,7 @@ export default function DestinationPage() {
               body="Bring your people. We'll handle the rest — venues, guest logistics, styling and the quiet details that make destination celebrations feel effortless."
             />
             <Link
-              href="/enquire"
+              href={enquireHref({ type: "Destination Event" })}
               className="mt-10 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
             >
               Plan a destination event
@@ -68,7 +70,10 @@ export default function DestinationPage() {
                   {featured.description}
                 </p>
                 <Link
-                  href="/enquire"
+                  href={enquireHref({
+                    type: "Destination Event",
+                    location: featured.name,
+                  })}
                   className="mt-10 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-champagne"
                 >
                   Enquire for {featured.name}
@@ -80,7 +85,7 @@ export default function DestinationPage() {
         </section>
       ) : null}
 
-      <section className="px-5 pb-28 md:px-8">
+      <section className="px-5 pb-20 md:px-8">
         <div className="mx-auto mb-10 max-w-7xl">
           <Reveal>
             <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
@@ -94,7 +99,13 @@ export default function DestinationPage() {
         <div className="mx-auto grid max-w-7xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {rest.map((place, i) => (
             <Reveal key={place.name} delay={0.05 * i}>
-              <article className="group relative aspect-[3/4] overflow-hidden">
+              <Link
+                href={enquireHref({
+                  type: "Destination Event",
+                  location: place.name,
+                })}
+                className="group relative block aspect-[3/4] overflow-hidden"
+              >
                 <Image
                   src={place.image}
                   alt={place.name}
@@ -108,16 +119,24 @@ export default function DestinationPage() {
                     {place.name}
                   </h3>
                   <p className="mt-2 text-sm text-taupe">{place.description}</p>
+                  <p className="mt-3 text-[10px] uppercase tracking-[0.18em] text-champagne opacity-0 transition group-hover:opacity-100">
+                    Enquire →
+                  </p>
                 </div>
-              </article>
+              </Link>
             </Reveal>
           ))}
         </div>
-        <p className="mx-auto mt-10 max-w-7xl text-sm text-taupe/70">
-          Tell us where you&apos;re dreaming of — we&apos;ll confirm what Marit
-          can orchestrate for your dates.
-        </p>
       </section>
+
+      <PageCloser
+        title="Ready for a Kenya celebration?"
+        body="Tell us the place you're dreaming of — we'll orchestrate the rest."
+        primaryHref={enquireHref({ type: "Destination Event" })}
+        primaryLabel="Plan a destination event"
+        secondaryHref="/weddings"
+        secondaryLabel="Explore weddings"
+      />
     </div>
   );
 }
