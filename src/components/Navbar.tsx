@@ -42,7 +42,7 @@ export function Navbar() {
         <Logo size="nav" priority />
 
         <nav
-          className="hidden items-center gap-7 lg:flex xl:gap-8"
+          className="hidden items-center gap-5 xl:gap-7 lg:flex"
           aria-label="Primary"
         >
           {navLinks.map((link) => {

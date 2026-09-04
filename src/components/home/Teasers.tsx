@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 import { images } from "@/lib/images";
 import { ButtonLink, ImageReveal, Reveal, SectionHeading } from "@/components/ui";
 
@@ -78,6 +79,67 @@ export function DestinationTeaser() {
   );
 }
 
+export function CelebrationsTeaser() {
+  return (
+    <section className="bg-obsidian px-5 py-24 md:px-8 md:py-32">
+      <div className="mx-auto max-w-7xl">
+        <Reveal>
+          <SectionHeading
+            eyebrow="Celebrations"
+            title="Proposals. Showers. Birthdays. Moments that matter."
+            body="Every gathering deserves the same care as a wedding — intentional design, calm execution, unforgettable atmosphere."
+          />
+        </Reveal>
+        <div className="mt-14 grid gap-5 md:grid-cols-2">
+          <Reveal>
+            <Link href="/portfolio/she-said-yes" className="group relative block aspect-[4/5] overflow-hidden md:aspect-[5/4]">
+              <Image
+                src={images.proposal}
+                alt="Proposal setup by Marit Events"
+                fill
+                className="object-cover transition duration-700 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidian/80 to-transparent" />
+              <div className="absolute bottom-0 p-6">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-champagne">
+                  Proposal
+                </p>
+                <h3 className="mt-2 font-display text-3xl text-ivory">
+                  She said yes
+                </h3>
+              </div>
+            </Link>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <Link
+              href="/portfolio/celebrations-in-colour"
+              className="group relative block aspect-[4/5] overflow-hidden md:aspect-[5/4]"
+            >
+              <Image
+                src={images.babyShower}
+                alt="Baby shower styled by Marit Events"
+                fill
+                className="object-cover transition duration-700 group-hover:scale-105"
+                sizes="(max-width: 768px) 100vw, 50vw"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-obsidian/80 to-transparent" />
+              <div className="absolute bottom-0 p-6">
+                <p className="text-[11px] uppercase tracking-[0.2em] text-champagne">
+                  Private celebration
+                </p>
+                <h3 className="mt-2 font-display text-3xl text-ivory">
+                  Celebrations in colour
+                </h3>
+              </div>
+            </Link>
+          </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
 export function CorporateTeaser() {
   return (
     <section className="border-y border-white/5 bg-obsidian-soft px-5 py-24 md:px-8 md:py-32">
@@ -98,3 +160,4 @@ export function CorporateTeaser() {
     </section>
   );
 }
+

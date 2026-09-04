@@ -16,8 +16,10 @@ export const siteConfig = {
   whatsapp: "254700000000",
   instagram: "https://instagram.com/maritevents",
   responseTime: "We'll be in touch within 24 hours.",
-  url: "https://maritevents.com",
+  /** Production URL — update when custom domain is connected */
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://marit-events.vercel.app",
   logo: "/marit-logo.png",
+  ogImage: "/events/reception-rustic-chic.jpg",
 };
 
 export const navLinks = [
@@ -25,6 +27,7 @@ export const navLinks = [
   { href: "/weddings", label: "Weddings" },
   { href: "/corporate", label: "Corporate" },
   { href: "/destination", label: "Destination" },
+  { href: "/portfolio", label: "Portfolio" },
   { href: "/story", label: "Our Story" },
   { href: "/journal", label: "Journal" },
 ] as const;

@@ -4,6 +4,7 @@ import {
   MaritExperienceSection,
 } from "@/components/home/Experience";
 import {
+  CelebrationsTeaser,
   CorporateTeaser,
   DestinationTeaser,
   WeddingsTeaser,
@@ -21,6 +22,7 @@ export default function HomePage() {
       <BrandIntro />
       <MaritExperienceSection />
       <WeddingsTeaser />
+      <CelebrationsTeaser />
       <DestinationTeaser />
       <CorporateTeaser />
       <PortfolioPreview />

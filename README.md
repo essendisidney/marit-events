@@ -2,12 +2,16 @@
 
 Premium event experiences website — editorial, luxurious, conversion-focused.
 
+**Live:** [marit-events.vercel.app](https://marit-events.vercel.app)  
+**Repo:** [github.com/essendisidney/marit-events](https://github.com/essendisidney/marit-events)
+
 ## Stack
 
 - Next.js 15 (App Router)
 - Tailwind CSS 4
 - Framer Motion
 - TypeScript
+- Vercel
 
 ## Getting started
 
@@ -27,8 +31,9 @@ Update contact details in `src/lib/site.ts`:
 - `instagram`
 - Trust stats (only verified numbers)
 - Destination list (only locations Marit actually services)
+- Optional: `NEXT_PUBLIC_SITE_URL` for custom domain
 
-Replace Unsplash placeholders with real event photography when available.
+Real event photos live in `public/events/`. Logo: `public/marit-logo.png`.
 
 ## Scripts
 

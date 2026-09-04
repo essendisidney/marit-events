@@ -4,17 +4,16 @@ import { FormEvent, useState } from "react";
 import { enquiryTypes, siteConfig, whatsappUrl } from "@/lib/site";
 
 type EnquiryType = (typeof enquiryTypes)[number];
+type SubmitMode = "whatsapp" | "email";
 
 export function EnquiryForm() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [type, setType] = useState<EnquiryType>(enquiryTypes[0]);
+  const [mode, setMode] = useState<SubmitMode>("whatsapp");
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    setSending(true);
-    const form = new FormData(e.currentTarget);
-    const payload = {
+  function buildPayload(form: FormData) {
+    return {
       type: String(form.get("type") || type),
       location: String(form.get("location") || ""),
       date: String(form.get("date") || ""),
@@ -25,6 +24,12 @@ export function EnquiryForm() {
       email: String(form.get("email") || ""),
       phone: String(form.get("phone") || ""),
     };
+  }
+
+  function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setSending(true);
+    const payload = buildPayload(new FormData(e.currentTarget));
 
     const lines = [
       `New Marit enquiry from ${payload.name}`,
@@ -38,7 +43,16 @@ export function EnquiryForm() {
       `Phone/WhatsApp: ${payload.phone}`,
     ].join("\n");
 
-    window.open(whatsappUrl(lines), "_blank", "noopener,noreferrer");
+    if (mode === "email") {
+      const subject = encodeURIComponent(
+        `Marit Events enquiry — ${payload.type} — ${payload.name}`
+      );
+      const body = encodeURIComponent(lines);
+      window.location.href = `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
+    } else {
+      window.open(whatsappUrl(lines), "_blank", "noopener,noreferrer");
+    }
+
     setSubmitted(true);
     setSending(false);
   }
@@ -53,18 +67,28 @@ export function EnquiryForm() {
         <p className="mx-auto mt-4 max-w-sm text-taupe">
           {siteConfig.responseTime}
         </p>
-        <a
-          href={`mailto:${siteConfig.email}`}
-          className="mt-8 inline-block text-[11px] uppercase tracking-[0.2em] text-champagne link-underline"
-        >
-          Or email {siteConfig.email}
-        </a>
+        <div className="mt-8 flex flex-col items-center gap-3">
+          <a
+            href={whatsappUrl()}
+            target="_blank"
+            rel="noreferrer"
+            className="text-[11px] uppercase tracking-[0.2em] text-champagne link-underline"
+          >
+            Continue on WhatsApp
+          </a>
+          <a
+            href={`mailto:${siteConfig.email}`}
+            className="text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
+          >
+            Or email {siteConfig.email}
+          </a>
+        </div>
       </div>
     );
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-10" noValidate={false}>
+    <form onSubmit={onSubmit} className="space-y-10">
       <fieldset>
         <legend className="flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-taupe">
           <span className="text-champagne">01</span>
@@ -158,12 +182,41 @@ export function EnquiryForm() {
       </div>
 
       <div className="border-t border-white/10 pt-8">
+        <p className="mb-4 text-[11px] uppercase tracking-[0.22em] text-taupe">
+          Send via
+        </p>
+        <div className="mb-6 flex flex-wrap gap-3">
+          {(
+            [
+              ["whatsapp", "WhatsApp"],
+              ["email", "Email"],
+            ] as const
+          ).map(([value, label]) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setMode(value)}
+              className={`border px-4 py-2 text-[11px] uppercase tracking-[0.18em] transition ${
+                mode === value
+                  ? "border-champagne text-champagne"
+                  : "border-white/15 text-taupe hover:border-white/30"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+
         <button
           type="submit"
           disabled={sending}
           className="w-full bg-champagne py-4 text-[11px] uppercase tracking-[0.22em] text-obsidian transition duration-300 hover:bg-champagne-soft disabled:opacity-60 md:w-auto md:min-w-[14rem] md:px-10"
         >
-          {sending ? "Opening WhatsApp…" : "Send Enquiry →"}
+          {sending
+            ? "Opening…"
+            : mode === "whatsapp"
+              ? "Send via WhatsApp →"
+              : "Send via Email →"}
         </button>
         <p className="mt-4 text-sm text-taupe">{siteConfig.responseTime}</p>
       </div>
@@ -201,7 +254,7 @@ function Field({
           required={required}
           rows={5}
           placeholder={placeholder}
-          className={`${classes} resize-y min-h-[8rem]`}
+          className={`${classes} min-h-[8rem] resize-y`}
         />
       ) : (
         <input

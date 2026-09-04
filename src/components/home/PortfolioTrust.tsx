@@ -73,6 +73,12 @@ export function PortfolioPreview() {
             ))}
           </div>
         </div>
+
+        <Reveal className="mt-12">
+          <ButtonLink href="/portfolio" variant="ghost">
+            View full portfolio
+          </ButtonLink>
+        </Reveal>
       </div>
     </section>
   );
