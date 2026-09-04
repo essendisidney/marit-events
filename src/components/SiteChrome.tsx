@@ -2,6 +2,7 @@ import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { MobileStickyBar, WhatsAppFloat } from "@/components/ConversionChrome";
 import { Preloader } from "@/components/Preloader";
+import { RouteTransition } from "@/components/RouteTransition";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { BackToTop } from "@/components/BackToTop";
 
@@ -15,6 +16,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
         Skip to content
       </a>
       <Preloader />
+      <RouteTransition />
       <ScrollProgress />
       <Navbar />
       <main id="main-content" className="pb-[4.5rem] md:pb-0">

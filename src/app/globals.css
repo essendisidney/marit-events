@@ -126,6 +126,15 @@
     }
   }
 
+  @keyframes marit-load {
+    0% {
+      transform: translateX(-120%);
+    }
+    100% {
+      transform: translateX(220%);
+    }
+  }
+
   @media (prefers-reduced-motion: reduce) {
     .img-kenburns {
       animation: none;
