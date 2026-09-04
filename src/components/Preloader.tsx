@@ -4,8 +4,12 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import Image from "next/image";
 import { siteConfig } from "@/lib/site";
+import {
+  PRELOADER_SESSION_KEY,
+  signalPreloaderDone,
+} from "@/lib/preloader";
 
-const SESSION_KEY = "marit-preloader-seen";
+const SESSION_KEY = PRELOADER_SESSION_KEY;
 
 /** Once per session — progress eases to 100, then curtains part. */
 const HOLD_MS = 2600;
@@ -18,11 +22,18 @@ export function Preloader() {
   const [progress, setProgress] = useState(0);
 
   useEffect(() => {
-    if (reduce) return;
+    if (reduce) {
+      signalPreloaderDone();
+      return;
+    }
     try {
-      if (sessionStorage.getItem(SESSION_KEY)) return;
+      if (sessionStorage.getItem(SESSION_KEY)) {
+        signalPreloaderDone();
+        return;
+      }
     } catch {
-      /* ignore */
+      signalPreloaderDone();
+      return;
     }
 
     setShow(true);
@@ -43,7 +54,10 @@ export function Preloader() {
         } catch {
           /* ignore */
         }
-        exitTimer = window.setTimeout(() => setShow(false), EXIT_MS);
+        exitTimer = window.setTimeout(() => {
+          setShow(false);
+          signalPreloaderDone();
+        }, EXIT_MS);
       }
     };
 

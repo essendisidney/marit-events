@@ -3,10 +3,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { enquireHrefForPath, siteConfig } from "@/lib/site";
+import { enquireHrefForPath, siteConfig, whatsappMessageForPath, whatsappUrl } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal } from "@/components/ui";
-import { trackCtaClick } from "@/lib/analytics";
+import { trackCtaClick, trackWhatsAppClick } from "@/lib/analytics";
 
 const tiles = [
   { src: images.weddingFormal, alt: "African print wedding styling" },
@@ -76,6 +76,16 @@ export function InstagramStrip() {
         <Reveal className="mt-10">
           <p className="text-sm text-taupe">
             Prefer WhatsApp?{" "}
+            <a
+              href={whatsappUrl(whatsappMessageForPath(pathname))}
+              target="_blank"
+              rel="noreferrer"
+              onClick={() => trackWhatsAppClick({ path: pathname })}
+              className="text-ivory underline-offset-4 hover:text-champagne hover:underline"
+            >
+              Message Marit
+            </a>{" "}
+            — or{" "}
             <Link
               href={enquire}
               onClick={() =>
@@ -87,9 +97,9 @@ export function InstagramStrip() {
               }
               className="text-ivory underline-offset-4 hover:text-champagne hover:underline"
             >
-              Plan your event
-            </Link>{" "}
-            and we&apos;ll respond within 24 hours.
+              plan your event
+            </Link>
+            .
           </p>
         </Reveal>
       </div>

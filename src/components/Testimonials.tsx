@@ -13,18 +13,19 @@ import { Reveal, SectionHeading } from "@/components/ui";
 
 export function Testimonials() {
   const [active, setActive] = useState(0);
+  const [paused, setPaused] = useState(false);
   const item = testimonials[active];
   const reduceMotion = useReducedMotion();
   const duration = reduceMotion ? 0 : 0.45;
   const bgDuration = reduceMotion ? 0 : 0.7;
 
   useEffect(() => {
-    if (reduceMotion) return;
+    if (reduceMotion || paused) return;
     const id = window.setInterval(() => {
       setActive((i) => (i + 1) % testimonials.length);
     }, 7000);
     return () => window.clearInterval(id);
-  }, [reduceMotion]);
+  }, [reduceMotion, paused]);
 
   const enquireType =
     item.detail.toLowerCase().includes("corporate")
@@ -35,7 +36,17 @@ export function Testimonials() {
         : "Wedding";
 
   return (
-    <section className="relative overflow-hidden">
+    <section
+      className="relative overflow-hidden"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocusCapture={() => setPaused(true)}
+      onBlurCapture={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget as Node)) {
+          setPaused(false);
+        }
+      }}
+    >
       <div className="absolute inset-0">
         <AnimatePresence mode="wait">
           <motion.div

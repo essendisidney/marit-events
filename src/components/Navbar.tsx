@@ -37,8 +37,10 @@ export function Navbar() {
 
   useEffect(() => {
     document.body.style.overflow = open ? "hidden" : "";
+    document.body.dataset.navOpen = open ? "true" : "false";
     return () => {
       document.body.style.overflow = "";
+      document.body.dataset.navOpen = "false";
     };
   }, [open]);
 
@@ -195,7 +197,7 @@ export function Navbar() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35 }}
-            className="fixed inset-0 z-40 bg-obsidian lg:hidden"
+            className="fixed inset-0 z-[55] bg-obsidian lg:hidden"
           >
             <div className="flex h-full flex-col justify-between px-8 pb-16 pt-28">
               <nav className="flex flex-col gap-5" aria-label="Mobile">

@@ -7,16 +7,20 @@ import { useRef } from "react";
 import { images } from "@/lib/images";
 import { Logo } from "@/components/Logo";
 import { trackCtaClick } from "@/lib/analytics";
+import { usePreloaderReady } from "@/lib/preloader";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
   const reduce = useReducedMotion();
+  const introReady = usePreloaderReady();
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start start", "end start"],
   });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "14%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.35]);
+
+  const enter = introReady && !reduce;
 
   return (
     <section
@@ -39,28 +43,31 @@ export function Hero() {
         style={{ opacity }}
         className="relative z-10 flex h-full flex-col justify-end px-5 pb-28 pt-28 md:px-8 md:pb-32"
       >
-        <div className="mx-auto w-full max-w-7xl">
+        <div
+          key={introReady ? "hero-ready" : "hero-wait"}
+          className="mx-auto w-full max-w-7xl"
+        >
           <motion.div
-            initial={{ opacity: 0, y: 18 }}
+            initial={enter ? { opacity: 0, y: 18 } : false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
           >
             <Logo size="hero" href={null} priority />
           </motion.div>
 
           <motion.p
-            initial={{ opacity: 0, y: 14 }}
+            initial={enter ? { opacity: 0, y: 14 } : false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 max-w-xl font-display text-[clamp(1.5rem,3.2vw,2.35rem)] leading-snug text-ivory/92"
           >
             Where extraordinary celebrations come to life.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={enter ? { opacity: 0, y: 10 } : false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.65 }}
+            transition={{ duration: 0.8, delay: 0.45 }}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
             <Link
@@ -86,11 +93,11 @@ export function Hero() {
         </div>
       </motion.div>
 
-      {!reduce ? (
+      {enter ? (
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          transition={{ delay: 1.2, duration: 1 }}
+          transition={{ delay: 0.9, duration: 1 }}
           className="absolute bottom-8 left-1/2 z-10 hidden -translate-x-1/2 flex-col items-center gap-2 md:flex"
           aria-hidden
         >

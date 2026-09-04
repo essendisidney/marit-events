@@ -18,7 +18,13 @@ export function Footer() {
   const enquire = enquireHrefForPath(pathname);
 
   return (
-    <footer className="border-t border-white/5 bg-obsidian pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
+    <footer
+      className={`border-t border-white/5 bg-obsidian md:pb-0 ${
+        pathname === "/enquire"
+          ? "pb-6"
+          : "pb-[calc(5rem+env(safe-area-inset-bottom))]"
+      }`}
+    >
       <div className="mx-auto max-w-7xl px-5 py-20 md:px-8 md:py-28">
         <div className="max-w-3xl">
           <p className="font-display text-4xl leading-[1.08] text-ivory md:text-6xl">

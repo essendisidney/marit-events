@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { MobileStickyBar, WhatsAppFloat } from "@/components/ConversionChrome";
 import { Preloader } from "@/components/Preloader";
 import { RouteTransition } from "@/components/RouteTransition";
+import { RouteScrollReset } from "@/components/RouteScrollReset";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { BackToTop } from "@/components/BackToTop";
 
@@ -17,6 +18,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       </a>
       <Preloader />
       <RouteTransition />
+      <RouteScrollReset />
       <ScrollProgress />
       <Navbar />
       <main id="main-content" tabIndex={-1} className="outline-none md:pb-0">

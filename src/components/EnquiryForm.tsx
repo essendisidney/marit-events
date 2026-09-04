@@ -317,7 +317,12 @@ export function EnquiryForm() {
             </button>
           ))}
         </div>
-        <Field label="Event date" name="date" type="date" />
+        <Field
+          label="Event date"
+          name="date"
+          type="date"
+          min={new Date().toISOString().slice(0, 10)}
+        />
 
         {/* Honeypot */}
         <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
@@ -481,6 +486,7 @@ function Field({
   onChange,
   autoComplete,
   inputMode,
+  min,
 }: {
   label: string;
   name: string;
@@ -493,6 +499,7 @@ function Field({
   onChange?: (v: string) => void;
   autoComplete?: string;
   inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
+  min?: string;
 }) {
   const classes =
     "mt-2 w-full border border-white/10 bg-transparent px-4 py-3.5 text-sm text-ivory outline-none transition duration-300 placeholder:text-taupe/35 focus:border-champagne/55";
@@ -523,6 +530,7 @@ function Field({
           onChange={onChange ? (e) => onChange(e.target.value) : undefined}
           autoComplete={autoComplete}
           inputMode={inputMode}
+          min={min}
           className={classes}
         />
       )}

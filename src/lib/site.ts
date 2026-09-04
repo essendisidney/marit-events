@@ -286,7 +286,7 @@ export function enquireHrefForPath(pathname: string) {
   if (pathname.startsWith("/corporate"))
     return enquireHref({ type: "Corporate Event" });
   if (pathname.startsWith("/portfolio"))
-    return enquireHref({ type: "Other" });
+    return enquireHref({ type: "Private Celebration" });
   if (pathname.startsWith("/journal"))
     return enquireHref({ type: "Wedding" });
   return "/enquire";

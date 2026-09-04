@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 export function BackToTop() {
   const [show, setShow] = useState(false);
+  const reduce = useReducedMotion();
 
   useEffect(() => {
     const onScroll = () => setShow(window.scrollY > 700);
@@ -21,7 +22,12 @@ export function BackToTop() {
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 8 }}
-          onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+          onClick={() =>
+            window.scrollTo({
+              top: 0,
+              behavior: reduce ? "auto" : "smooth",
+            })
+          }
           className="fixed bottom-24 left-5 z-40 hidden border border-white/15 bg-obsidian/90 px-3 py-2 text-[10px] uppercase tracking-[0.18em] text-taupe backdrop-blur transition hover:border-champagne hover:text-champagne md:bottom-8 md:block"
           aria-label="Back to top"
         >

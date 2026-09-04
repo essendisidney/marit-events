@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import {
   enquireHrefForPath,
@@ -30,8 +31,22 @@ export function WhatsAppFloat() {
 
 export function MobileStickyBar() {
   const pathname = usePathname();
-  if (pathname === "/enquire") return null;
+  const [navOpen, setNavOpen] = useState(false);
   const enquire = enquireHrefForPath(pathname);
+
+  useEffect(() => {
+    const sync = () =>
+      setNavOpen(document.body.dataset.navOpen === "true");
+    sync();
+    const observer = new MutationObserver(sync);
+    observer.observe(document.body, {
+      attributes: true,
+      attributeFilter: ["data-nav-open"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
+  if (pathname === "/enquire" || navOpen) return null;
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-white/10 bg-obsidian/95 backdrop-blur-md md:hidden safe-pb">

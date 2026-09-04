@@ -96,7 +96,11 @@ export function GalleryLightbox({
               alt={`${title} detail ${i + 1}`}
               fill
               className="object-cover transition duration-700 group-hover:scale-[1.03]"
-              sizes="(max-width: 768px) 100vw, 50vw"
+              sizes={
+                i === 0
+                  ? "(max-width: 768px) 100vw, (max-width: 1024px) 100vw, 66vw"
+                  : "(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
+              }
             />
             <span className="absolute inset-0 bg-obsidian/0 transition group-hover:bg-obsidian/15" />
             <span className="absolute bottom-4 right-4 text-[10px] uppercase tracking-[0.2em] text-ivory/70 md:text-ivory/0 md:transition md:group-hover:text-ivory/80">
