@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getJournalPost, journalPosts } from "@/lib/journal";
+import {
+  getJournalPost,
+  getRelatedJournalPosts,
+  journalPosts,
+} from "@/lib/journal";
 import { Reveal } from "@/components/ui";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -22,6 +26,7 @@ export default async function JournalPostPage({ params }: Props) {
   const { slug } = await params;
   const post = getJournalPost(slug);
   if (!post) notFound();
+  const related = getRelatedJournalPosts(slug);
 
   return (
     <article className="pt-24 md:pt-28">
@@ -68,6 +73,44 @@ export default async function JournalPostPage({ params }: Props) {
           </Link>
         </Reveal>
       </div>
+
+      {related.length > 0 ? (
+        <section className="border-t border-white/5 bg-obsidian-soft px-5 py-20 md:px-8 md:py-24">
+          <div className="mx-auto max-w-7xl">
+            <Reveal>
+              <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
+                Continue reading
+              </p>
+              <h2 className="mt-4 font-display text-3xl text-ivory md:text-4xl">
+                Related from the journal
+              </h2>
+            </Reveal>
+            <div className="mt-12 grid gap-8 md:grid-cols-2">
+              {related.map((item, i) => (
+                <Reveal key={item.slug} delay={0.06 * i}>
+                  <Link href={`/journal/${item.slug}`} className="group block">
+                    <div className="relative aspect-[16/10] overflow-hidden">
+                      <Image
+                        src={item.image}
+                        alt={item.title}
+                        fill
+                        className="object-cover transition duration-700 group-hover:scale-105"
+                        sizes="(max-width: 768px) 100vw, 50vw"
+                      />
+                    </div>
+                    <p className="mt-5 text-[11px] uppercase tracking-[0.2em] text-champagne">
+                      {item.category}
+                    </p>
+                    <h3 className="mt-2 font-display text-2xl text-ivory transition group-hover:text-champagne">
+                      {item.title}
+                    </h3>
+                  </Link>
+                </Reveal>
+              ))}
+            </div>
+          </div>
+        </section>
+      ) : null}
     </article>
   );
 }

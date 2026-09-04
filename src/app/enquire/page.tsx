@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import { EnquiryForm } from "@/components/EnquiryForm";
-import { siteConfig, whatsappUrl } from "@/lib/site";
+import { enquireFaqs, siteConfig, whatsappUrl } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
+import { Faq } from "@/components/Faq";
 
 export const metadata: Metadata = {
   title: "Plan Your Event",
@@ -92,6 +93,8 @@ export default function EnquirePage() {
           </Reveal>
         </div>
       </section>
+
+      <Faq items={[...enquireFaqs]} title="Before you enquire" />
     </div>
   );
 }

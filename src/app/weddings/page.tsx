@@ -1,14 +1,35 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { weddingFaqs } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
+import { Faq } from "@/components/Faq";
+import { InstagramStrip } from "@/components/InstagramStrip";
 
 export const metadata: Metadata = {
   title: "Weddings",
   description:
     "Intimate celebrations to destination weddings — your day, your story, your moment with Marit Events.",
 };
+
+const weddingMoments = [
+  {
+    title: "Intimate",
+    body: "Small gatherings with quiet luxury and personal pacing.",
+    image: images.entranceDraped,
+  },
+  {
+    title: "Destination",
+    body: "Kenya as the stage — coast, city or wilderness, fully hosted.",
+    image: images.dianiSunset,
+  },
+  {
+    title: "Heritage",
+    body: "Culture and craft woven into an international standard.",
+    image: images.weddingFormal,
+  },
+];
 
 export default function WeddingsPage() {
   return (
@@ -74,27 +95,43 @@ export default function WeddingsPage() {
         </div>
       </section>
 
-      <section className="bg-obsidian-soft px-5 py-16 md:px-8 md:py-24">
-        <div className="mx-auto grid max-w-7xl gap-4 md:grid-cols-3">
-          {[
-            images.receptionRustic,
-            images.proposal,
-            images.entranceDraped,
-          ].map((src, i) => (
-            <Reveal key={src} delay={0.06 * i}>
-              <div className="relative aspect-[3/4] overflow-hidden">
-                <Image
-                  src={src}
-                  alt="Celebration styled by Marit Events"
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                />
-              </div>
-            </Reveal>
-          ))}
+      <section className="bg-obsidian-soft px-5 py-24 md:px-8 md:py-28">
+        <div className="mx-auto max-w-7xl">
+          <Reveal>
+            <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
+              Ways to celebrate
+            </p>
+            <h2 className="mt-4 font-display text-3xl text-ivory md:text-5xl">
+              Every love story asks for a different room.
+            </h2>
+          </Reveal>
+          <div className="mt-14 grid gap-6 md:grid-cols-3">
+            {weddingMoments.map((item, i) => (
+              <Reveal key={item.title} delay={0.06 * i}>
+                <article className="group relative aspect-[3/4] overflow-hidden">
+                  <Image
+                    src={item.image}
+                    alt={item.title}
+                    fill
+                    className="object-cover transition duration-700 group-hover:scale-105"
+                    sizes="(max-width: 768px) 100vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/30 to-transparent" />
+                  <div className="absolute inset-x-0 bottom-0 p-6">
+                    <h3 className="font-display text-3xl text-ivory">
+                      {item.title}
+                    </h3>
+                    <p className="mt-2 text-sm text-taupe">{item.body}</p>
+                  </div>
+                </article>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
+
+      <Faq items={[...weddingFaqs]} title="Planning a wedding with Marit" />
+      <InstagramStrip />
     </div>
   );
 }

@@ -79,3 +79,15 @@ export const journalPosts: JournalPost[] = [
 export function getJournalPost(slug: string) {
   return journalPosts.find((post) => post.slug === slug);
 }
+
+export function getRelatedJournalPosts(slug: string, limit = 2) {
+  const current = getJournalPost(slug);
+  if (!current) return [];
+  const sameCategory = journalPosts.filter(
+    (post) => post.slug !== slug && post.category === current.category
+  );
+  const others = journalPosts.filter(
+    (post) => post.slug !== slug && post.category !== current.category
+  );
+  return [...sameCategory, ...others].slice(0, limit);
+}

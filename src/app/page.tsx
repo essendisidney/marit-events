@@ -15,6 +15,7 @@ import {
   TrustSection,
 } from "@/components/home/PortfolioTrust";
 import { Testimonials } from "@/components/Testimonials";
+import { InstagramStrip } from "@/components/InstagramStrip";
 
 export default function HomePage() {
   return (
@@ -29,6 +30,7 @@ export default function HomePage() {
       <PortfolioPreview />
       <Testimonials />
       <TrustSection />
+      <InstagramStrip />
       <FinalCta />
     </>
   );

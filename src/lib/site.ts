@@ -167,6 +167,68 @@ export const storyPillars = [
   },
 ] as const;
 
+export const weddingFaqs = [
+  {
+    q: "Can you plan a wedding in Kenya if we live abroad?",
+    a: "Yes. Many of our clients plan from London, Dubai, Johannesburg and beyond. We handle venues, vendors, guest logistics and on-the-day orchestration so distance never becomes chaos.",
+  },
+  {
+    q: "How far in advance should we enquire?",
+    a: "For peak wedding seasons and destination celebrations, 6–12 months is ideal. Shorter timelines are possible — tell us your date window and we'll be honest about what's achievable.",
+  },
+  {
+    q: "Do you only do large weddings?",
+    a: "No. We design intimate gatherings and spectacular destination weddings with the same standard — presence, polish and personal detail.",
+  },
+  {
+    q: "What's included in working with Marit?",
+    a: "Discovery, design direction, vendor curation, timelines, guest experience planning and full on-the-day orchestration. Every engagement is scoped to your celebration.",
+  },
+] as const;
+
+export const corporateFaqs = [
+  {
+    q: "What kinds of corporate events do you deliver?",
+    a: "Conferences, product launches, gala dinners, team experiences, brand activations and executive gatherings — from boardroom precision to ballroom presence.",
+  },
+  {
+    q: "Can you work with our brand guidelines?",
+    a: "Absolutely. We translate brand systems into spatial experience — styling, flow, production and guest journey — without losing operational clarity.",
+  },
+  {
+    q: "How quickly can you turn around a corporate enquiry?",
+    a: "We'll respond within 24 hours. Timeline depends on scale and date — share your brief and we'll propose a clear next step.",
+  },
+] as const;
+
+export const enquireFaqs = [
+  {
+    q: "How soon will we hear back?",
+    a: "Within 24 hours on working days. Urgent dates — say so in your enquiry and WhatsApp us directly.",
+  },
+  {
+    q: "Do we need a finished budget?",
+    a: "A range is enough to begin. We'll help you understand where investment creates the most impact.",
+  },
+  {
+    q: "WhatsApp or email — which should we use?",
+    a: "Both work. Local clients often prefer WhatsApp; international clients often prefer email. Choose whichever feels natural on the form.",
+  },
+] as const;
+
+export const primaryNav = [
+  { href: "/experiences", label: "Experiences" },
+  { href: "/weddings", label: "Weddings" },
+  { href: "/corporate", label: "Corporate" },
+  { href: "/destination", label: "Destination" },
+] as const;
+
+export const moreNav = [
+  { href: "/portfolio", label: "Portfolio" },
+  { href: "/story", label: "Our Story" },
+  { href: "/journal", label: "Journal" },
+] as const;
+
 export const enquiryTypes = [
   "Wedding",
   "Corporate Event",
