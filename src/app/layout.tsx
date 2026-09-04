@@ -1,5 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { siteConfig } from "@/lib/site";
 import { SiteChrome } from "@/components/SiteChrome";
@@ -85,6 +87,8 @@ export default function RootLayout({
       <body className="min-h-screen overflow-x-hidden">
         <JsonLd />
         <SiteChrome>{children}</SiteChrome>
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

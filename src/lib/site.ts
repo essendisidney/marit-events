@@ -128,6 +128,45 @@ export const corporateTypes = [
   "Brand Activations",
 ] as const;
 
+export const testimonials = [
+  {
+    quote:
+      "Marit didn't just plan our wedding. They gave us the freedom to actually enjoy it.",
+    name: "A Nairobi couple",
+    detail: "Wedding · Nairobi",
+    image: images.weddingFormal,
+  },
+  {
+    quote:
+      "From the first call to the last song, everything felt calm, considered and completely ours.",
+    name: "Destination clients",
+    detail: "Celebration · Coast",
+    image: images.dianiSunset,
+  },
+  {
+    quote:
+      "Our corporate evening looked premium and ran with precision. Guests still talk about it.",
+    name: "Brand team",
+    detail: "Corporate · Nairobi",
+    image: images.celebrationGold,
+  },
+] as const;
+
+export const storyPillars = [
+  {
+    title: "Listen deeply",
+    body: "Every celebration begins with your story — not a package.",
+  },
+  {
+    title: "Design with intent",
+    body: "Spaces, light, flow and detail composed as one experience.",
+  },
+  {
+    title: "Orchestrate quietly",
+    body: "Vendors, timelines and logistics managed so you stay present.",
+  },
+] as const;
+
 export const enquiryTypes = [
   "Wedding",
   "Corporate Event",

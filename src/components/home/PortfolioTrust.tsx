@@ -108,12 +108,12 @@ export function TrustSection() {
         </div>
 
         <Reveal className="mt-20 max-w-3xl border-l border-champagne/40 pl-6 md:pl-10">
-          <blockquote className="font-display text-3xl leading-snug text-ivory md:text-[2.5rem]">
-            “Marit didn&apos;t just plan our wedding. They gave us the freedom to
-            actually enjoy it.”
-          </blockquote>
-          <p className="mt-6 text-sm tracking-[0.12em] text-taupe">
-            — Client Name
+          <p className="text-[11px] uppercase tracking-[0.22em] text-champagne">
+            Trust signals
+          </p>
+          <p className="mt-4 font-display text-2xl leading-snug text-ivory md:text-3xl">
+            Replace placeholder figures with verified numbers, real client names
+            and photography before launch.
           </p>
         </Reveal>
       </div>

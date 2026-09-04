@@ -3,6 +3,7 @@ import { Navbar } from "@/components/Navbar";
 import { MobileStickyBar, WhatsAppFloat } from "@/components/ConversionChrome";
 import { Preloader } from "@/components/Preloader";
 import { ScrollProgress } from "@/components/ScrollProgress";
+import { BackToTop } from "@/components/BackToTop";
 
 export function SiteChrome({ children }: { children: React.ReactNode }) {
   return (
@@ -22,6 +23,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       <Footer />
       <WhatsAppFloat />
       <MobileStickyBar />
+      <BackToTop />
     </>
   );
 }
