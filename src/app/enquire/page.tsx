@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { Suspense } from "react";
 import { EnquiryForm } from "@/components/EnquiryForm";
+import { EnquireBeacon } from "@/components/EnquireBeacon";
 import { canonical, enquireFaqs, siteConfig, whatsappUrl } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
@@ -112,6 +113,7 @@ export default function EnquirePage() {
                 </div>
               }
             >
+              <EnquireBeacon />
               <EnquiryForm />
             </Suspense>
           </Reveal>

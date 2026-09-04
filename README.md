@@ -24,16 +24,17 @@ Open [http://localhost:3000](http://localhost:3000).
 
 ## Before launch
 
-Update contact details in `src/lib/site.ts`:
+Contact in `src/lib/site.ts` is live (WhatsApp, Gmail, Instagram).
 
-- `email`
-- `phone` / `whatsapp`
-- `instagram`
-- Trust stats (only verified numbers)
-- Destination list (only locations Marit actually services)
-- Optional: `NEXT_PUBLIC_SITE_URL` for custom domain
+Still optional / pending:
+
+- DNS for `maritevents.com` → Vercel (`A` `76.76.21.21`)
+- Verified trust stats + named testimonials
+- `RESEND_API_KEY` in Vercel env so enquiries are emailed server-side (see `.env.example`)
+- Custom from-address once the domain is verified in Resend
 
 Real event photos live in `public/events/`. Logo: `public/marit-logo.png`.
+OG share image is generated at `/opengraph-image`.
 
 ## Scripts
 

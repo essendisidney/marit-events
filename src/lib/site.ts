@@ -19,7 +19,8 @@ export const siteConfig = {
   /** Production URL — update when custom domain is connected */
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://maritevents.com",
   logo: "/marit-logo.png",
-  ogImage: "/events/reception-rustic-chic.jpg",
+  /** Generated at /opengraph-image — branded 1200×630 */
+  ogImage: "/opengraph-image",
 };
 
 export const navLinks = [

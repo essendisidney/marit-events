@@ -8,6 +8,7 @@ import {
   siteConfig,
   whatsappUrl,
 } from "@/lib/site";
+import { trackEnquireSubmit } from "@/lib/analytics";
 
 type EnquiryType = (typeof enquiryTypes)[number];
 type SubmitMode = "whatsapp" | "email";
@@ -32,6 +33,7 @@ export function EnquiryForm() {
   const [submitted, setSubmitted] = useState(false);
   const [sending, setSending] = useState(false);
   const [handoffBlocked, setHandoffBlocked] = useState(false);
+  const [serverReceived, setServerReceived] = useState(false);
   const [brief, setBrief] = useState("");
   const [type, setType] = useState<EnquiryType>(initialType);
   const [mode, setMode] = useState<SubmitMode>("whatsapp");
@@ -52,7 +54,7 @@ export function EnquiryForm() {
     };
   }
 
-  function onSubmit(e: FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSending(true);
     const payload = buildPayload(new FormData(e.currentTarget));
@@ -70,8 +72,29 @@ export function EnquiryForm() {
     ].join("\n");
 
     setBrief(lines);
-    let blocked = false;
+    let emailed = false;
 
+    try {
+      const res = await fetch("/api/enquire", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ ...payload, mode }),
+      });
+      const data = (await res.json()) as {
+        ok?: boolean;
+        emailed?: boolean;
+        brief?: string;
+      };
+      if (data.brief) setBrief(data.brief);
+      emailed = Boolean(data.emailed);
+      if (data.ok) setServerReceived(true);
+    } catch {
+      /* handoff still proceeds */
+    }
+
+    trackEnquireSubmit({ mode, type: payload.type, emailed });
+
+    let blocked = false;
     if (mode === "email") {
       const subject = encodeURIComponent(
         `Marit Events enquiry — ${payload.type} — ${payload.name}`
@@ -100,6 +123,9 @@ export function EnquiryForm() {
           Thank you.
         </p>
         <p className="mx-auto mt-4 max-w-sm text-taupe">
+          {serverReceived
+            ? "We've received your enquiry. "
+            : null}
           {siteConfig.responseTime}
         </p>
         <ol className="mx-auto mt-8 max-w-sm space-y-3 text-left text-sm text-taupe">

@@ -54,8 +54,8 @@ export const metadata: Metadata = {
       {
         url: siteConfig.ogImage,
         width: 1200,
-        height: 800,
-        alt: "Marit Events celebration",
+        height: 630,
+        alt: "Marit Events — exceptional moments, impeccably orchestrated",
       },
     ],
   },
