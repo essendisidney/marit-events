@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  --color-obsidian: #0b0b0b;
+  --color-obsidian-soft: #141414;
+  --color-ivory: #f6f1e8;
+  --color-ivory-muted: #ebe4d8;
+  --color-champagne: #c9a96e;
+  --color-champagne-soft: #d4bc8a;
+  --color-taupe: #b8aea0;
+  --color-taupe-deep: #8a7f72;
+
+  --font-display: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-dm), "DM Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+
+  body {
+    @apply bg-obsidian text-ivory antialiased;
+    font-family: var(--font-sans);
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection {
+    background: color-mix(in oklab, var(--color-champagne) 35%, transparent);
+    color: var(--color-ivory);
+  }
+
+  :focus-visible {
+    outline: 1px solid var(--color-champagne);
+    outline-offset: 3px;
+  }
+
+  a,
+  button {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.75) sepia(0.4) saturate(2) hue-rotate(5deg);
+    cursor: pointer;
+  }
+}
+
+@layer utilities {
+  .font-display {
+    font-family: var(--font-display);
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .gold-rule {
+    height: 1px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      var(--color-champagne),
+      transparent
+    );
+  }
+
+  .editorial-gradient {
+    background: linear-gradient(
+      180deg,
+      rgba(11, 11, 11, 0.2) 0%,
+      rgba(11, 11, 11, 0.45) 40%,
+      rgba(11, 11, 11, 0.88) 78%,
+      rgba(11, 11, 11, 0.96) 100%
+    );
+  }
+
+  .grain {
+    position: relative;
+  }
+
+  .grain::after {
+    content: "";
+    pointer-events: none;
+    position: absolute;
+    inset: 0;
+    opacity: 0.035;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .safe-pb {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    background-size: 0% 1px;
+    transition: background-size 0.45s var(--ease-editorial);
+  }
+
+  .link-underline:hover {
+    background-size: 100% 1px;
+  }
+}

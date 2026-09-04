@@ -1,0 +1,31 @@
+import { Hero } from "@/components/home/Hero";
+import {
+  BrandIntro,
+  MaritExperienceSection,
+} from "@/components/home/Experience";
+import {
+  CorporateTeaser,
+  DestinationTeaser,
+  WeddingsTeaser,
+} from "@/components/home/Teasers";
+import {
+  FinalCta,
+  PortfolioPreview,
+  TrustSection,
+} from "@/components/home/PortfolioTrust";
+
+export default function HomePage() {
+  return (
+    <>
+      <Hero />
+      <BrandIntro />
+      <MaritExperienceSection />
+      <WeddingsTeaser />
+      <DestinationTeaser />
+      <CorporateTeaser />
+      <PortfolioPreview />
+      <TrustSection />
+      <FinalCta />
+    </>
+  );
+}
