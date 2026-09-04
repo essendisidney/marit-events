@@ -112,4 +112,23 @@
   .link-underline:hover {
     background-size: 100% 1px;
   }
+
+  .img-kenburns {
+    animation: kenburns 18s ease-out forwards;
+  }
+
+  @keyframes kenburns {
+    from {
+      transform: scale(1);
+    }
+    to {
+      transform: scale(1.08);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .img-kenburns {
+      animation: none;
+    }
+  }
 }

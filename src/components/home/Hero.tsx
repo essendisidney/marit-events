@@ -30,7 +30,7 @@ export function Hero() {
           alt="Marit Events pavilion reception with woven lighting and draped ceiling"
           fill
           priority
-          className="object-cover object-[center_25%]"
+          className="object-cover object-[center_25%] img-kenburns"
           sizes="100vw"
         />
       </motion.div>
