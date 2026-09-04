@@ -15,7 +15,10 @@ type EnquiryBody = {
   email?: string;
   phone?: string;
   mode?: string;
+  company?: string; // honeypot
 };
+
+const rateMap = new Map<string, { count: number; reset: number }>();
 
 function clean(value: unknown, max = 500) {
   return String(value ?? "")
@@ -23,12 +26,45 @@ function clean(value: unknown, max = 500) {
     .slice(0, max);
 }
 
+function clientKey(request: Request) {
+  return (
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    request.headers.get("x-real-ip") ||
+    "unknown"
+  );
+}
+
+function rateLimited(key: string) {
+  const now = Date.now();
+  const windowMs = 60_000;
+  const max = 8;
+  const entry = rateMap.get(key);
+  if (!entry || now > entry.reset) {
+    rateMap.set(key, { count: 1, reset: now + windowMs });
+    return false;
+  }
+  entry.count += 1;
+  return entry.count > max;
+}
+
 export async function POST(request: Request) {
+  if (rateLimited(clientKey(request))) {
+    return NextResponse.json(
+      { ok: false, error: "Too many requests" },
+      { status: 429 }
+    );
+  }
+
   let body: EnquiryBody;
   try {
     body = (await request.json()) as EnquiryBody;
   } catch {
     return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
+  }
+
+  // Honeypot — bots fill hidden fields; accept silently
+  if (clean(body.company, 80)) {
+    return NextResponse.json({ ok: true, emailed: false, brief: "" });
   }
 
   const payload = {
@@ -47,6 +83,13 @@ export async function POST(request: Request) {
   if (!payload.name || !payload.email || !payload.phone || !payload.vision) {
     return NextResponse.json(
       { ok: false, error: "Missing required fields" },
+      { status: 400 }
+    );
+  }
+
+  if (!payload.guests && !payload.budget) {
+    return NextResponse.json(
+      { ok: false, error: "Please select guests or budget" },
       { status: 400 }
     );
   }
@@ -98,7 +141,6 @@ export async function POST(request: Request) {
       );
     }
   } else {
-    // No Resend key yet — accept lead so WhatsApp/email handoff can continue.
     console.info("[enquire] lead (no RESEND_API_KEY)", {
       type: payload.type,
       name: payload.name,

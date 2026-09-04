@@ -7,7 +7,7 @@ import {
   getRelatedJournalPosts,
   journalPosts,
 } from "@/lib/journal";
-import { canonical, siteConfig } from "@/lib/site";
+import { canonical, enquireHref, siteConfig } from "@/lib/site";
 import { Reveal } from "@/components/ui";
 
 type Props = { params: Promise<{ slug: string }> };
@@ -93,7 +93,7 @@ export default async function JournalPostPage({ params }: Props) {
         ))}
         <Reveal className="mt-12 border-t border-white/10 pt-10">
           <Link
-            href="/enquire"
+            href={enquireHref({ type: "Wedding" })}
             className="inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
           >
             Plan your celebration with Marit

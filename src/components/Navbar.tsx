@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { moreNav, primaryNav, siteConfig } from "@/lib/site";
+import { enquireHrefForPath, moreNav, primaryNav, siteConfig } from "@/lib/site";
 import { Logo } from "@/components/Logo";
+import { trackCtaClick } from "@/lib/analytics";
 
 export function Navbar() {
   const pathname = usePathname();
@@ -15,6 +16,7 @@ export function Navbar() {
   const moreRef = useRef<HTMLDivElement>(null);
 
   const allMobile = [...primaryNav, ...moreNav];
+  const enquire = enquireHrefForPath(pathname);
   const moreActive = moreNav.some(
     (l) => pathname === l.href || pathname.startsWith(`${l.href}/`)
   );
@@ -127,7 +129,14 @@ export function Navbar() {
 
         <div className="flex items-center gap-3">
           <Link
-            href="/enquire"
+            href={enquire}
+            onClick={() =>
+              trackCtaClick({
+                path: pathname,
+                href: enquire,
+                source: "navbar_desktop",
+              })
+            }
             className="hidden border border-champagne/55 px-4 py-2 text-[11px] uppercase tracking-[0.18em] text-champagne transition duration-300 hover:bg-champagne hover:text-obsidian sm:inline-block"
           >
             Plan Your Event
@@ -193,7 +202,14 @@ export function Navbar() {
                   <Logo size="footer" href={null} />
                 </div>
                 <Link
-                  href="/enquire"
+                  href={enquire}
+                  onClick={() =>
+                    trackCtaClick({
+                      path: pathname,
+                      href: enquire,
+                      source: "navbar_mobile",
+                    })
+                  }
                   className="inline-block bg-champagne px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-obsidian"
                 >
                   Plan Your Event

@@ -3,6 +3,7 @@
 import { FormEvent, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
+  destinations,
   enquiryTypes,
   resolveEnquiryType,
   siteConfig,
@@ -21,6 +22,7 @@ const budgetChips = [
   "$15k–40k",
   "$40k+",
 ] as const;
+const locationChips = destinations.map((d) => d.name);
 
 export function EnquiryForm() {
   const searchParams = useSearchParams();
@@ -39,11 +41,13 @@ export function EnquiryForm() {
   const [mode, setMode] = useState<SubmitMode>("whatsapp");
   const [guests, setGuests] = useState("");
   const [budget, setBudget] = useState("");
+  const [location, setLocation] = useState(initialLocation);
+  const [formError, setFormError] = useState("");
 
   function buildPayload(form: FormData) {
     return {
       type: String(form.get("type") || type),
-      location: String(form.get("location") || ""),
+      location: String(form.get("location") || location || ""),
       date: String(form.get("date") || ""),
       guests: String(form.get("guests") || guests || ""),
       budget: String(form.get("budget") || budget || ""),
@@ -51,13 +55,22 @@ export function EnquiryForm() {
       name: String(form.get("name") || ""),
       email: String(form.get("email") || ""),
       phone: String(form.get("phone") || ""),
+      company: String(form.get("company") || ""),
     };
   }
 
   async function onSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setFormError("");
+    const form = e.currentTarget;
+    const payload = buildPayload(new FormData(form));
+
+    if (!payload.guests && !payload.budget) {
+      setFormError("Select an estimated guest count or budget to continue.");
+      return;
+    }
+
     setSending(true);
-    const payload = buildPayload(new FormData(e.currentTarget));
 
     const lines = [
       `New Marit enquiry from ${payload.name}`,
@@ -73,6 +86,7 @@ export function EnquiryForm() {
 
     setBrief(lines);
     let emailed = false;
+    let ok = false;
 
     try {
       const res = await fetch("/api/enquire", {
@@ -84,10 +98,17 @@ export function EnquiryForm() {
         ok?: boolean;
         emailed?: boolean;
         brief?: string;
+        error?: string;
       };
+      if (!res.ok) {
+        setFormError(data.error || "Something went wrong. Please try again.");
+        setSending(false);
+        return;
+      }
       if (data.brief) setBrief(data.brief);
       emailed = Boolean(data.emailed);
-      if (data.ok) setServerReceived(true);
+      ok = Boolean(data.ok);
+      if (ok) setServerReceived(true);
     } catch {
       /* handoff still proceeds */
     }
@@ -96,11 +117,14 @@ export function EnquiryForm() {
 
     let blocked = false;
     if (mode === "email") {
-      const subject = encodeURIComponent(
-        `Marit Events enquiry — ${payload.type} — ${payload.name}`
-      );
-      const body = encodeURIComponent(lines);
-      window.location.href = `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
+      // Avoid double handoff when Resend already delivered
+      if (!emailed) {
+        const subject = encodeURIComponent(
+          `Marit Events enquiry — ${payload.type} — ${payload.name}`
+        );
+        const body = encodeURIComponent(lines);
+        window.location.href = `mailto:${siteConfig.email}?subject=${subject}&body=${body}`;
+      }
     } else {
       const win = window.open(
         whatsappUrl(lines),
@@ -117,7 +141,11 @@ export function EnquiryForm() {
 
   if (submitted) {
     return (
-      <div className="border border-champagne/35 bg-obsidian-soft px-8 py-14 text-center md:px-12">
+      <div
+        className="border border-champagne/35 bg-obsidian-soft px-8 py-14 text-center md:px-12"
+        role="status"
+        aria-live="polite"
+      >
         <div className="mx-auto mb-6 h-px w-12 bg-champagne" />
         <p className="font-display text-3xl text-ivory md:text-4xl">
           Thank you.
@@ -196,7 +224,12 @@ export function EnquiryForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="space-y-10">
+    <form onSubmit={onSubmit} className="relative space-y-10">
+      {formError ? (
+        <p className="border border-champagne/40 bg-champagne/5 px-4 py-3 text-sm text-champagne" role="alert">
+          {formError}
+        </p>
+      ) : null}
       {initialLocation || initialType !== enquiryTypes[0] ? (
         <p className="border border-champagne/25 bg-champagne/5 px-4 py-3 text-sm text-ivory/80">
           We&apos;ve started your enquiry
@@ -268,9 +301,35 @@ export function EnquiryForm() {
           name="location"
           placeholder="Nairobi, Diani, abroad…"
           required
-          defaultValue={initialLocation}
+          value={location}
+          onChange={setLocation}
+          autoComplete="address-level2"
         />
+        <div className="flex flex-wrap gap-2">
+          {locationChips.map((chip) => (
+            <button
+              key={chip}
+              type="button"
+              onClick={() => setLocation(chip)}
+              className={`border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition ${
+                location === chip
+                  ? "border-champagne text-champagne"
+                  : "border-white/15 text-taupe hover:border-white/30"
+              }`}
+            >
+              {chip}
+            </button>
+          ))}
+        </div>
         <Field label="Event date" name="date" type="date" />
+
+        {/* Honeypot */}
+        <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
+          <label>
+            Company
+            <input type="text" name="company" tabIndex={-1} autoComplete="off" />
+          </label>
+        </div>
 
         <div>
           <p className="text-[11px] uppercase tracking-[0.18em] text-taupe/80">
@@ -333,14 +392,22 @@ export function EnquiryForm() {
           How we reach you
         </p>
         <div className="grid gap-6 md:grid-cols-2">
-          <Field label="Your name" name="name" required />
-          <Field label="Email" name="email" type="email" required />
+          <Field label="Your name" name="name" required autoComplete="name" />
+          <Field
+            label="Email"
+            name="email"
+            type="email"
+            required
+            autoComplete="email"
+          />
         </div>
         <Field
           label="WhatsApp / Phone"
           name="phone"
           required
           placeholder="+254…"
+          autoComplete="tel"
+          inputMode="tel"
         />
       </div>
 
@@ -395,6 +462,10 @@ function Field({
   textarea,
   placeholder,
   defaultValue,
+  value,
+  onChange,
+  autoComplete,
+  inputMode,
 }: {
   label: string;
   name: string;
@@ -403,6 +474,10 @@ function Field({
   textarea?: boolean;
   placeholder?: string;
   defaultValue?: string;
+  value?: string;
+  onChange?: (v: string) => void;
+  autoComplete?: string;
+  inputMode?: React.HTMLAttributes<HTMLInputElement>["inputMode"];
 }) {
   const classes =
     "mt-2 w-full border border-white/10 bg-transparent px-4 py-3.5 text-sm text-ivory outline-none transition duration-300 placeholder:text-taupe/35 focus:border-champagne/55";
@@ -428,7 +503,11 @@ function Field({
           type={type}
           required={required}
           placeholder={placeholder}
-          defaultValue={defaultValue}
+          defaultValue={onChange ? undefined : defaultValue}
+          value={onChange ? value : undefined}
+          onChange={onChange ? (e) => onChange(e.target.value) : undefined}
+          autoComplete={autoComplete}
+          inputMode={inputMode}
           className={classes}
         />
       )}

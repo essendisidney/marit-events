@@ -278,6 +278,20 @@ export function whatsappMessageForPath(pathname: string) {
   return "Hello Marit — I'd like to talk about planning an event.";
 }
 
+export function enquireHrefForPath(pathname: string) {
+  if (pathname.startsWith("/weddings"))
+    return enquireHref({ type: "Wedding" });
+  if (pathname.startsWith("/destination"))
+    return enquireHref({ type: "Destination Event" });
+  if (pathname.startsWith("/corporate"))
+    return enquireHref({ type: "Corporate Event" });
+  if (pathname.startsWith("/portfolio"))
+    return enquireHref({ type: "Other" });
+  if (pathname.startsWith("/journal"))
+    return enquireHref({ type: "Wedding" });
+  return "/enquire";
+}
+
 export function canonical(path = "/") {
   const base = siteConfig.url.replace(/\/$/, "");
   if (!path || path === "/") return base;

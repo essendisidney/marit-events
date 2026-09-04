@@ -2,8 +2,12 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { whatsappMessageForPath, whatsappUrl } from "@/lib/site";
-import { trackWhatsAppClick } from "@/lib/analytics";
+import {
+  enquireHrefForPath,
+  whatsappMessageForPath,
+  whatsappUrl,
+} from "@/lib/site";
+import { trackCtaClick, trackWhatsAppClick } from "@/lib/analytics";
 
 export function WhatsAppFloat() {
   const pathname = usePathname();
@@ -27,11 +31,15 @@ export function WhatsAppFloat() {
 export function MobileStickyBar() {
   const pathname = usePathname();
   if (pathname === "/enquire") return null;
+  const enquire = enquireHrefForPath(pathname);
 
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 border-t border-white/10 bg-obsidian/95 backdrop-blur-md md:hidden safe-pb">
       <Link
-        href="/enquire"
+        href={enquire}
+        onClick={() =>
+          trackCtaClick({ path: pathname, href: enquire, source: "mobile_bar" })
+        }
         className="border-r border-white/10 py-3.5 text-center text-[11px] uppercase tracking-[0.18em] text-champagne active:bg-white/5"
       >
         Enquire

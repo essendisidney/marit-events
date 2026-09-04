@@ -9,14 +9,14 @@ import { JsonLd } from "@/components/JsonLd";
 
 const display = Cormorant_Garamond({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-cormorant",
   display: "swap",
 });
 
 const sans = DM_Sans({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600"],
   variable: "--font-dm",
   display: "swap",
 });

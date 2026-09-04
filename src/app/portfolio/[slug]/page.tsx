@@ -6,6 +6,7 @@ import { getPortfolioItem, portfolio } from "@/lib/portfolio";
 import { enquireHref } from "@/lib/site";
 import { Reveal } from "@/components/ui";
 import { GalleryLightbox } from "@/components/GalleryLightbox";
+import { PageCloser } from "@/components/PageCloser";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -135,6 +136,25 @@ export default async function PortfolioCasePage({ params }: Props) {
           </Link>
         </div>
       </section>
+
+      <PageCloser
+        title="Inspired by this celebration?"
+        body="Tell us what you're imagining — we'll orchestrate the rest."
+        primaryHref={enquireHref({
+          type:
+            item.category === "Corporate"
+              ? "Corporate Event"
+              : item.category === "Wedding"
+                ? "Wedding"
+                : item.category === "Private Celebration"
+                  ? "Private Celebration"
+                  : "Other",
+          location: item.location,
+        })}
+        primaryLabel="Plan your event"
+        secondaryHref="/portfolio"
+        secondaryLabel="More from the portfolio"
+      />
     </article>
   );
 }

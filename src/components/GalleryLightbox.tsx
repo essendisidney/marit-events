@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { trackGalleryOpen } from "@/lib/analytics";
 
 export function GalleryLightbox({
   images,
@@ -13,12 +14,21 @@ export function GalleryLightbox({
 }) {
   const [index, setIndex] = useState<number | null>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
+  const touchX = useRef<number | null>(null);
 
   useEffect(() => {
     if (index === null) return;
     lastFocus.current = document.activeElement as HTMLElement;
     closeRef.current?.focus();
+    trackGalleryOpen({ title });
+
+    const focusables = () =>
+      [closeRef.current, prevRef.current, nextRef.current].filter(
+        Boolean
+      ) as HTMLElement[];
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIndex(null);
@@ -28,9 +38,16 @@ export function GalleryLightbox({
         setIndex((i) =>
           i === null ? 0 : (i - 1 + images.length) % images.length
         );
-      if (e.key === "Tab" && closeRef.current) {
+      if (e.key === "Tab") {
+        const nodes = focusables();
+        if (!nodes.length) return;
         e.preventDefault();
-        closeRef.current.focus();
+        const current = document.activeElement as HTMLElement;
+        const idx = nodes.indexOf(current);
+        const next = e.shiftKey
+          ? nodes[(idx - 1 + nodes.length) % nodes.length]
+          : nodes[(idx + 1) % nodes.length];
+        next.focus();
       }
     };
     window.addEventListener("keydown", onKey);
@@ -40,7 +57,26 @@ export function GalleryLightbox({
       document.body.style.overflow = "";
       lastFocus.current?.focus();
     };
-  }, [index, images.length]);
+  }, [index, images.length, title]);
+
+  function onTouchStart(e: React.TouchEvent) {
+    touchX.current = e.touches[0]?.clientX ?? null;
+  }
+
+  function onTouchEnd(e: React.TouchEvent) {
+    if (touchX.current == null) return;
+    const end = e.changedTouches[0]?.clientX ?? touchX.current;
+    const delta = end - touchX.current;
+    touchX.current = null;
+    if (Math.abs(delta) < 48) return;
+    if (delta < 0) {
+      setIndex((i) => (i === null ? 0 : (i + 1) % images.length));
+    } else {
+      setIndex((i) =>
+        i === null ? 0 : (i - 1 + images.length) % images.length
+      );
+    }
+  }
 
   return (
     <>
@@ -77,6 +113,8 @@ export function GalleryLightbox({
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setIndex(null)}
+            onTouchStart={onTouchStart}
+            onTouchEnd={onTouchEnd}
             role="dialog"
             aria-modal="true"
             aria-label={`${title} gallery`}
@@ -90,6 +128,7 @@ export function GalleryLightbox({
               Close
             </button>
             <button
+              ref={prevRef}
               type="button"
               className="absolute left-4 top-1/2 -translate-y-1/2 text-champagne md:left-8"
               onClick={(e) => {
@@ -121,6 +160,7 @@ export function GalleryLightbox({
               />
             </motion.div>
             <button
+              ref={nextRef}
               type="button"
               className="absolute right-4 top-1/2 -translate-y-1/2 text-champagne md:right-8"
               onClick={(e) => {

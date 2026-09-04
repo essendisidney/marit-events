@@ -1,10 +1,23 @@
+"use client";
+
 import Link from "next/link";
-import { moreNav, navLinks, siteConfig, whatsappUrl } from "@/lib/site";
+import { usePathname } from "next/navigation";
+import {
+  enquireHrefForPath,
+  moreNav,
+  navLinks,
+  siteConfig,
+  whatsappUrl,
+} from "@/lib/site";
 import { Logo } from "@/components/Logo";
+import { trackCtaClick } from "@/lib/analytics";
 
 export function Footer() {
+  const pathname = usePathname();
+  const enquire = enquireHrefForPath(pathname);
+
   return (
-    <footer className="border-t border-white/5 bg-obsidian pb-6 md:pb-0">
+    <footer className="border-t border-white/5 bg-obsidian pb-[calc(5rem+env(safe-area-inset-bottom))] md:pb-0">
       <div className="mx-auto max-w-7xl px-5 py-20 md:px-8 md:py-28">
         <div className="max-w-3xl">
           <p className="font-display text-4xl leading-[1.08] text-ivory md:text-6xl">
@@ -12,7 +25,10 @@ export function Footer() {
             <br className="hidden sm:block" /> worth remembering.
           </p>
           <Link
-            href="/enquire"
+            href={enquire}
+            onClick={() =>
+              trackCtaClick({ path: pathname, href: enquire, source: "footer" })
+            }
             className="mt-8 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne transition duration-300 hover:gap-5"
           >
             Plan your event

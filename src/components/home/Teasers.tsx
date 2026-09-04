@@ -1,22 +1,35 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useRef } from "react";
+import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { images } from "@/lib/images";
 import { ButtonLink, ImageReveal, Reveal, SectionHeading } from "@/components/ui";
 
 export function WeddingsTeaser() {
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "12%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 1.05]);
+
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0">
+    <section ref={ref} className="relative overflow-hidden">
+      <motion.div style={{ y, scale }} className="absolute inset-0">
         <Image
           src={images.weddingFormal}
           alt="Marit Events wedding reception with African print accents and gold place settings"
           fill
-          className="object-cover object-[center_20%] scale-105"
+          className="object-cover object-[center_20%]"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-obsidian/70" />
-        <div className="absolute inset-0 bg-gradient-to-r from-obsidian/85 via-obsidian/55 to-transparent" />
-      </div>
+      </motion.div>
+      <div className="absolute inset-0 bg-obsidian/70" />
+      <div className="absolute inset-0 bg-gradient-to-r from-obsidian/85 via-obsidian/55 to-transparent" />
 
       <div className="relative mx-auto max-w-7xl px-5 py-28 md:px-8 md:py-40">
         <Reveal>
@@ -138,9 +151,18 @@ export function CelebrationsTeaser() {
 }
 
 export function CorporateTeaser() {
+  const ref = useRef<HTMLElement>(null);
+  const reduce = useReducedMotion();
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ["start end", "end start"],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "10%"]);
+  const scale = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 1.04]);
+
   return (
-    <section className="relative overflow-hidden">
-      <div className="absolute inset-0">
+    <section ref={ref} className="relative overflow-hidden">
+      <motion.div style={{ y, scale }} className="absolute inset-0">
         <Image
           src={images.celebrationGold}
           alt="Marit Events corporate black and gold setup"
@@ -148,9 +170,9 @@ export function CorporateTeaser() {
           className="object-cover object-center"
           sizes="100vw"
         />
-        <div className="absolute inset-0 bg-obsidian/72" />
-        <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/50 to-obsidian/30" />
-      </div>
+      </motion.div>
+      <div className="absolute inset-0 bg-obsidian/72" />
+      <div className="absolute inset-0 bg-gradient-to-t from-obsidian via-obsidian/50 to-obsidian/30" />
       <div className="relative mx-auto max-w-7xl px-5 py-28 md:px-8 md:py-40">
         <Reveal>
           <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">

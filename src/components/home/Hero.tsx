@@ -6,6 +6,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { useRef } from "react";
 import { images } from "@/lib/images";
 import { Logo } from "@/components/Logo";
+import { trackCtaClick } from "@/lib/analytics";
 
 export function Hero() {
   const ref = useRef<HTMLElement>(null);
@@ -15,7 +16,6 @@ export function Hero() {
     offset: ["start start", "end start"],
   });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "14%"]);
-  const scale = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 1.06]);
   const opacity = useTransform(scrollYProgress, [0, 0.85], [1, 0.35]);
 
   return (
@@ -23,13 +23,13 @@ export function Hero() {
       ref={ref}
       className="relative h-[100svh] min-h-[640px] overflow-hidden grain"
     >
-      <motion.div style={{ y, scale }} className="absolute inset-0">
+      <motion.div style={{ y }} className="absolute inset-0">
         <Image
           src={images.hero}
           alt="Marit Events pavilion reception with woven lighting and draped ceiling"
           fill
           priority
-          className="object-cover object-[center_25%] img-kenburns"
+          className="object-cover object-[center_25%]"
           sizes="100vw"
         />
       </motion.div>
@@ -65,6 +65,13 @@ export function Hero() {
           >
             <Link
               href="/enquire"
+              onClick={() =>
+                trackCtaClick({
+                  path: "/",
+                  href: "/enquire",
+                  source: "hero_primary",
+                })
+              }
               className="bg-champagne px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-obsidian transition duration-300 hover:bg-champagne-soft"
             >
               Plan Your Event
