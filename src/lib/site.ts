@@ -11,9 +11,9 @@ export const siteConfig = {
     "Premium event experiences, beautifully orchestrated — weddings, destination celebrations and corporate events from Nairobi, Kenya.",
   location: "Nairobi, Kenya",
   locationLine: "Nairobi, Kenya · Creating experiences wherever your celebration takes us",
-  email: "hello@maritevents.com",
-  phone: "+254700000000",
-  whatsapp: "254700000000",
+  email: "maritevents@gmail.com",
+  phone: "+254115251888",
+  whatsapp: "254115251888",
   instagram: "https://instagram.com/maritevents",
   responseTime: "We'll be in touch within 24 hours.",
   /** Production URL — update when custom domain is connected */
