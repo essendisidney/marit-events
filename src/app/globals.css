@@ -48,6 +48,10 @@
     -webkit-tap-highlight-color: transparent;
   }
 
+  input[type="date"] {
+    color-scheme: dark;
+  }
+
   input[type="date"]::-webkit-calendar-picker-indicator {
     filter: invert(0.75) sepia(0.4) saturate(2) hue-rotate(5deg);
     cursor: pointer;

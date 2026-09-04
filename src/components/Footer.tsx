@@ -7,10 +7,11 @@ import {
   moreNav,
   navLinks,
   siteConfig,
+  whatsappMessageForPath,
   whatsappUrl,
 } from "@/lib/site";
 import { Logo } from "@/components/Logo";
-import { trackCtaClick } from "@/lib/analytics";
+import { trackCtaClick, trackWhatsAppClick } from "@/lib/analytics";
 
 export function Footer() {
   const pathname = usePathname();
@@ -80,9 +81,10 @@ export function Footer() {
               Instagram
             </a>
             <a
-              href={whatsappUrl()}
+              href={whatsappUrl(whatsappMessageForPath(pathname))}
               target="_blank"
               rel="noreferrer"
+              onClick={() => trackWhatsAppClick({ path: pathname })}
               className="text-sm text-ivory/70 transition hover:text-champagne"
             >
               WhatsApp

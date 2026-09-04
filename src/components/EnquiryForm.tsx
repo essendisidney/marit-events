@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useState } from "react";
+import { FormEvent, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   destinations,
@@ -43,6 +43,8 @@ export function EnquiryForm() {
   const [budget, setBudget] = useState("");
   const [location, setLocation] = useState(initialLocation);
   const [formError, setFormError] = useState("");
+  const [copied, setCopied] = useState(false);
+  const guestsGroupRef = useRef<HTMLDivElement>(null);
 
   function buildPayload(form: FormData) {
     return {
@@ -67,6 +69,7 @@ export function EnquiryForm() {
 
     if (!payload.guests && !payload.budget) {
       setFormError("Select an estimated guest count or budget to continue.");
+      guestsGroupRef.current?.querySelector("button")?.focus();
       return;
     }
 
@@ -172,53 +175,45 @@ export function EnquiryForm() {
         </ol>
 
         {handoffBlocked ? (
-          <div className="mx-auto mt-8 max-w-md border border-champagne/30 bg-obsidian/40 p-5 text-left">
-            <p className="text-sm text-ivory/85">
-              Your message didn&apos;t open automatically. Use a direct link or
-              copy your brief:
-            </p>
-            <div className="mt-4 flex flex-col gap-3">
-              <a
-                href={whatsappUrl(brief)}
-                target="_blank"
-                rel="noreferrer"
-                className="text-[11px] uppercase tracking-[0.2em] text-champagne link-underline"
-              >
-                Open WhatsApp →
-              </a>
-              <a
-                href={`mailto:${siteConfig.email}?subject=${encodeURIComponent("Marit Events enquiry")}&body=${encodeURIComponent(brief)}`}
-                className="text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
-              >
-                Open email →
-              </a>
-              <button
-                type="button"
-                className="text-left text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
-                onClick={() => navigator.clipboard?.writeText(brief)}
-              >
-                Copy brief
-              </button>
-            </div>
-          </div>
-        ) : (
-          <div className="mt-8 flex flex-col items-center gap-3">
-            <a
-              href={whatsappUrl(brief || undefined)}
-              target="_blank"
-              rel="noreferrer"
-              className="text-[11px] uppercase tracking-[0.2em] text-champagne link-underline"
-            >
-              Continue on WhatsApp
-            </a>
-            <a
-              href={`mailto:${siteConfig.email}`}
-              className="text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
-            >
-              Or email {siteConfig.email}
-            </a>
-          </div>
-        )}
+          <p className="mx-auto mt-6 max-w-sm text-sm text-ivory/80">
+            Your message didn&apos;t open automatically — use the options below.
+          </p>
+        ) : null}
+
+        <div className="mx-auto mt-8 flex max-w-sm flex-col items-center gap-3">
+          <a
+            href={whatsappUrl(brief || undefined)}
+            target="_blank"
+            rel="noreferrer"
+            className="text-[11px] uppercase tracking-[0.2em] text-champagne link-underline"
+          >
+            Continue on WhatsApp
+          </a>
+          <a
+            href={`mailto:${siteConfig.email}?subject=${encodeURIComponent("Marit Events enquiry")}&body=${encodeURIComponent(brief)}`}
+            className="text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
+          >
+            Or email {siteConfig.email}
+          </a>
+          <button
+            type="button"
+            className="text-[11px] uppercase tracking-[0.2em] text-taupe link-underline"
+            onClick={async () => {
+              try {
+                await navigator.clipboard?.writeText(brief);
+                setCopied(true);
+                window.setTimeout(() => setCopied(false), 2000);
+              } catch {
+                /* ignore */
+              }
+            }}
+          >
+            {copied ? "Copied" : "Copy brief"}
+          </button>
+          <span className="sr-only" aria-live="polite">
+            {copied ? "Brief copied to clipboard" : ""}
+          </span>
+        </div>
       </div>
     );
   }
@@ -305,11 +300,12 @@ export function EnquiryForm() {
           onChange={setLocation}
           autoComplete="address-level2"
         />
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-2" role="group" aria-label="Suggested locations">
           {locationChips.map((chip) => (
             <button
               key={chip}
               type="button"
+              aria-pressed={location === chip}
               onClick={() => setLocation(chip)}
               className={`border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition ${
                 location === chip
@@ -331,15 +327,23 @@ export function EnquiryForm() {
           </label>
         </div>
 
-        <div>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-taupe/80">
+        <div ref={guestsGroupRef}>
+          <p
+            id="guests-label"
+            className="text-[11px] uppercase tracking-[0.18em] text-taupe/80"
+          >
             Estimated guest count
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div
+            className="mt-3 flex flex-wrap gap-2"
+            role="group"
+            aria-labelledby="guests-label"
+          >
             {guestChips.map((chip) => (
               <button
                 key={chip}
                 type="button"
+                aria-pressed={guests === chip}
                 onClick={() => setGuests(chip)}
                 className={`border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition ${
                   guests === chip
@@ -355,14 +359,22 @@ export function EnquiryForm() {
         </div>
 
         <div>
-          <p className="text-[11px] uppercase tracking-[0.18em] text-taupe/80">
+          <p
+            id="budget-label"
+            className="text-[11px] uppercase tracking-[0.18em] text-taupe/80"
+          >
             Estimated budget
           </p>
-          <div className="mt-3 flex flex-wrap gap-2">
+          <div
+            className="mt-3 flex flex-wrap gap-2"
+            role="group"
+            aria-labelledby="budget-label"
+          >
             {budgetChips.map((chip) => (
               <button
                 type="button"
                 key={chip}
+                aria-pressed={budget === chip}
                 onClick={() => setBudget(chip)}
                 className={`border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition ${
                   budget === chip
@@ -425,6 +437,7 @@ export function EnquiryForm() {
             <button
               key={value}
               type="button"
+              aria-pressed={mode === value}
               onClick={() => setMode(value)}
               className={`border px-4 py-2 text-[11px] uppercase tracking-[0.18em] transition ${
                 mode === value
@@ -443,7 +456,9 @@ export function EnquiryForm() {
           className="w-full bg-champagne py-4 text-[11px] uppercase tracking-[0.22em] text-obsidian transition duration-300 hover:bg-champagne-soft disabled:opacity-60 md:w-auto md:min-w-[14rem] md:px-10"
         >
           {sending
-            ? "Opening…"
+            ? mode === "whatsapp"
+              ? "Opening WhatsApp…"
+              : "Sending…"
             : mode === "whatsapp"
               ? "Send via WhatsApp →"
               : "Send via Email →"}

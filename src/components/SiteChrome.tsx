@@ -19,7 +19,7 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
       <RouteTransition />
       <ScrollProgress />
       <Navbar />
-      <main id="main-content" className="md:pb-0">
+      <main id="main-content" tabIndex={-1} className="outline-none md:pb-0">
         {children}
       </main>
       <Footer />

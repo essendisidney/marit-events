@@ -2,9 +2,11 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { siteConfig } from "@/lib/site";
+import { usePathname } from "next/navigation";
+import { enquireHrefForPath, siteConfig } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal } from "@/components/ui";
+import { trackCtaClick } from "@/lib/analytics";
 
 const tiles = [
   { src: images.weddingFormal, alt: "African print wedding styling" },
@@ -16,6 +18,8 @@ const tiles = [
 ];
 
 export function InstagramStrip() {
+  const pathname = usePathname();
+  const enquire = enquireHrefForPath(pathname);
   const handle =
     siteConfig.instagram
       .replace(/https?:\/\/(www\.)?instagram\.com\//, "")
@@ -73,7 +77,14 @@ export function InstagramStrip() {
           <p className="text-sm text-taupe">
             Prefer WhatsApp?{" "}
             <Link
-              href="/enquire"
+              href={enquire}
+              onClick={() =>
+                trackCtaClick({
+                  path: pathname,
+                  href: enquire,
+                  source: "instagram_strip",
+                })
+              }
               className="text-ivory underline-offset-4 hover:text-champagne hover:underline"
             >
               Plan your event

@@ -14,6 +14,8 @@ export function Navbar() {
   const [moreOpen, setMoreOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const moreRef = useRef<HTMLDivElement>(null);
+  const moreBtnRef = useRef<HTMLButtonElement>(null);
+  const menuBtnRef = useRef<HTMLButtonElement>(null);
 
   const allMobile = [...primaryNav, ...moreNav];
   const enquire = enquireHrefForPath(pathname);
@@ -39,6 +41,22 @@ export function Navbar() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  useEffect(() => {
+    if (!moreOpen && !open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Escape") return;
+      if (moreOpen) {
+        setMoreOpen(false);
+        moreBtnRef.current?.focus();
+      } else if (open) {
+        setOpen(false);
+        menuBtnRef.current?.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [moreOpen, open]);
 
   useEffect(() => {
     if (!moreOpen) return;
@@ -87,9 +105,11 @@ export function Navbar() {
 
           <div className="relative" ref={moreRef}>
             <button
+              ref={moreBtnRef}
               type="button"
               className={linkClass(moreActive || moreOpen)}
               aria-expanded={moreOpen}
+              aria-haspopup="menu"
               onClick={() => setMoreOpen((v) => !v)}
             >
               More
@@ -97,6 +117,7 @@ export function Navbar() {
             <AnimatePresence>
               {moreOpen ? (
                 <motion.div
+                  role="menu"
                   initial={{ opacity: 0, y: 6 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: 6 }}
@@ -142,6 +163,7 @@ export function Navbar() {
             Plan Your Event
           </Link>
           <button
+            ref={menuBtnRef}
             type="button"
             aria-expanded={open}
             aria-controls="mobile-nav"

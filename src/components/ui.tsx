@@ -111,11 +111,13 @@ export function ButtonLink({
   children,
   variant = "primary",
   className = "",
+  onClick,
 }: {
   href: string;
   children: ReactNode;
   variant?: "primary" | "secondary" | "ghost" | "ghost-dark" | "solid-dark";
   className?: string;
+  onClick?: () => void;
 }) {
   const styles = {
     primary:
@@ -135,6 +137,7 @@ export function ButtonLink({
   return (
     <Link
       href={href}
+      onClick={onClick}
       className={`inline-flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.2em] transition-all duration-300 ${
         isGhost ? "" : "px-7 py-3.5"
       } ${styles[variant]} ${className}`}

@@ -86,6 +86,7 @@ export function GalleryLightbox({
             key={`${src}-${i}`}
             type="button"
             onClick={() => setIndex(i)}
+            aria-label={`View ${title} image ${i + 1}`}
             className={`group relative overflow-hidden text-left ${
               i === 0 ? "md:col-span-2 md:aspect-[16/10]" : "aspect-[3/4]"
             }`}
@@ -98,7 +99,7 @@ export function GalleryLightbox({
               sizes="(max-width: 768px) 100vw, 50vw"
             />
             <span className="absolute inset-0 bg-obsidian/0 transition group-hover:bg-obsidian/15" />
-            <span className="absolute bottom-4 right-4 text-[10px] uppercase tracking-[0.2em] text-ivory/0 transition group-hover:text-ivory/80">
+            <span className="absolute bottom-4 right-4 text-[10px] uppercase tracking-[0.2em] text-ivory/70 md:text-ivory/0 md:transition md:group-hover:text-ivory/80">
               View
             </span>
           </button>
@@ -173,6 +174,7 @@ export function GalleryLightbox({
             </button>
             <p className="absolute bottom-6 text-[11px] tracking-[0.18em] text-taupe">
               {index + 1} / {images.length}
+              <span className="ml-3 text-taupe/60 md:hidden">Swipe</span>
             </p>
           </motion.div>
         ) : null}
