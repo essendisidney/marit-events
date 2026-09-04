@@ -2,7 +2,7 @@
 
 Premium event experiences website — editorial, luxurious, conversion-focused.
 
-**Live:** [marit-events.vercel.app](https://marit-events.vercel.app)  
+**Live:** [maritevents.com](https://maritevents.com) (also [marit-events.vercel.app](https://marit-events.vercel.app))  
 **Repo:** [github.com/essendisidney/marit-events](https://github.com/essendisidney/marit-events)
 
 ## Stack

@@ -17,7 +17,7 @@ export const siteConfig = {
   instagram: "https://instagram.com/maritevents",
   responseTime: "We'll be in touch within 24 hours.",
   /** Production URL — update when custom domain is connected */
-  url: process.env.NEXT_PUBLIC_SITE_URL || "https://marit-events.vercel.app",
+  url: process.env.NEXT_PUBLIC_SITE_URL || "https://maritevents.com",
   logo: "/marit-logo.png",
   ogImage: "/events/reception-rustic-chic.jpg",
 };
