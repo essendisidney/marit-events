@@ -7,6 +7,7 @@ import { Reveal, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/Faq";
 import { InstagramStrip } from "@/components/InstagramStrip";
 import { PageCloser } from "@/components/PageCloser";
+import { trackCtaClick } from "@/lib/analytics";
 
 export const metadata: Metadata = {
   title: "Weddings",
@@ -73,6 +74,13 @@ export default function WeddingsPage() {
             <div className="mt-10 flex flex-wrap gap-4">
               <Link
                 href={enquireHref({ type: "Wedding" })}
+                onClick={() =>
+                  trackCtaClick({
+                    path: "/weddings",
+                    href: enquireHref({ type: "Wedding" }),
+                    source: "weddings_hero",
+                  })
+                }
                 className="bg-champagne px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-obsidian transition hover:bg-champagne-soft"
               >
                 Begin wedding enquiry

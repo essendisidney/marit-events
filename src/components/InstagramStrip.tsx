@@ -3,18 +3,47 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { enquireHrefForPath, siteConfig, whatsappMessageForPath, whatsappUrl } from "@/lib/site";
+import {
+  enquireHrefForPath,
+  siteConfig,
+  whatsappMessageForPath,
+  whatsappUrl,
+} from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal } from "@/components/ui";
 import { trackCtaClick, trackWhatsAppClick } from "@/lib/analytics";
 
 const tiles = [
-  { src: images.weddingFormal, alt: "African print wedding styling" },
-  { src: images.proposal, alt: "Proposal heart floor installation" },
-  { src: images.celebrationGold, alt: "Black and gold corporate evening" },
-  { src: images.entranceDraped, alt: "Draped floral entrance" },
-  { src: images.receptionRustic, alt: "Rustic chic reception pavilion" },
-  { src: images.babyShower, alt: "Soft pink celebration tablescape" },
+  {
+    src: images.weddingFormal,
+    alt: "African print wedding styling",
+    href: "/portfolio/african-print-celebration",
+  },
+  {
+    src: images.proposal,
+    alt: "Proposal heart floor installation",
+    href: "/portfolio/she-said-yes",
+  },
+  {
+    src: images.celebrationGold,
+    alt: "Black and gold corporate evening",
+    href: "/portfolio/black-and-gold-corporate",
+  },
+  {
+    src: images.entranceDraped,
+    alt: "Draped floral entrance",
+    href: "/portfolio/starlit-pavilion-reception",
+  },
+  {
+    src: images.receptionRustic,
+    alt: "Rustic chic reception pavilion",
+    href: "/portfolio/starlit-pavilion-reception",
+  },
+  {
+    src: images.babyShower,
+    alt: "Soft pink celebration tablescape",
+    href: "/portfolio/celebrations-in-colour",
+  },
 ];
 
 export function InstagramStrip() {
@@ -52,11 +81,16 @@ export function InstagramStrip() {
 
         <div className="mt-12 grid grid-cols-2 gap-2 md:grid-cols-3 md:gap-3">
           {tiles.map((tile, i) => (
-            <Reveal key={tile.src} delay={0.04 * i}>
-              <a
-                href={siteConfig.instagram}
-                target="_blank"
-                rel="noreferrer"
+            <Reveal key={`${tile.href}-${i}`} delay={0.04 * i}>
+              <Link
+                href={tile.href}
+                onClick={() =>
+                  trackCtaClick({
+                    path: pathname,
+                    href: tile.href,
+                    source: "instagram_tile",
+                  })
+                }
                 className="group relative block aspect-square overflow-hidden"
               >
                 <Image
@@ -68,7 +102,7 @@ export function InstagramStrip() {
                 />
                 <span className="absolute inset-0 bg-obsidian/0 transition group-hover:bg-obsidian/35" />
                 <span className="absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 bg-champagne transition duration-500 group-hover:scale-x-100" />
-              </a>
+              </Link>
             </Reveal>
           ))}
         </div>

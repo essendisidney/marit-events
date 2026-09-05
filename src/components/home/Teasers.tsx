@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useRef } from "react";
 import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion";
 import { images } from "@/lib/images";
+import { enquireHref } from "@/lib/site";
+import { trackCtaClick } from "@/lib/analytics";
 import { ButtonLink, ImageReveal, Reveal, SectionHeading } from "@/components/ui";
 
 export function WeddingsTeaser() {
@@ -16,6 +18,7 @@ export function WeddingsTeaser() {
   });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "12%"]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 1.05]);
+  const enquire = enquireHref({ type: "Wedding" });
 
   return (
     <section ref={ref} className="relative overflow-hidden">
@@ -45,7 +48,20 @@ export function WeddingsTeaser() {
             Intimate gatherings and spectacular Kenya celebrations — designed
             around your story, orchestrated so you stay present.
           </p>
-          <div className="mt-10">
+          <div className="mt-10 flex flex-wrap items-center gap-6">
+            <ButtonLink
+              href={enquire}
+              variant="ghost"
+              onClick={() =>
+                trackCtaClick({
+                  path: "/",
+                  href: enquire,
+                  source: "teaser_weddings",
+                })
+              }
+            >
+              Begin wedding enquiry
+            </ButtonLink>
             <ButtonLink href="/weddings" variant="ghost">
               Explore Weddings
             </ButtonLink>
@@ -57,6 +73,8 @@ export function WeddingsTeaser() {
 }
 
 export function DestinationTeaser() {
+  const enquire = enquireHref({ type: "Destination Event" });
+
   return (
     <section className="bg-obsidian px-5 py-24 md:px-8 md:py-36">
       <div className="mx-auto grid max-w-7xl items-end gap-12 lg:grid-cols-2 lg:gap-16">
@@ -66,9 +84,22 @@ export function DestinationTeaser() {
             title="Get married in Kenya."
             body="Bring your people. We'll handle the rest. From Nairobi's sophisticated venues to the coast's tropical landscapes, Marit creates destination experiences that feel effortless for couples and their guests."
           />
-          <div className="mt-8">
+          <div className="mt-8 flex flex-wrap items-center gap-6">
+            <ButtonLink
+              href={enquire}
+              variant="ghost"
+              onClick={() =>
+                trackCtaClick({
+                  path: "/",
+                  href: enquire,
+                  source: "teaser_destination",
+                })
+              }
+            >
+              Plan a destination event
+            </ButtonLink>
             <ButtonLink href="/destination" variant="ghost">
-              Destination Weddings
+              Destination Kenya
             </ButtonLink>
           </div>
         </Reveal>
@@ -90,6 +121,8 @@ export function DestinationTeaser() {
 }
 
 export function CelebrationsTeaser() {
+  const enquire = enquireHref({ type: "Private Celebration" });
+
   return (
     <section className="bg-obsidian px-5 py-24 md:px-8 md:py-32">
       <div className="mx-auto max-w-7xl">
@@ -99,10 +132,28 @@ export function CelebrationsTeaser() {
             title="Proposals. Showers. Birthdays. Moments that matter."
             body="Every gathering deserves the same care as a wedding — intentional design, calm execution, unforgettable atmosphere."
           />
+          <div className="mt-8">
+            <ButtonLink
+              href={enquire}
+              variant="ghost"
+              onClick={() =>
+                trackCtaClick({
+                  path: "/",
+                  href: enquire,
+                  source: "teaser_celebrations",
+                })
+              }
+            >
+              Plan a celebration
+            </ButtonLink>
+          </div>
         </Reveal>
         <div className="mt-14 grid gap-5 md:grid-cols-2">
           <Reveal>
-            <Link href="/portfolio/she-said-yes" className="group relative block aspect-[4/5] overflow-hidden md:aspect-[5/4]">
+            <Link
+              href="/portfolio/she-said-yes"
+              className="group relative block aspect-[4/5] overflow-hidden md:aspect-[5/4]"
+            >
               <Image
                 src={images.proposal}
                 alt="Proposal setup by Marit Events"
@@ -159,6 +210,7 @@ export function CorporateTeaser() {
   });
   const y = useTransform(scrollYProgress, [0, 1], ["0%", reduce ? "0%" : "10%"]);
   const scale = useTransform(scrollYProgress, [0, 1], [1, reduce ? 1 : 1.04]);
+  const enquire = enquireHref({ type: "Corporate Event" });
 
   return (
     <section ref={ref} className="relative overflow-hidden">
@@ -185,9 +237,22 @@ export function CorporateTeaser() {
             From boardroom to ballroom — brand experiences that look premium and
             run with precision.
           </p>
-          <div className="mt-10">
-            <ButtonLink href="/corporate" variant="ghost">
+          <div className="mt-10 flex flex-wrap items-center gap-6">
+            <ButtonLink
+              href={enquire}
+              variant="ghost"
+              onClick={() =>
+                trackCtaClick({
+                  path: "/",
+                  href: enquire,
+                  source: "teaser_corporate",
+                })
+              }
+            >
               Plan a Corporate Event
+            </ButtonLink>
+            <ButtonLink href="/corporate" variant="ghost">
+              Explore Corporate
             </ButtonLink>
           </div>
         </Reveal>

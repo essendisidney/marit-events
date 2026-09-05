@@ -25,7 +25,7 @@ export function RouteTransition() {
     }
     setKey((k) => k + 1);
     setActive(true);
-    const done = window.setTimeout(() => setActive(false), 720);
+    const done = window.setTimeout(() => setActive(false), 480);
     return () => window.clearTimeout(done);
   }, [pathname, reduce]);
 

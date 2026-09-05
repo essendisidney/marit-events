@@ -6,6 +6,8 @@ import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { PageCloser } from "@/components/PageCloser";
 import { Faq } from "@/components/Faq";
+import { InstagramStrip } from "@/components/InstagramStrip";
+import { trackCtaClick } from "@/lib/analytics";
 
 export const metadata: Metadata = {
   title: "Destination",
@@ -39,6 +41,13 @@ export default function DestinationPage() {
             />
             <Link
               href={enquireHref({ type: "Destination Event" })}
+              onClick={() =>
+                trackCtaClick({
+                  path: "/destination",
+                  href: enquireHref({ type: "Destination Event" }),
+                  source: "destination_hero",
+                })
+              }
               className="mt-10 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
             >
               Plan a destination event
@@ -135,6 +144,8 @@ export default function DestinationPage() {
         items={[...destinationFaqs]}
         title="Destination celebrations with Marit"
       />
+
+      <InstagramStrip />
 
       <PageCloser
         title="Ready for a Kenya celebration?"

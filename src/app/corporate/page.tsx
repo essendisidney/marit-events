@@ -5,7 +5,9 @@ import { canonical, corporateFaqs, corporateTypes, enquireHref } from "@/lib/sit
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/Faq";
+import { InstagramStrip } from "@/components/InstagramStrip";
 import { PageCloser } from "@/components/PageCloser";
+import { trackCtaClick } from "@/lib/analytics";
 
 export const metadata: Metadata = {
   title: "Corporate",
@@ -64,6 +66,13 @@ export default function CorporatePage() {
           <Reveal className="mt-14">
             <Link
               href={enquireHref({ type: "Corporate Event" })}
+              onClick={() =>
+                trackCtaClick({
+                  path: "/corporate",
+                  href: enquireHref({ type: "Corporate Event" }),
+                  source: "corporate_mid",
+                })
+              }
               className="inline-block border border-champagne px-8 py-4 text-[11px] uppercase tracking-[0.2em] text-champagne transition hover:bg-champagne hover:text-obsidian"
             >
               Plan a Corporate Event →
@@ -106,6 +115,7 @@ export default function CorporatePage() {
       </section>
 
       <Faq items={[...corporateFaqs]} title="Corporate planning with Marit" />
+      <InstagramStrip />
       <PageCloser
         title="Ready to elevate your next corporate moment?"
         primaryHref={enquireHref({ type: "Corporate Event" })}

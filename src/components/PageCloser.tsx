@@ -25,7 +25,7 @@ const byPath: Record<
       | "secondaryHref"
       | "secondaryLabel"
     >
-  > & { primaryType?: string }
+  >
 > = {
   "/": {
     title: "Ready for a celebration without the chaos?",

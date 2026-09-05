@@ -55,14 +55,14 @@ export function Hero() {
             <Logo size="hero" href={null} priority />
           </motion.div>
 
-          <motion.p
+          <motion.h1
             initial={enter ? { opacity: 0, y: 14 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 max-w-xl font-display text-[clamp(1.5rem,3.2vw,2.35rem)] leading-snug text-ivory/92"
           >
             Where extraordinary celebrations come to life.
-          </motion.p>
+          </motion.h1>
 
           <motion.div
             initial={enter ? { opacity: 0, y: 10 } : false}
@@ -85,6 +85,13 @@ export function Hero() {
             </Link>
             <Link
               href="/weddings"
+              onClick={() =>
+                trackCtaClick({
+                  path: "/",
+                  href: "/weddings",
+                  source: "hero_secondary",
+                })
+              }
               className="border border-ivory/30 px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-ivory/90 transition duration-300 hover:border-champagne hover:text-champagne"
             >
               Explore Weddings

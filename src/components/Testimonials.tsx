@@ -9,7 +9,8 @@ import {
   useReducedMotion,
 } from "framer-motion";
 import { enquireHref, testimonials } from "@/lib/site";
-import { Reveal, SectionHeading } from "@/components/ui";
+import { Reveal } from "@/components/ui";
+import { trackCtaClick } from "@/lib/analytics";
 
 export function Testimonials() {
   const [active, setActive] = useState(0);
@@ -27,6 +28,21 @@ export function Testimonials() {
     }, 7000);
     return () => window.clearInterval(id);
   }, [reduceMotion, paused]);
+
+  useEffect(() => {
+    if (!paused) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "ArrowRight") {
+        e.preventDefault();
+        setActive((i) => (i + 1) % testimonials.length);
+      } else if (e.key === "ArrowLeft") {
+        e.preventDefault();
+        setActive((i) => (i - 1 + testimonials.length) % testimonials.length);
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [paused]);
 
   function go(delta: number) {
     setActive((i) => (i + delta + testimonials.length) % testimonials.length);
@@ -117,6 +133,13 @@ export function Testimonials() {
         </p>
         <Link
           href={enquireHref({ type: enquireType })}
+          onClick={() =>
+            trackCtaClick({
+              path: "/",
+              href: enquireHref({ type: enquireType }),
+              source: "testimonials",
+            })
+          }
           className="mt-8 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-champagne transition hover:gap-4"
         >
           Begin your enquiry
@@ -140,13 +163,5 @@ export function Testimonials() {
         </div>
       </div>
     </section>
-  );
-}
-
-export function TestimonialsIntro() {
-  return (
-    <div className="sr-only">
-      <SectionHeading title="Testimonials" />
-    </div>
   );
 }

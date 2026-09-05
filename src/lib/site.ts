@@ -319,6 +319,8 @@ export function enquireHrefForPath(pathname: string) {
     return enquireHref({ type: type ?? "Wedding" });
   }
   if (pathname.startsWith("/journal")) return "/enquire";
+  if (pathname.startsWith("/experiences")) return "/enquire";
+  if (pathname.startsWith("/story")) return "/enquire";
   return "/enquire";
 }
 

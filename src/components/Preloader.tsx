@@ -12,8 +12,8 @@ import {
 const SESSION_KEY = PRELOADER_SESSION_KEY;
 
 /** Once per session — progress eases to 100, then curtains part. */
-const HOLD_MS = 2600;
-const EXIT_MS = 900;
+const HOLD_MS = 1800;
+const EXIT_MS = 700;
 
 export function Preloader() {
   const reduce = useReducedMotion();

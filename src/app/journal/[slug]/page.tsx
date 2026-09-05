@@ -50,8 +50,20 @@ export default async function JournalPostPage({ params }: Props) {
       ? post.image
       : `${siteConfig.url}${post.image}`,
     datePublished: post.date,
+    dateModified: post.date,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": canonical(`/journal/${post.slug}`),
+    },
     author: { "@type": "Organization", name: siteConfig.name },
-    publisher: { "@type": "Organization", name: siteConfig.name },
+    publisher: {
+      "@type": "Organization",
+      name: siteConfig.name,
+      logo: {
+        "@type": "ImageObject",
+        url: `${siteConfig.url.replace(/\/$/, "")}${siteConfig.logo}`,
+      },
+    },
   };
 
   return (
