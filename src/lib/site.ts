@@ -314,9 +314,34 @@ export function enquireHrefForPath(pathname: string) {
     return enquireHref({ type: type ?? "Private Celebration" });
   }
   if (pathname.startsWith("/portfolio")) return "/enquire";
-  if (pathname.startsWith("/journal"))
-    return enquireHref({ type: "Wedding" });
+  if (pathname.startsWith("/journal/")) {
+    const type = enquiryTypeForJournalPath(pathname);
+    return enquireHref({ type: type ?? "Wedding" });
+  }
+  if (pathname.startsWith("/journal")) return "/enquire";
   return "/enquire";
+}
+
+function enquiryTypeForJournalPath(
+  pathname: string
+): (typeof enquiryTypes)[number] | null {
+  const slug = pathname.split("/")[2];
+  if (!slug) return null;
+  const bySlug: Record<string, (typeof enquiryTypes)[number]> = {
+    "destination-wedding-venues-kenya": "Destination Event",
+    "planning-a-wedding-in-kenya-from-abroad": "Wedding",
+    "nairobi-wedding-venues": "Wedding",
+    "luxury-wedding-planners-kenya": "Wedding",
+  };
+  return bySlug[slug] ?? null;
+}
+
+export function enquireTypeForJournalCategory(category: string) {
+  const key = category.toLowerCase();
+  if (key.includes("destination")) return "Destination Event" as const;
+  if (key.includes("corporate")) return "Corporate Event" as const;
+  if (key.includes("wedding")) return "Wedding" as const;
+  return "Wedding" as const;
 }
 
 export function canonical(path = "/") {

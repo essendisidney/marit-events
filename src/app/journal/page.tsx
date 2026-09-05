@@ -22,6 +22,7 @@ export default function JournalPage() {
         <div className="mx-auto max-w-7xl">
           <Reveal>
             <SectionHeading
+              as="h1"
               eyebrow="Journal"
               title="For anyone dreaming of celebrating in Kenya."
               body="Editorial guides for destination weddings, Nairobi venues and planning from abroad — written to help international guests discover and trust Marit."

@@ -55,7 +55,9 @@ export function Footer() {
           <div className="flex flex-col gap-3">
             {navLinks
               .filter((l) =>
-                ["Weddings", "Corporate", "Destination"].includes(l.label)
+                ["Experiences", "Weddings", "Corporate", "Destination"].includes(
+                  l.label
+                )
               )
               .map((link) => (
                 <Link
@@ -94,6 +96,12 @@ export function Footer() {
               className="text-sm text-ivory/70 transition hover:text-champagne"
             >
               WhatsApp
+            </a>
+            <a
+              href={`tel:${siteConfig.phone.replace(/\s/g, "")}`}
+              className="text-sm text-ivory/70 transition hover:text-champagne"
+            >
+              {siteConfig.phone}
             </a>
             <a
               href={`mailto:${siteConfig.email}`}

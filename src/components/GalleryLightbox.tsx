@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { trackGalleryOpen } from "@/lib/analytics";
 
 export function GalleryLightbox({
@@ -18,6 +18,9 @@ export function GalleryLightbox({
   const nextRef = useRef<HTMLButtonElement>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
   const touchX = useRef<number | null>(null);
+  const reduceMotion = useReducedMotion();
+  const fade = reduceMotion ? 0 : 0.25;
+  const scaleIn = reduceMotion ? 0 : 0.35;
 
   useEffect(() => {
     if (index === null) return;
@@ -117,6 +120,7 @@ export function GalleryLightbox({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
+            transition={{ duration: fade }}
             onClick={() => setIndex(null)}
             onTouchStart={onTouchStart}
             onTouchEnd={onTouchEnd}
@@ -149,10 +153,10 @@ export function GalleryLightbox({
             <motion.div
               key={index}
               className="relative h-[70vh] w-full max-w-5xl"
-              initial={{ opacity: 0, scale: 0.98 }}
+              initial={reduceMotion ? false : { opacity: 0, scale: 0.98 }}
               animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0 }}
-              transition={{ duration: 0.35 }}
+              exit={reduceMotion ? undefined : { opacity: 0 }}
+              transition={{ duration: scaleIn }}
               onClick={(e) => e.stopPropagation()}
             >
               <Image

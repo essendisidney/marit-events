@@ -95,6 +95,7 @@ export function Testimonials() {
           <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
             Words from the room
           </p>
+          <h2 className="sr-only">Client reflections</h2>
         </Reveal>
         <AnimatePresence mode="wait">
           <motion.blockquote
@@ -104,6 +105,7 @@ export function Testimonials() {
             exit={reduceMotion ? undefined : { opacity: 0, y: -10 }}
             transition={{ duration }}
             className="mt-8 font-display text-3xl leading-snug text-ivory md:text-5xl"
+            aria-live="polite"
           >
             “{item.quote}”
           </motion.blockquote>

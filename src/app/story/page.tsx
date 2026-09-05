@@ -28,6 +28,7 @@ export default function StoryPage() {
         <div className="relative z-10 mx-auto flex min-h-[70svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-32 md:px-8">
           <Reveal>
             <SectionHeading
+              as="h1"
               eyebrow="Our Story"
               title="African soul. International luxury."
               body="Marit Events was built for people who want extraordinary celebrations — without the chaos."

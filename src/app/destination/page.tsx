@@ -32,6 +32,7 @@ export default function DestinationPage() {
         <div className="relative z-10 mx-auto flex min-h-[75svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-32 md:px-8">
           <Reveal>
             <SectionHeading
+              as="h1"
               eyebrow="Destination Kenya"
               title="Get married in Kenya."
               body="Bring your people. We'll handle the rest — venues, guest logistics, styling and the quiet details that make destination celebrations feel effortless."

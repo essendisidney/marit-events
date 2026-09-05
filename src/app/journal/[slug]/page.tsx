@@ -7,8 +7,9 @@ import {
   getRelatedJournalPosts,
   journalPosts,
 } from "@/lib/journal";
-import { canonical, enquireHref, siteConfig } from "@/lib/site";
+import { canonical, enquireHref, enquireTypeForJournalCategory, siteConfig } from "@/lib/site";
 import { Reveal } from "@/components/ui";
+import { PageCloser } from "@/components/PageCloser";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -38,6 +39,7 @@ export default async function JournalPostPage({ params }: Props) {
   const post = getJournalPost(slug);
   if (!post) notFound();
   const related = getRelatedJournalPosts(slug);
+  const enquireType = enquireTypeForJournalCategory(post.category);
 
   const articleSchema = {
     "@context": "https://schema.org",
@@ -93,7 +95,7 @@ export default async function JournalPostPage({ params }: Props) {
         ))}
         <Reveal className="mt-12 border-t border-white/10 pt-10">
           <Link
-            href={enquireHref({ type: "Wedding" })}
+            href={enquireHref({ type: enquireType })}
             className="inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
           >
             Plan your celebration with Marit
@@ -139,6 +141,13 @@ export default async function JournalPostPage({ params }: Props) {
           </div>
         </section>
       ) : null}
+
+      <PageCloser
+        title="Ready to plan your celebration?"
+        body="Tell us what you're imagining — we'll orchestrate the rest."
+        primaryHref={enquireHref({ type: enquireType })}
+        primaryLabel="Plan your event"
+      />
     </article>
   );
 }

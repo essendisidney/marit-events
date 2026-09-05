@@ -45,6 +45,7 @@ export default function EnquirePage() {
           <Reveal>
             <div className="md:hidden">
               <SectionHeading
+                as="h1"
                 eyebrow="Enquire"
                 title="Tell us about your celebration."
                 body="Share the essentials. We'll respond with care — and clarity — within 24 hours."

@@ -29,6 +29,7 @@ export default function ExperiencesPage() {
         <div className="relative z-10 mx-auto flex min-h-[70svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-32 md:px-8">
           <Reveal>
             <SectionHeading
+              as="h1"
               eyebrow="Experiences"
               title="Event experiences, beautifully orchestrated."
               body="Not a list of services — a way of working. We shape celebrations so you can be fully present for the moment."

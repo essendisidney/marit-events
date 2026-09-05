@@ -19,6 +19,7 @@ export default function PortfolioPage() {
         <div className="mx-auto max-w-7xl">
           <Reveal>
             <SectionHeading
+              as="h1"
               eyebrow="Portfolio"
               title="Recently orchestrated."
               body="Real celebrations by Marit — each one a story of vision, curation and calm execution."

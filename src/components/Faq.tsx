@@ -1,7 +1,7 @@
 "use client";
 
 import { useId, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 export type FaqItem = { q: string; a: string };
 
@@ -16,6 +16,7 @@ export function Faq({
 }) {
   const [open, setOpen] = useState<number | null>(0);
   const baseId = useId();
+  const reduceMotion = useReducedMotion();
 
   const faqSchema = {
     "@context": "https://schema.org",
@@ -41,11 +42,7 @@ export function Faq({
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
       />
       <div className="mx-auto max-w-3xl">
-        <p
-          className={`text-[11px] uppercase tracking-[0.28em] ${
-            light ? "text-champagne" : "text-champagne"
-          }`}
-        >
+        <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
           FAQ
         </p>
         <h2
@@ -81,18 +78,9 @@ export function Faq({
                     {isOpen ? "−" : "+"}
                   </span>
                 </button>
-                <AnimatePresence initial={false}>
-                  {isOpen ? (
-                    <motion.div
-                      id={panelId}
-                      role="region"
-                      aria-labelledby={buttonId}
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
-                      transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-                      className="overflow-hidden"
-                    >
+                {isOpen ? (
+                  reduceMotion ? (
+                    <div id={panelId} role="region" aria-labelledby={buttonId}>
                       <p
                         className={`pb-6 text-base leading-relaxed ${
                           light ? "text-obsidian/65" : "text-taupe"
@@ -100,9 +88,33 @@ export function Faq({
                       >
                         {item.a}
                       </p>
-                    </motion.div>
-                  ) : null}
-                </AnimatePresence>
+                    </div>
+                  ) : (
+                    <AnimatePresence initial={false}>
+                      <motion.div
+                        id={panelId}
+                        role="region"
+                        aria-labelledby={buttonId}
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{
+                          duration: 0.35,
+                          ease: [0.22, 1, 0.36, 1],
+                        }}
+                        className="overflow-hidden"
+                      >
+                        <p
+                          className={`pb-6 text-base leading-relaxed ${
+                            light ? "text-obsidian/65" : "text-taupe"
+                          }`}
+                        >
+                          {item.a}
+                        </p>
+                      </motion.div>
+                    </AnimatePresence>
+                  )
+                ) : null}
               </div>
             );
           })}

@@ -61,6 +61,34 @@ export function Navbar() {
   }, [moreOpen, open]);
 
   useEffect(() => {
+    if (!open) return;
+    const panel = document.getElementById("mobile-nav");
+    const firstLink = panel?.querySelector("a") as HTMLElement | null;
+    firstLink?.focus();
+
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key !== "Tab" || !panel) return;
+      const focusables = [
+        ...panel.querySelectorAll<HTMLElement>("a, button"),
+        menuBtnRef.current,
+      ].filter(Boolean) as HTMLElement[];
+      if (focusables.length === 0) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      const active = document.activeElement as HTMLElement;
+      if (e.shiftKey && active === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && active === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open]);
+
+  useEffect(() => {
     if (!moreOpen) return;
     const onClick = (e: MouseEvent) => {
       if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
@@ -133,6 +161,7 @@ export function Navbar() {
                     return (
                       <Link
                         key={link.href}
+                        role="menuitem"
                         href={link.href}
                         className={`block px-3 py-2.5 text-[11px] uppercase tracking-[0.16em] transition ${
                           active

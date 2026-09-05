@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import {
   destinations,
@@ -52,7 +52,20 @@ export function EnquiryForm() {
   const [location, setLocation] = useState(initialLocation);
   const [formError, setFormError] = useState("");
   const [copied, setCopied] = useState(false);
+  const [stickyVisible, setStickyVisible] = useState(true);
   const guestsGroupRef = useRef<HTMLDivElement>(null);
+  const formRef = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    const el = formRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setStickyVisible(entry.isIntersecting),
+      { threshold: 0, rootMargin: "0px 0px -20% 0px" }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   function buildPayload(form: FormData) {
     return {
@@ -74,6 +87,11 @@ export function EnquiryForm() {
     setFormError("");
     const form = e.currentTarget;
     const payload = buildPayload(new FormData(form));
+
+    if (!payload.location) {
+      setFormError("Add where the celebration will take place.");
+      return;
+    }
 
     if (!payload.guests && !payload.budget) {
       setFormError("Select an estimated guest count or budget to continue.");
@@ -98,6 +116,7 @@ export function EnquiryForm() {
     setBrief(lines);
     let emailed = false;
     let ok = false;
+    let apiError = "";
 
     try {
       const res = await fetch("/api/enquire", {
@@ -114,16 +133,23 @@ export function EnquiryForm() {
       if (data.brief) setBrief(data.brief);
       emailed = Boolean(data.emailed);
       ok = Boolean(data.ok) && res.ok;
+      if (!ok) apiError = data.error || "Something went wrong. Please try again.";
       if (ok) setServerReceived(true);
     } catch {
-      /* handoff still proceeds */
+      apiError =
+        "Couldn't reach our server. Continue on WhatsApp or email below.";
+    }
+
+    if (!ok) {
+      setFormError(apiError);
+      setSending(false);
+      return;
     }
 
     trackEnquireSubmit({ mode, type: payload.type, emailed });
 
     let blocked = false;
     if (mode === "email") {
-      // Avoid double handoff when Resend already delivered
       if (!emailed) {
         const subject = encodeURIComponent(
           `Marit Events enquiry — ${payload.type} — ${payload.name}`
@@ -157,9 +183,7 @@ export function EnquiryForm() {
           Thank you.
         </p>
         <p className="mx-auto mt-4 max-w-sm text-taupe">
-          {serverReceived
-            ? "We've received your enquiry. "
-            : null}
+          {serverReceived ? "We've received your enquiry. " : null}
           {siteConfig.responseTime}
         </p>
         <ol className="mx-auto mt-8 max-w-sm space-y-3 text-left text-sm text-taupe">
@@ -222,11 +246,32 @@ export function EnquiryForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="relative space-y-10">
+    <form ref={formRef} onSubmit={onSubmit} className="relative space-y-10">
       {formError ? (
-        <p className="border border-champagne/40 bg-champagne/5 px-4 py-3 text-sm text-champagne" role="alert">
-          {formError}
-        </p>
+        <div
+          className="space-y-3 border border-champagne/40 bg-champagne/5 px-4 py-3"
+          role="alert"
+        >
+          <p className="text-sm text-champagne">{formError}</p>
+          {brief ? (
+            <div className="flex flex-wrap gap-4">
+              <a
+                href={whatsappUrl(brief)}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[11px] uppercase tracking-[0.18em] text-ivory link-underline"
+              >
+                WhatsApp instead
+              </a>
+              <a
+                href={`mailto:${siteConfig.email}?subject=${encodeURIComponent("Marit Events enquiry")}&body=${encodeURIComponent(brief)}`}
+                className="text-[11px] uppercase tracking-[0.18em] text-taupe link-underline"
+              >
+                Email instead
+              </a>
+            </div>
+          ) : null}
+        </div>
       ) : null}
       {initialLocation || initialType !== enquiryTypes[0] ? (
         <p className="border border-champagne/25 bg-champagne/5 px-4 py-3 text-sm text-ivory/80">
@@ -303,7 +348,11 @@ export function EnquiryForm() {
           onChange={setLocation}
           autoComplete="address-level2"
         />
-        <div className="flex flex-wrap gap-2" role="group" aria-label="Suggested locations">
+        <div
+          className="flex flex-wrap gap-2"
+          role="group"
+          aria-label="Suggested locations"
+        >
           {locationChips.map((chip) => (
             <button
               key={chip}
@@ -327,11 +376,18 @@ export function EnquiryForm() {
           min={localDateMin()}
         />
 
-        {/* Honeypot */}
-        <div className="absolute -left-[9999px] h-0 w-0 overflow-hidden" aria-hidden>
+        <div
+          className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+          aria-hidden
+        >
           <label>
             Company
-            <input type="text" name="company" tabIndex={-1} autoComplete="off" />
+            <input
+              type="text"
+              name="company"
+              tabIndex={-1}
+              autoComplete="off"
+            />
           </label>
         </div>
 
@@ -380,8 +436,8 @@ export function EnquiryForm() {
           >
             {budgetChips.map((chip) => (
               <button
-                type="button"
                 key={chip}
+                type="button"
                 aria-pressed={budget === chip}
                 onClick={() => setBudget(chip)}
                 className={`border px-3 py-2 text-[11px] uppercase tracking-[0.14em] transition ${
@@ -476,27 +532,28 @@ export function EnquiryForm() {
         </p>
       </div>
 
-      {/* Mobile sticky submit — keeps CTA reachable while scrolling the form */}
-      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-obsidian/95 px-5 py-3 backdrop-blur-md md:hidden">
-        <div className="pointer-events-auto mx-auto flex max-w-lg flex-col gap-1">
-          <button
-            type="submit"
-            disabled={sending}
-            className="w-full bg-champagne py-3.5 text-[11px] uppercase tracking-[0.22em] text-obsidian transition disabled:opacity-60"
-          >
-            {sending
-              ? mode === "whatsapp"
-                ? "Opening WhatsApp…"
-                : "Sending…"
-              : mode === "whatsapp"
-                ? "Send via WhatsApp →"
-                : "Send via Email →"}
-          </button>
-          <p className="text-center text-[10px] text-taupe">
-            {siteConfig.responseTime}
-          </p>
+      {stickyVisible ? (
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-obsidian/95 px-5 py-3 backdrop-blur-md md:hidden safe-pb">
+          <div className="pointer-events-auto mx-auto flex max-w-lg flex-col gap-1">
+            <button
+              type="submit"
+              disabled={sending}
+              className="w-full bg-champagne py-3.5 text-[11px] uppercase tracking-[0.22em] text-obsidian transition disabled:opacity-60"
+            >
+              {sending
+                ? mode === "whatsapp"
+                  ? "Opening WhatsApp…"
+                  : "Sending…"
+                : mode === "whatsapp"
+                  ? "Send via WhatsApp →"
+                  : "Send via Email →"}
+            </button>
+            <p className="text-center text-[10px] text-taupe">
+              {siteConfig.responseTime}
+            </p>
+          </div>
         </div>
-      </div>
+      ) : null}
       <div className="h-24 md:hidden" aria-hidden />
     </form>
   );

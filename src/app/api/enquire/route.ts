@@ -80,7 +80,13 @@ export async function POST(request: Request) {
     mode: clean(body.mode, 20),
   };
 
-  if (!payload.name || !payload.email || !payload.phone || !payload.vision) {
+  if (
+    !payload.name ||
+    !payload.email ||
+    !payload.phone ||
+    !payload.vision ||
+    !payload.location
+  ) {
     return NextResponse.json(
       { ok: false, error: "Missing required fields" },
       { status: 400 }

@@ -30,6 +30,7 @@ export default function CorporatePage() {
         <div className="relative z-10 mx-auto flex min-h-[75svh] max-w-7xl flex-col justify-end px-5 pb-16 pt-32 md:px-8">
           <Reveal>
             <SectionHeading
+              as="h1"
               eyebrow="Corporate"
               title="Business deserves a great experience too."
               body="From boardroom to ballroom, we create events that move people, strengthen brands and leave an impression."

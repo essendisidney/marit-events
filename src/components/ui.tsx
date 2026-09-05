@@ -67,11 +67,13 @@ export function SectionHeading({
   title,
   body,
   light = false,
+  as: Tag = "h2",
 }: {
   eyebrow?: string;
   title: string;
   body?: string;
   light?: boolean;
+  as?: "h1" | "h2";
 }) {
   return (
     <div className="max-w-3xl">
@@ -86,13 +88,13 @@ export function SectionHeading({
           </p>
         </div>
       ) : null}
-      <h2
+      <Tag
         className={`font-display text-4xl leading-[1.08] text-balance md:text-5xl lg:text-[3.5rem] ${
           light ? "text-obsidian" : "text-ivory"
         }`}
       >
         {title}
-      </h2>
+      </Tag>
       {body ? (
         <p
           className={`mt-6 max-w-xl text-base leading-relaxed md:text-lg ${
