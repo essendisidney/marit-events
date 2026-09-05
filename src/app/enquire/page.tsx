@@ -7,6 +7,7 @@ import { canonical, enquireFaqs, siteConfig, whatsappUrl } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/Faq";
+import { TrackedMailto, TrackedWhatsApp } from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
   title: "Plan Your Event",
@@ -74,25 +75,24 @@ export default function EnquirePage() {
                 <p className="text-[11px] uppercase tracking-[0.2em] text-taupe">
                   Email
                 </p>
-                <a
+                <TrackedMailto
                   href={`mailto:${siteConfig.email}`}
+                  source="enquire_sidebar_email"
                   className="mt-2 inline-block text-ivory transition hover:text-champagne"
                 >
                   {siteConfig.email}
-                </a>
+                </TrackedMailto>
               </div>
               <div>
                 <p className="text-[11px] uppercase tracking-[0.2em] text-taupe">
                   WhatsApp
                 </p>
-                <a
+                <TrackedWhatsApp
                   href={whatsappUrl()}
-                  target="_blank"
-                  rel="noreferrer"
                   className="mt-2 inline-block text-ivory transition hover:text-champagne"
                 >
                   Let&apos;s talk →
-                </a>
+                </TrackedWhatsApp>
               </div>
               <div>
                 <p className="text-[11px] uppercase tracking-[0.2em] text-taupe">

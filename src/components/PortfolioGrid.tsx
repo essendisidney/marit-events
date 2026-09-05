@@ -4,9 +4,17 @@ import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { PortfolioItem } from "@/lib/portfolio";
+import { enquireHref } from "@/lib/site";
 import { Reveal } from "@/components/ui";
+import { TrackedLink } from "@/components/TrackedLink";
 
-const filters = ["All", "Wedding", "Corporate", "Proposal", "Private Celebration"] as const;
+const filters = [
+  "All",
+  "Wedding",
+  "Corporate",
+  "Proposal",
+  "Private Celebration",
+] as const;
 
 export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
   const [filter, setFilter] = useState<(typeof filters)[number]>("All");
@@ -18,11 +26,16 @@ export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
 
   return (
     <div>
-      <div className="mx-auto flex max-w-7xl flex-wrap gap-2 px-5 pb-10 md:px-8">
+      <div
+        className="mx-auto flex max-w-7xl flex-wrap gap-2 px-5 pb-10 md:px-8"
+        role="group"
+        aria-label="Portfolio filters"
+      >
         {filters.map((f) => (
           <button
             key={f}
             type="button"
+            aria-pressed={filter === f}
             onClick={() => setFilter(f)}
             className={`border px-4 py-2 text-[11px] uppercase tracking-[0.16em] transition ${
               filter === f
@@ -66,9 +79,25 @@ export function PortfolioGrid({ items }: { items: PortfolioItem[] }) {
       </div>
 
       {visible.length === 0 ? (
-        <p className="px-5 pb-28 text-center text-taupe md:px-8">
-          No stories in this category yet.
-        </p>
+        <div className="px-5 pb-28 text-center md:px-8">
+          <p className="text-taupe">No stories in this category yet.</p>
+          <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
+            <button
+              type="button"
+              onClick={() => setFilter("All")}
+              className="border border-champagne/50 px-5 py-2.5 text-[11px] uppercase tracking-[0.16em] text-champagne transition hover:bg-champagne hover:text-obsidian"
+            >
+              Show all
+            </button>
+            <TrackedLink
+              href={enquireHref()}
+              source="portfolio_empty"
+              className="text-[11px] uppercase tracking-[0.16em] text-ivory link-underline"
+            >
+              Plan your event
+            </TrackedLink>
+          </div>
+        </div>
       ) : null}
     </div>
   );

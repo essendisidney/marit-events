@@ -59,7 +59,9 @@ export function Testimonials() {
     const end = e.changedTouches[0]?.clientX ?? start;
     const dx = end - start;
     if (Math.abs(dx) < 48) return;
+    setPaused(true);
     go(dx < 0 ? 1 : -1);
+    window.setTimeout(() => setPaused(false), 8000);
   }
 
   const enquireType =

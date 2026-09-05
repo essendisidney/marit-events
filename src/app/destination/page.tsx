@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { canonical, destinationFaqs, destinations, enquireHref } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { PageCloser } from "@/components/PageCloser";
 import { Faq } from "@/components/Faq";
 import { InstagramStrip } from "@/components/InstagramStrip";
-import { trackCtaClick } from "@/lib/analytics";
+import { TrackedLink } from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
   title: "Destination",
@@ -39,20 +38,14 @@ export default function DestinationPage() {
               title="Get married in Kenya."
               body="Bring your people. We'll handle the rest — venues, guest logistics, styling and the quiet details that make destination celebrations feel effortless."
             />
-            <Link
+            <TrackedLink
               href={enquireHref({ type: "Destination Event" })}
-              onClick={() =>
-                trackCtaClick({
-                  path: "/destination",
-                  href: enquireHref({ type: "Destination Event" }),
-                  source: "destination_hero",
-                })
-              }
+              source="destination_hero"
               className="mt-10 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
             >
               Plan a destination event
               <span aria-hidden>→</span>
-            </Link>
+            </TrackedLink>
           </Reveal>
         </div>
       </section>
@@ -80,16 +73,17 @@ export default function DestinationPage() {
                 <p className="mt-5 max-w-md text-lg text-taupe">
                   {featured.description}
                 </p>
-                <Link
+                <TrackedLink
                   href={enquireHref({
                     type: "Destination Event",
                     location: featured.name,
                   })}
+                  source="destination_featured"
                   className="mt-10 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.2em] text-champagne"
                 >
                   Enquire for {featured.name}
                   <span aria-hidden>→</span>
-                </Link>
+                </TrackedLink>
               </div>
             </article>
           </Reveal>
@@ -110,11 +104,12 @@ export default function DestinationPage() {
         <div className="mx-auto grid max-w-7xl gap-5 sm:grid-cols-2 lg:grid-cols-4">
           {rest.map((place, i) => (
             <Reveal key={place.name} delay={0.05 * i}>
-              <Link
+              <TrackedLink
                 href={enquireHref({
                   type: "Destination Event",
                   location: place.name,
                 })}
+                source="destination_place"
                 className="group relative block aspect-[3/4] overflow-hidden"
               >
                 <Image
@@ -134,7 +129,7 @@ export default function DestinationPage() {
                     Enquire →
                   </p>
                 </div>
-              </Link>
+              </TrackedLink>
             </Reveal>
           ))}
         </div>

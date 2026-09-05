@@ -6,10 +6,13 @@ import { portfolio } from "@/lib/portfolio";
 import { trustStats } from "@/lib/site";
 import { ButtonLink, ImageReveal, Reveal, SectionHeading } from "@/components/ui";
 import { StatValue } from "@/components/StatValue";
+import { trackCtaClick } from "@/lib/analytics";
+import { usePathname } from "next/navigation";
 
 export function PortfolioPreview() {
   const preview = portfolio.slice(0, 3);
   const [feature, ...rest] = preview;
+  const pathname = usePathname();
 
   return (
     <section className="bg-obsidian px-5 py-24 md:px-8 md:py-36">
@@ -75,7 +78,17 @@ export function PortfolioPreview() {
         </div>
 
         <Reveal className="mt-12">
-          <ButtonLink href="/portfolio" variant="ghost">
+          <ButtonLink
+            href="/portfolio"
+            variant="ghost"
+            onClick={() =>
+              trackCtaClick({
+                path: pathname,
+                href: "/portfolio",
+                source: "home_portfolio",
+              })
+            }
+          >
             View full portfolio
           </ButtonLink>
         </Reveal>

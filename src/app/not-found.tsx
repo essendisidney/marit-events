@@ -1,9 +1,10 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { Logo } from "@/components/Logo";
+import { TrackedLink } from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
   title: "Page not found",
+  robots: { index: false, follow: true },
 };
 
 export default function NotFound() {
@@ -21,18 +22,34 @@ export default function NotFound() {
         still being designed.
       </p>
       <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
-        <Link
+        <TrackedLink
           href="/"
+          source="not_found_home"
           className="bg-champagne px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-obsidian"
         >
           Back home
-        </Link>
-        <Link
-          href="/enquire"
+        </TrackedLink>
+        <TrackedLink
+          href="/weddings"
+          source="not_found_weddings"
           className="border border-champagne/50 px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-champagne"
         >
+          Explore weddings
+        </TrackedLink>
+        <TrackedLink
+          href="/portfolio"
+          source="not_found_portfolio"
+          className="border border-champagne/50 px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-champagne"
+        >
+          View portfolio
+        </TrackedLink>
+        <TrackedLink
+          href="/enquire"
+          source="not_found_enquire"
+          className="border border-white/20 px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-ivory"
+        >
           Plan your event
-        </Link>
+        </TrackedLink>
       </div>
     </div>
   );

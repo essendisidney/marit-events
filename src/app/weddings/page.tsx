@@ -7,7 +7,7 @@ import { Reveal, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/Faq";
 import { InstagramStrip } from "@/components/InstagramStrip";
 import { PageCloser } from "@/components/PageCloser";
-import { trackCtaClick } from "@/lib/analytics";
+import { TrackedLink } from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
   title: "Weddings",
@@ -72,19 +72,13 @@ export default function WeddingsPage() {
               your story unforgettable.
             </p>
             <div className="mt-10 flex flex-wrap gap-4">
-              <Link
+              <TrackedLink
                 href={enquireHref({ type: "Wedding" })}
-                onClick={() =>
-                  trackCtaClick({
-                    path: "/weddings",
-                    href: enquireHref({ type: "Wedding" }),
-                    source: "weddings_hero",
-                  })
-                }
+                source="weddings_hero"
                 className="bg-champagne px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-obsidian transition hover:bg-champagne-soft"
               >
                 Begin wedding enquiry
-              </Link>
+              </TrackedLink>
               <Link
                 href="/portfolio"
                 className="border border-ivory/35 px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-ivory transition hover:border-champagne hover:text-champagne"
@@ -103,13 +97,14 @@ export default function WeddingsPage() {
               title="Designed around you — not a template."
               body="We listen first. Then we curate venues, suppliers and a timeline that feels effortless on the day. You arrive to a celebration that is unmistakably yours."
             />
-            <Link
+            <TrackedLink
               href={enquireHref({ type: "Wedding" })}
+              source="weddings_mid"
               className="mt-10 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
             >
               Begin your wedding enquiry
               <span aria-hidden>→</span>
-            </Link>
+            </TrackedLink>
           </Reveal>
           <Reveal delay={0.12}>
             <div className="relative aspect-[4/5] overflow-hidden">

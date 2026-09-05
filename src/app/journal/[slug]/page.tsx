@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
   getJournalPost,
@@ -10,6 +9,7 @@ import {
 import { canonical, enquireHref, enquireTypeForJournalCategory, siteConfig } from "@/lib/site";
 import { Reveal } from "@/components/ui";
 import { PageCloser } from "@/components/PageCloser";
+import { TrackedLink } from "@/components/TrackedLink";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -106,13 +106,14 @@ export default async function JournalPostPage({ params }: Props) {
           </Reveal>
         ))}
         <Reveal className="mt-12 border-t border-white/10 pt-10">
-          <Link
+          <TrackedLink
             href={enquireHref({ type: enquireType })}
+            source="journal_inline"
             className="inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
           >
             Plan your celebration with Marit
             <span aria-hidden>→</span>
-          </Link>
+          </TrackedLink>
         </Reveal>
       </div>
 
@@ -130,7 +131,11 @@ export default async function JournalPostPage({ params }: Props) {
             <div className="mt-12 grid gap-8 md:grid-cols-2">
               {related.map((item, i) => (
                 <Reveal key={item.slug} delay={0.06 * i}>
-                  <Link href={`/journal/${item.slug}`} className="group block">
+                  <TrackedLink
+                    href={`/journal/${item.slug}`}
+                    source="journal_related"
+                    className="group block"
+                  >
                     <div className="relative aspect-[16/10] overflow-hidden">
                       <Image
                         src={item.image}
@@ -146,7 +151,7 @@ export default async function JournalPostPage({ params }: Props) {
                     <h3 className="mt-2 font-display text-2xl text-ivory transition group-hover:text-champagne">
                       {item.title}
                     </h3>
-                  </Link>
+                  </TrackedLink>
                 </Reveal>
               ))}
             </div>

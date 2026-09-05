@@ -18,15 +18,23 @@ export function GalleryLightbox({
   const nextRef = useRef<HTMLButtonElement>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
   const touchX = useRef<number | null>(null);
+  const opened = useRef(false);
   const reduceMotion = useReducedMotion();
   const fade = reduceMotion ? 0 : 0.25;
   const scaleIn = reduceMotion ? 0 : 0.35;
+  const multi = images.length > 1;
 
   useEffect(() => {
-    if (index === null) return;
+    if (index === null) {
+      opened.current = false;
+      return;
+    }
     lastFocus.current = document.activeElement as HTMLElement;
     closeRef.current?.focus();
-    trackGalleryOpen({ title });
+    if (!opened.current) {
+      trackGalleryOpen({ title });
+      opened.current = true;
+    }
 
     const focusables = () =>
       [closeRef.current, prevRef.current, nextRef.current].filter(
@@ -35,6 +43,7 @@ export function GalleryLightbox({
 
     const onKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") setIndex(null);
+      if (!multi) return;
       if (e.key === "ArrowRight")
         setIndex((i) => (i === null ? 0 : (i + 1) % images.length));
       if (e.key === "ArrowLeft")
@@ -60,14 +69,15 @@ export function GalleryLightbox({
       document.body.style.overflow = "";
       lastFocus.current?.focus();
     };
-  }, [index, images.length, title]);
+  }, [index, images.length, title, multi]);
 
   function onTouchStart(e: React.TouchEvent) {
+    if (!multi) return;
     touchX.current = e.touches[0]?.clientX ?? null;
   }
 
   function onTouchEnd(e: React.TouchEvent) {
-    if (touchX.current == null) return;
+    if (!multi || touchX.current == null) return;
     const end = e.changedTouches[0]?.clientX ?? touchX.current;
     const delta = end - touchX.current;
     touchX.current = null;
@@ -98,6 +108,7 @@ export function GalleryLightbox({
               src={src}
               alt={`${title} detail ${i + 1}`}
               fill
+              priority={i === 0}
               className="object-cover transition duration-700 group-hover:scale-[1.03]"
               sizes={
                 i === 0
@@ -136,20 +147,22 @@ export function GalleryLightbox({
             >
               Close
             </button>
-            <button
-              ref={prevRef}
-              type="button"
-              className="absolute left-4 top-1/2 -translate-y-1/2 text-champagne md:left-8"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIndex((i) =>
-                  i === null ? 0 : (i - 1 + images.length) % images.length
-                );
-              }}
-              aria-label="Previous image"
-            >
-              ←
-            </button>
+            {multi ? (
+              <button
+                ref={prevRef}
+                type="button"
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-champagne md:left-8"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIndex((i) =>
+                    i === null ? 0 : (i - 1 + images.length) % images.length
+                  );
+                }}
+                aria-label="Previous image"
+              >
+                ←
+              </button>
+            ) : null}
             <motion.div
               key={index}
               className="relative h-[70vh] w-full max-w-5xl"
@@ -168,21 +181,25 @@ export function GalleryLightbox({
                 priority
               />
             </motion.div>
-            <button
-              ref={nextRef}
-              type="button"
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-champagne md:right-8"
-              onClick={(e) => {
-                e.stopPropagation();
-                setIndex((i) => (i === null ? 0 : (i + 1) % images.length));
-              }}
-              aria-label="Next image"
-            >
-              →
-            </button>
+            {multi ? (
+              <button
+                ref={nextRef}
+                type="button"
+                className="absolute right-4 top-1/2 -translate-y-1/2 text-champagne md:right-8"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIndex((i) => (i === null ? 0 : (i + 1) % images.length));
+                }}
+                aria-label="Next image"
+              >
+                →
+              </button>
+            ) : null}
             <p className="absolute bottom-6 text-[11px] tracking-[0.18em] text-taupe">
               {index + 1} / {images.length}
-              <span className="ml-3 text-taupe/60 md:hidden">Swipe</span>
+              {multi ? (
+                <span className="ml-3 text-taupe/60 md:hidden">Swipe</span>
+              ) : null}
             </p>
           </motion.div>
         ) : null}

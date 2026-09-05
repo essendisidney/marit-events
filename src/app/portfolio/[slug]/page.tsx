@@ -3,10 +3,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPortfolioItem, portfolio } from "@/lib/portfolio";
-import { enquireHref, canonical } from "@/lib/site";
+import { enquireHref, canonical, siteConfig } from "@/lib/site";
 import { Reveal } from "@/components/ui";
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { PageCloser } from "@/components/PageCloser";
+import { TrackedLink } from "@/components/TrackedLink";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -44,8 +45,41 @@ export default async function PortfolioCasePage({ params }: Props) {
     { label: "The Result", body: item.result },
   ];
 
+  const enquireType =
+    item.category === "Corporate"
+      ? "Corporate Event"
+      : item.category === "Wedding"
+        ? "Wedding"
+        : "Private Celebration";
+  const enquire = enquireHref({
+    type: enquireType,
+    location: item.location,
+  });
+
+  const caseSchema = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: item.title,
+    description: item.excerpt,
+    image: item.image.startsWith("http")
+      ? item.image
+      : `${siteConfig.url.replace(/\/$/, "")}${item.image}`,
+    url: canonical(`/portfolio/${item.slug}`),
+    dateCreated: item.year,
+    creator: {
+      "@type": "Organization",
+      name: siteConfig.name,
+    },
+    about: item.category,
+    contentLocation: item.location,
+  };
+
   return (
     <article>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(caseSchema) }}
+      />
       <section className="relative min-h-[85svh] overflow-hidden">
         <Image
           src={item.image}
@@ -107,20 +141,13 @@ export default async function PortfolioCasePage({ params }: Props) {
               {prev.title}
             </p>
           </Link>
-          <Link
-            href={enquireHref({
-              type:
-                item.category === "Corporate"
-                  ? "Corporate Event"
-                  : item.category === "Wedding"
-                    ? "Wedding"
-                    : "Private Celebration",
-              location: item.location,
-            })}
+          <TrackedLink
+            href={enquire}
+            source="portfolio_case_mid"
             className="inline-flex items-center justify-center gap-3 border border-champagne px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-champagne transition hover:bg-champagne hover:text-obsidian"
           >
             Plan your event
-          </Link>
+          </TrackedLink>
           <Link
             href={`/portfolio/${next.slug}`}
             className="group max-w-xs text-right md:ml-auto"
@@ -138,15 +165,7 @@ export default async function PortfolioCasePage({ params }: Props) {
       <PageCloser
         title="Inspired by this celebration?"
         body="Tell us what you're imagining — we'll orchestrate the rest."
-        primaryHref={enquireHref({
-          type:
-            item.category === "Corporate"
-              ? "Corporate Event"
-              : item.category === "Wedding"
-                ? "Wedding"
-                : "Private Celebration",
-          location: item.location,
-        })}
+        primaryHref={enquire}
         primaryLabel="Plan your event"
         secondaryHref="/portfolio"
         secondaryLabel="More from the portfolio"

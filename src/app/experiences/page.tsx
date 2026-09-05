@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import Link from "next/link";
 import { canonical, enquireHref, maritExperience, processSteps } from "@/lib/site";
 import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { PageCloser } from "@/components/PageCloser";
-import { trackCtaClick } from "@/lib/analytics";
+import { TrackedLink } from "@/components/TrackedLink";
 
 export const metadata: Metadata = {
   title: "Experiences",
@@ -95,19 +94,13 @@ export default function ExperiencesPage() {
             ))}
           </div>
           <Reveal className="mt-14">
-            <Link
+            <TrackedLink
               href={enquireHref()}
-              onClick={() =>
-                trackCtaClick({
-                  path: "/experiences",
-                  href: enquireHref(),
-                  source: "experiences_mid",
-                })
-              }
+              source="experiences_mid"
               className="inline-block bg-obsidian px-8 py-4 text-[11px] uppercase tracking-[0.2em] text-ivory"
             >
               Plan Your Event →
-            </Link>
+            </TrackedLink>
           </Reveal>
         </div>
       </section>

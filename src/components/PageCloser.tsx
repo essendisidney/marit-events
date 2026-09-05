@@ -119,7 +119,17 @@ export function PageCloser({
               {resolvedPrimaryLabel}
             </ButtonLink>
             {resolvedSecondaryHref ? (
-              <ButtonLink href={resolvedSecondaryHref} variant="ghost-dark">
+              <ButtonLink
+                href={resolvedSecondaryHref}
+                variant="ghost-dark"
+                onClick={() =>
+                  trackCtaClick({
+                    path: pathname,
+                    href: resolvedSecondaryHref,
+                    source: "page_closer_secondary",
+                  })
+                }
+              >
                 {resolvedSecondaryLabel}
               </ButtonLink>
             ) : null}
