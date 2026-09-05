@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getPortfolioItem, portfolio } from "@/lib/portfolio";
-import { enquireHref } from "@/lib/site";
+import { enquireHref, canonical } from "@/lib/site";
 import { Reveal } from "@/components/ui";
 import { GalleryLightbox } from "@/components/GalleryLightbox";
 import { PageCloser } from "@/components/PageCloser";
@@ -21,7 +21,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return {
     title: item.title,
     description: item.excerpt,
-    alternates: { canonical: `/portfolio/${slug}` },
+    alternates: { canonical: canonical(`/portfolio/${slug}`) },
     openGraph: {
       images: [{ url: item.image }],
     },
@@ -114,9 +114,7 @@ export default async function PortfolioCasePage({ params }: Props) {
                   ? "Corporate Event"
                   : item.category === "Wedding"
                     ? "Wedding"
-                    : item.category === "Private Celebration"
-                      ? "Private Celebration"
-                      : "Other",
+                    : "Private Celebration",
               location: item.location,
             })}
             className="inline-flex items-center justify-center gap-3 border border-champagne px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-champagne transition hover:bg-champagne hover:text-obsidian"
@@ -146,9 +144,7 @@ export default async function PortfolioCasePage({ params }: Props) {
               ? "Corporate Event"
               : item.category === "Wedding"
                 ? "Wedding"
-                : item.category === "Private Celebration"
-                  ? "Private Celebration"
-                  : "Other",
+                : "Private Celebration",
           location: item.location,
         })}
         primaryLabel="Plan your event"

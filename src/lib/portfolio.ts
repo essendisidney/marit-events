@@ -1,4 +1,4 @@
-import { marit, images } from "@/lib/images";
+import { marit } from "@/lib/images";
 
 export type PortfolioItem = {
   slug: string;
@@ -33,12 +33,7 @@ export const portfolio: PortfolioItem[] = [
       "Marquee draping, gold place settings, African textile runners and sashes, floral accents, seating layout and on-site orchestration.",
     result:
       "A celebration that looked premium to any eye — and personal to every guest who recognised the fabric of home.",
-    gallery: [
-      marit.weddingAfricanPrint,
-      marit.entranceDraped,
-      marit.receptionRustic,
-      marit.proposal,
-    ],
+    gallery: [marit.weddingAfricanPrint, marit.entranceDraped],
   },
   {
     slug: "starlit-pavilion-reception",
@@ -57,12 +52,7 @@ export const portfolio: PortfolioItem[] = [
       "Tent draping, pendant lighting, furniture hire, linen styling, floral and botanical design, layout and evening run of show.",
     result:
       "A reception guests remember for atmosphere — not for waiting, confusion or unfinished corners.",
-    gallery: [
-      marit.receptionRustic,
-      marit.entranceDraped,
-      marit.weddingAfricanPrint,
-      marit.corporateBlackGold,
-    ],
+    gallery: [marit.receptionRustic, marit.entranceDraped],
   },
   {
     slug: "she-said-yes",
@@ -79,14 +69,8 @@ export const portfolio: PortfolioItem[] = [
       "Marit built the scene in secret — heart arch, neon signage, rose petals and a VIP path — then stepped back so the moment could belong only to them.",
     details:
       "Balloon installation, neon signage, floral petal styling, red carpet and gold stanchions, lighting and discreet setup logistics.",
-    result:
-      "She said yes. The photographs say everything else.",
-    gallery: [
-      marit.proposal,
-      marit.entranceDraped,
-      marit.babyShower,
-      marit.kidsBirthday,
-    ],
+    result: "She said yes. The photographs say everything else.",
+    gallery: [marit.proposal],
   },
   {
     slug: "black-and-gold-corporate",
@@ -103,14 +87,8 @@ export const portfolio: PortfolioItem[] = [
       "We styled the full room in Marit's signature black and gold language — consistent, polished and aligned to how the brand presents itself.",
     details:
       "Chair styling, sash detailing, room layout, AV coordination support and on-site presentation standards.",
-    result:
-      "An event space that felt as intentional as the agenda itself.",
-    gallery: [
-      marit.corporateBlackGold,
-      marit.weddingAfricanPrint,
-      marit.receptionRustic,
-      marit.entranceDraped,
-    ],
+    result: "An event space that felt as intentional as the agenda itself.",
+    gallery: [marit.corporateBlackGold],
   },
   {
     slug: "celebrations-in-colour",
@@ -129,18 +107,10 @@ export const portfolio: PortfolioItem[] = [
       "Balloon installations, backdrop styling, table dressing, chair selection, thematic props and outdoor setup.",
     result:
       "Parties that feel special in person and beautiful in every photograph.",
-    gallery: [
-      marit.babyShower,
-      marit.kidsBirthday,
-      marit.proposal,
-      marit.entranceDraped,
-    ],
+    gallery: [marit.babyShower, marit.kidsBirthday],
   },
 ];
 
 export function getPortfolioItem(slug: string) {
   return portfolio.find((item) => item.slug === slug);
 }
-
-/** Keep destination Unsplash refs available via images export */
-export { images };

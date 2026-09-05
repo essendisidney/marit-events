@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   AnimatePresence,
   motion,
@@ -14,6 +14,7 @@ import { Reveal, SectionHeading } from "@/components/ui";
 export function Testimonials() {
   const [active, setActive] = useState(0);
   const [paused, setPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
   const item = testimonials[active];
   const reduceMotion = useReducedMotion();
   const duration = reduceMotion ? 0 : 0.45;
@@ -27,6 +28,24 @@ export function Testimonials() {
     return () => window.clearInterval(id);
   }, [reduceMotion, paused]);
 
+  function go(delta: number) {
+    setActive((i) => (i + delta + testimonials.length) % testimonials.length);
+  }
+
+  function onTouchStart(e: React.TouchEvent) {
+    touchStartX.current = e.changedTouches[0]?.clientX ?? null;
+  }
+
+  function onTouchEnd(e: React.TouchEvent) {
+    const start = touchStartX.current;
+    touchStartX.current = null;
+    if (start == null) return;
+    const end = e.changedTouches[0]?.clientX ?? start;
+    const dx = end - start;
+    if (Math.abs(dx) < 48) return;
+    go(dx < 0 ? 1 : -1);
+  }
+
   const enquireType =
     item.detail.toLowerCase().includes("corporate")
       ? "Corporate Event"
@@ -37,7 +56,7 @@ export function Testimonials() {
 
   return (
     <section
-      className="relative overflow-hidden"
+      className="relative overflow-hidden touch-pan-y"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       onFocusCapture={() => setPaused(true)}
@@ -46,6 +65,8 @@ export function Testimonials() {
           setPaused(false);
         }
       }}
+      onTouchStart={onTouchStart}
+      onTouchEnd={onTouchEnd}
     >
       <div className="absolute inset-0">
         <AnimatePresence mode="wait">

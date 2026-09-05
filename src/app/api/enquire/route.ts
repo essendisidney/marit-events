@@ -127,18 +127,21 @@ export async function POST(request: Request) {
 
       if (error) {
         console.error("[enquire] Resend error", error);
-        return NextResponse.json(
-          { ok: false, error: "Email delivery failed", emailed: false },
-          { status: 502 }
-        );
+        // Soft-fail: client can still hand off via WhatsApp/email
+        return NextResponse.json({
+          ok: true,
+          emailed: false,
+          brief: lines,
+        });
       }
       emailed = true;
     } catch (err) {
       console.error("[enquire] Resend exception", err);
-      return NextResponse.json(
-        { ok: false, error: "Email delivery failed", emailed: false },
-        { status: 502 }
-      );
+      return NextResponse.json({
+        ok: true,
+        emailed: false,
+        brief: lines,
+      });
     }
   } else {
     console.info("[enquire] lead (no RESEND_API_KEY)", {

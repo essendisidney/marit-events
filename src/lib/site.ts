@@ -84,10 +84,10 @@ export const maritExperience = [
   },
 ] as const;
 
-/** Launch-ready trust signals — swap in verified counts when available. */
+/** Honest trust signals — swap in verified counts when available. */
 export const trustStats = [
-  { value: "100+", label: "Events Delivered" },
   { value: "24h", label: "Response Promise" },
+  { value: "Nairobi", label: "Based In" },
   { value: "Kenya", label: "Destination Reach" },
   { value: "Full", label: "Day Orchestration" },
 ] as const;
@@ -133,22 +133,22 @@ export const testimonials = [
   {
     quote:
       "Marit didn't just plan our wedding. They gave us the freedom to actually enjoy it.",
-    name: "Wedding clients",
-    detail: "Intimate celebration · Nairobi",
+    name: "An African Print Celebration",
+    detail: "Wedding · Nairobi",
     image: images.weddingFormal,
   },
   {
     quote:
       "From the first call to the last song, everything felt calm, considered and completely ours.",
-    name: "Destination couple",
-    detail: "Coastal celebration · Kenya",
-    image: images.dianiSunset,
+    name: "A Starlit Pavilion Reception",
+    detail: "Wedding · Nairobi",
+    image: images.hero,
   },
   {
     quote:
       "Our corporate evening looked premium and ran with precision. Guests still talk about it.",
-    name: "Brand hosts",
-    detail: "Corporate evening · Nairobi",
+    name: "Black & Gold Corporate",
+    detail: "Corporate · Nairobi",
     image: images.celebrationGold,
   },
 ] as const;
@@ -271,11 +271,35 @@ export function whatsappMessageForPath(pathname: string) {
     return "Hello Marit — I'd like to talk about a destination celebration in Kenya.";
   if (pathname.startsWith("/corporate"))
     return "Hello Marit — I'd like to talk about a corporate event.";
+  if (pathname.startsWith("/portfolio/")) {
+    const type = enquiryTypeForPortfolioPath(pathname);
+    if (type === "Wedding")
+      return "Hello Marit — I saw a wedding in your portfolio and would like to plan one.";
+    if (type === "Corporate Event")
+      return "Hello Marit — I saw a corporate event in your portfolio and would like to plan one.";
+    return "Hello Marit — I saw your portfolio and would like to plan an event.";
+  }
   if (pathname.startsWith("/portfolio"))
     return "Hello Marit — I saw your portfolio and would like to plan an event.";
   if (pathname.startsWith("/enquire"))
     return "Hello Marit — I'm ready to enquire about an event.";
   return "Hello Marit — I'd like to talk about planning an event.";
+}
+
+function enquiryTypeForPortfolioPath(
+  pathname: string
+): (typeof enquiryTypes)[number] | null {
+  const slug = pathname.split("/")[2];
+  if (!slug) return null;
+  // Inline map avoids circular import with portfolio.ts
+  const bySlug: Record<string, (typeof enquiryTypes)[number]> = {
+    "african-print-celebration": "Wedding",
+    "starlit-pavilion-reception": "Wedding",
+    "she-said-yes": "Private Celebration",
+    "black-and-gold-corporate": "Corporate Event",
+    "celebrations-in-colour": "Private Celebration",
+  };
+  return bySlug[slug] ?? null;
 }
 
 export function enquireHrefForPath(pathname: string) {
@@ -285,8 +309,11 @@ export function enquireHrefForPath(pathname: string) {
     return enquireHref({ type: "Destination Event" });
   if (pathname.startsWith("/corporate"))
     return enquireHref({ type: "Corporate Event" });
-  if (pathname.startsWith("/portfolio"))
-    return enquireHref({ type: "Private Celebration" });
+  if (pathname.startsWith("/portfolio/")) {
+    const type = enquiryTypeForPortfolioPath(pathname);
+    return enquireHref({ type: type ?? "Private Celebration" });
+  }
+  if (pathname.startsWith("/portfolio")) return "/enquire";
   if (pathname.startsWith("/journal"))
     return enquireHref({ type: "Wedding" });
   return "/enquire";

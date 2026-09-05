@@ -24,6 +24,14 @@ const budgetChips = [
 ] as const;
 const locationChips = destinations.map((d) => d.name);
 
+function localDateMin() {
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
+}
+
 export function EnquiryForm() {
   const searchParams = useSearchParams();
   const initialType = useMemo(
@@ -103,14 +111,9 @@ export function EnquiryForm() {
         brief?: string;
         error?: string;
       };
-      if (!res.ok) {
-        setFormError(data.error || "Something went wrong. Please try again.");
-        setSending(false);
-        return;
-      }
       if (data.brief) setBrief(data.brief);
       emailed = Boolean(data.emailed);
-      ok = Boolean(data.ok);
+      ok = Boolean(data.ok) && res.ok;
       if (ok) setServerReceived(true);
     } catch {
       /* handoff still proceeds */
@@ -321,7 +324,7 @@ export function EnquiryForm() {
           label="Event date"
           name="date"
           type="date"
-          min={new Date().toISOString().slice(0, 10)}
+          min={localDateMin()}
         />
 
         {/* Honeypot */}
@@ -458,7 +461,7 @@ export function EnquiryForm() {
         <button
           type="submit"
           disabled={sending}
-          className="w-full bg-champagne py-4 text-[11px] uppercase tracking-[0.22em] text-obsidian transition duration-300 hover:bg-champagne-soft disabled:opacity-60 md:w-auto md:min-w-[14rem] md:px-10"
+          className="hidden w-full bg-champagne py-4 text-[11px] uppercase tracking-[0.22em] text-obsidian transition duration-300 hover:bg-champagne-soft disabled:opacity-60 md:inline-flex md:w-auto md:min-w-[14rem] md:items-center md:justify-center md:px-10"
         >
           {sending
             ? mode === "whatsapp"
@@ -468,8 +471,33 @@ export function EnquiryForm() {
               ? "Send via WhatsApp →"
               : "Send via Email →"}
         </button>
-        <p className="mt-4 text-sm text-taupe">{siteConfig.responseTime}</p>
+        <p className="mt-4 hidden text-sm text-taupe md:block">
+          {siteConfig.responseTime}
+        </p>
       </div>
+
+      {/* Mobile sticky submit — keeps CTA reachable while scrolling the form */}
+      <div className="pointer-events-none fixed inset-x-0 bottom-0 z-40 border-t border-white/10 bg-obsidian/95 px-5 py-3 backdrop-blur-md md:hidden">
+        <div className="pointer-events-auto mx-auto flex max-w-lg flex-col gap-1">
+          <button
+            type="submit"
+            disabled={sending}
+            className="w-full bg-champagne py-3.5 text-[11px] uppercase tracking-[0.22em] text-obsidian transition disabled:opacity-60"
+          >
+            {sending
+              ? mode === "whatsapp"
+                ? "Opening WhatsApp…"
+                : "Sending…"
+              : mode === "whatsapp"
+                ? "Send via WhatsApp →"
+                : "Send via Email →"}
+          </button>
+          <p className="text-center text-[10px] text-taupe">
+            {siteConfig.responseTime}
+          </p>
+        </div>
+      </div>
+      <div className="h-24 md:hidden" aria-hidden />
     </form>
   );
 }
