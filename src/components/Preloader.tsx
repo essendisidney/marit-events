@@ -137,15 +137,22 @@ export function Preloader() {
               initial={{ opacity: 0, scale: 0.94, filter: "blur(8px)" }}
               animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
               transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col items-center"
             >
+              {/* Monogram mark, not the full lockup — the wordmark/tagline
+                  baked into the full logo image is illegible at this size,
+                  so the brand name below is live text instead. */}
               <Image
-                src={siteConfig.logo}
+                src={siteConfig.mark}
                 alt=""
-                width={240}
-                height={92}
+                width={172}
+                height={100}
                 priority
-                className="h-[4.5rem] w-auto object-contain md:h-20"
+                className="h-14 w-auto object-contain md:h-16"
               />
+              <p className="mt-5 font-display text-xl uppercase tracking-[0.2em] text-ivory md:text-2xl">
+                {siteConfig.name}
+              </p>
             </motion.div>
 
             <motion.p
