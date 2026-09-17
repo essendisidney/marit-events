@@ -40,8 +40,10 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   icons: {
-    icon: [{ url: "/marit-logo.png", type: "image/png" }],
-    apple: "/marit-logo.png",
+    // The full lockup (wordmark + tagline) turns to mush at favicon/home-screen
+    // sizes — use the square-cropped monogram instead.
+    icon: [{ url: "/marit-icon.png", type: "image/png" }],
+    apple: "/marit-apple-touch-icon.png",
   },
   openGraph: {
     title: `${siteConfig.name} — ${siteConfig.slogan}`,
