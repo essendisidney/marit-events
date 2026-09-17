@@ -19,6 +19,8 @@ export const siteConfig = {
   /** Production URL — update when custom domain is connected */
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://maritevents.com",
   logo: "/marit-logo.png",
+  /** Monogram-only mark (no wordmark text) — used at compact sizes like the nav bar, where the full lockup reads too faint/thin */
+  mark: "/marit-mark.png",
   /** Generated at /opengraph-image — branded 1200×630 */
   ogImage: "/opengraph-image",
 };

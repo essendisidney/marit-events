@@ -10,10 +10,24 @@ type LogoProps = {
 };
 
 const sizes = {
-  nav: { width: 148, height: 56, className: "h-10 w-auto md:h-12" },
-  footer: { width: 180, height: 68, className: "h-14 w-auto" },
-  hero: { width: 280, height: 106, className: "h-16 w-auto md:h-24 lg:h-28" },
-  mark: { width: 72, height: 72, className: "h-12 w-auto" },
+  // Monogram-only mark — bold letterform reads cleanly at compact sizes
+  // and against busy photo backgrounds; the full lockup's wordmark/tagline
+  // text goes illegible this small.
+  nav: {
+    width: 172,
+    height: 100,
+    src: siteConfig.mark,
+    className: "h-9 w-auto md:h-11 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]",
+  },
+  mark: { width: 172, height: 100, src: siteConfig.mark, className: "h-12 w-auto" },
+  // Full lockup (arc + monogram + wordmark + tagline) — has room to breathe.
+  footer: { width: 180, height: 68, src: siteConfig.logo, className: "h-14 w-auto" },
+  hero: {
+    width: 280,
+    height: 106,
+    src: siteConfig.logo,
+    className: "h-16 w-auto md:h-24 lg:h-28",
+  },
 } as const;
 
 export function Logo({
@@ -25,7 +39,7 @@ export function Logo({
   const s = sizes[size];
   const image = (
     <Image
-      src={siteConfig.logo}
+      src={s.src}
       alt={siteConfig.name}
       width={s.width}
       height={s.height}
