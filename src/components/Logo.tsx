@@ -17,7 +17,7 @@ const sizes = {
     width: 172,
     height: 100,
     src: siteConfig.mark,
-    className: "h-9 w-auto md:h-11 drop-shadow-[0_1px_4px_rgba(0,0,0,0.6)]",
+    className: "h-9 w-auto md:h-11 drop-shadow-[0_1px_3px_rgba(0,0,0,0.85)]",
   },
   mark: { width: 172, height: 100, src: siteConfig.mark, className: "h-12 w-auto" },
   // Full lockup (arc + monogram + wordmark + tagline) — has room to breathe.
