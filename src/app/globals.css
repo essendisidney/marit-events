@@ -144,4 +144,54 @@
       animation: none;
     }
   }
+
+  /** Diagonal light sweep for filled CTAs — a single quiet flourish on hover. */
+  .btn-sheen {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-sheen::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      115deg,
+      transparent 20%,
+      rgba(255, 255, 255, 0.35) 50%,
+      transparent 80%
+    );
+    transform: translateX(-120%);
+    transition: transform 0.65s var(--ease-editorial);
+    pointer-events: none;
+  }
+
+  .btn-sheen:hover::before {
+    transform: translateX(120%);
+  }
+
+  /** Editorial hover-lift for numbered/index cards — quiet elevation, no drop-shadow noise. */
+  .card-lift {
+    transition:
+      transform 0.5s var(--ease-editorial),
+      border-color 0.4s ease,
+      box-shadow 0.5s ease;
+  }
+
+  .card-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 28px 48px -34px
+      color-mix(in oklab, var(--color-champagne) 55%, transparent);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .btn-sheen::before {
+      display: none;
+    }
+
+    .card-lift:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
 }

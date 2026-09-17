@@ -126,9 +126,16 @@ export function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={linkClass(active)}
+                className={`relative ${linkClass(active)}`}
               >
                 {link.label}
+                {active ? (
+                  <motion.span
+                    layoutId="nav-active-underline"
+                    className="absolute inset-x-0 -bottom-1.5 h-px bg-champagne"
+                    transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                  />
+                ) : null}
               </Link>
             );
           })}
@@ -137,12 +144,19 @@ export function Navbar() {
             <button
               ref={moreBtnRef}
               type="button"
-              className={linkClass(moreActive || moreOpen)}
+              className={`relative ${linkClass(moreActive || moreOpen)}`}
               aria-expanded={moreOpen}
               aria-haspopup="menu"
               onClick={() => setMoreOpen((v) => !v)}
             >
               More
+              {moreActive ? (
+                <motion.span
+                  layoutId="nav-active-underline"
+                  className="absolute inset-x-0 -bottom-1.5 h-px bg-champagne"
+                  transition={{ type: "spring", stiffness: 380, damping: 32 }}
+                />
+              ) : null}
             </button>
             <AnimatePresence>
               {moreOpen ? (

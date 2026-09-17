@@ -74,8 +74,14 @@ export function Faq({
                   >
                     {item.q}
                   </span>
-                  <span className="text-champagne" aria-hidden>
-                    {isOpen ? "−" : "+"}
+                  <span
+                    className={`relative flex h-4 w-4 shrink-0 items-center justify-center text-champagne transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+                      isOpen ? "rotate-45" : ""
+                    }`}
+                    aria-hidden
+                  >
+                    <span className="absolute h-px w-4 bg-current" />
+                    <span className="absolute h-4 w-px bg-current" />
                   </span>
                 </button>
                 {isOpen ? (

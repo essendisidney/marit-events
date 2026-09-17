@@ -587,11 +587,11 @@ function Field({
   min?: string;
 }) {
   const classes =
-    "mt-2 w-full border border-white/10 bg-transparent px-4 py-3.5 text-sm text-ivory outline-none transition duration-300 placeholder:text-taupe/35 focus:border-champagne/55";
+    "mt-2 w-full border border-white/10 bg-transparent px-4 py-3.5 text-sm text-ivory outline-none transition duration-300 placeholder:text-taupe/35 focus:border-champagne/55 focus:shadow-[0_0_0_3px_color-mix(in_oklab,var(--color-champagne)_16%,transparent)]";
 
   return (
-    <label className="block">
-      <span className="text-[11px] uppercase tracking-[0.18em] text-taupe/80">
+    <label className="group block">
+      <span className="text-[11px] uppercase tracking-[0.18em] text-taupe/80 transition-colors duration-300 group-focus-within:text-champagne">
         {label}
         {required ? <span className="text-champagne"> *</span> : null}
       </span>

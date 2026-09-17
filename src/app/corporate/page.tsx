@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { canonical, corporateFaqs, corporateTypes, enquireHref } from "@/lib/site";
 import { images } from "@/lib/images";
-import { Reveal, SectionHeading } from "@/components/ui";
+import { IndexCard, Reveal, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/Faq";
 import { InstagramStrip } from "@/components/InstagramStrip";
 import { PageCloser } from "@/components/PageCloser";
@@ -53,14 +53,7 @@ export default function CorporatePage() {
           </Reveal>
           <div className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {corporateTypes.map((type, i) => (
-              <Reveal key={type} delay={0.04 * i}>
-                <div className="border border-white/10 px-6 py-8 transition hover:border-champagne/50">
-                  <p className="text-[11px] tracking-[0.2em] text-champagne">
-                    0{i + 1}
-                  </p>
-                  <p className="mt-4 font-display text-2xl text-ivory">{type}</p>
-                </div>
-              </Reveal>
+              <IndexCard key={type} index={i + 1} title={type} delay={0.04 * i} />
             ))}
           </div>
           <Reveal className="mt-14">

@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { canonical, enquireHref, siteConfig, storyPillars } from "@/lib/site";
+import {
+  canonical,
+  enquireHref,
+  founderApproach,
+  founderCredentials,
+  founderExpectations,
+  founderFocusAreas,
+  siteConfig,
+  storyPillars,
+} from "@/lib/site";
 import { images, marit } from "@/lib/images";
-import { Reveal, SectionHeading } from "@/components/ui";
+import { IndexCard, Reveal, SectionHeading } from "@/components/ui";
 import { PageCloser } from "@/components/PageCloser";
 
 export const metadata: Metadata = {
@@ -89,6 +98,111 @@ export default function StoryPage() {
               </Reveal>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-24 md:px-8 md:py-32">
+        <div className="mx-auto max-w-7xl">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Meet the Founder"
+              title="Rose Kimonge"
+              body="Event & Operations Consultant — I bring structure to moving parts, coordinate the people behind the work, and help important projects move from intention to execution."
+            />
+          </Reveal>
+
+          <Reveal delay={0.1} className="mt-8 max-w-3xl border-l border-champagne/40 pl-6 md:pl-10">
+            <p className="font-display text-2xl leading-snug text-ivory md:text-3xl">
+              <span className="text-champagne">“</span>With over seven years
+              of experience supporting executives, coordinating projects and
+              events, and managing stakeholders and suppliers, I keep complex
+              assignments moving under pressure — identifying what needs to
+              happen, who needs to make it happen, and following through
+              until the work is done.<span className="text-champagne">”</span>
+            </p>
+          </Reveal>
+
+          <div className="mt-14 grid gap-4 sm:grid-cols-2">
+            {founderFocusAreas.map((area, i) => (
+              <IndexCard
+                key={area.title}
+                index={i + 1}
+                title={area.title}
+                body={area.body}
+                delay={0.05 * i}
+              />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="border-y border-white/5 bg-obsidian-soft px-5 py-24 md:px-8 md:py-28">
+        <div className="mx-auto max-w-7xl">
+          <Reveal>
+            <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
+              My approach
+            </p>
+          </Reveal>
+          <div className="mt-12 divide-y divide-white/10 border-y border-white/10 sm:grid sm:grid-cols-2 sm:divide-y-0 lg:grid-cols-5 lg:divide-x">
+            {founderApproach.map((step, i) => (
+              <Reveal key={step.title} delay={0.05 * i}>
+                <article className="group py-8 sm:px-5 sm:py-10 lg:first:pl-0 lg:last:pr-0">
+                  <p className="text-[11px] tracking-[0.28em] text-champagne">
+                    {step.number}
+                  </p>
+                  <h3 className="mt-4 font-display text-2xl text-ivory transition duration-500 group-hover:text-champagne">
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-taupe">
+                    {step.description}
+                  </p>
+                </article>
+              </Reveal>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="px-5 py-24 md:px-8 md:py-28">
+        <div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-2">
+          <Reveal>
+            <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
+              Experience
+            </p>
+            <p className="mt-6 leading-relaxed text-taupe">
+              At Marit Events, I have coordinated weddings, corporate
+              luncheons and stakeholder events — managing vendors, logistics,
+              budgets, timelines, rehearsals and event-day execution.
+            </p>
+            <p className="mt-4 leading-relaxed text-taupe">
+              Previously, as Executive Assistant to a CEO, I supported
+              high-level meetings, conferences and projects while coordinating
+              multiple priorities and external contacts, and coordinated
+              decoration arrangements for prominent family weddings. I have
+              also led a project event in Machakos that brought together more
+              than 200 young people, managing external stakeholders and
+              communication throughout.
+            </p>
+          </Reveal>
+          <Reveal delay={0.1}>
+            <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
+              What to expect
+            </p>
+            <div className="mt-6 flex flex-wrap gap-2">
+              {founderExpectations.map((item) => (
+                <span
+                  key={item}
+                  className="border border-white/15 px-3.5 py-2 text-[11px] uppercase tracking-[0.14em] text-taupe transition duration-300 hover:border-champagne/50 hover:text-ivory"
+                >
+                  {item}
+                </span>
+              ))}
+            </div>
+            <div className="gold-rule mt-10 h-px w-16" />
+            <p className="mt-5 text-sm leading-relaxed text-taupe/70">
+              {founderCredentials.join(" · ")}
+            </p>
+          </Reveal>
         </div>
       </section>
 

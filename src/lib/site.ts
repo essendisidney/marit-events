@@ -168,6 +168,70 @@ export const storyPillars = [
   },
 ] as const;
 
+/** Rose Kimonge — Event & Operations Consultant, Marit Events founder profile ("Our Story" page). */
+export const founderFocusAreas = [
+  {
+    title: "Event & Project Coordination",
+    body: "Bringing together timelines, people, suppliers, logistics and deliverables so nothing important falls through the cracks.",
+  },
+  {
+    title: "Operations Support",
+    body: "Coordinating people, information, suppliers, schedules and follow-ups so teams operate more efficiently.",
+  },
+  {
+    title: "Stakeholder & Vendor Coordination",
+    body: "The link between clients, internal teams, suppliers and partners — clear expectations, timely communication, followed-through actions.",
+  },
+  {
+    title: "Problem Solving & Follow-Through",
+    body: "Investigating what's stuck, identifying the next step, and coordinating the right people to move it forward.",
+  },
+] as const;
+
+export const founderApproach = [
+  {
+    number: "01",
+    title: "Understand",
+    description: "I start with the objective, the moving parts and what success needs to look like.",
+  },
+  {
+    number: "02",
+    title: "Structure",
+    description: "Requirements become clear actions, timelines, responsibilities and priorities.",
+  },
+  {
+    number: "03",
+    title: "Coordinate",
+    description: "The relevant people stay informed, aligned and accountable.",
+  },
+  {
+    number: "04",
+    title: "Resolve",
+    description: "Issues are identified early, with practical action to address them.",
+  },
+  {
+    number: "05",
+    title: "Deliver",
+    description: "I follow through until the agreed outcome is achieved.",
+  },
+] as const;
+
+export const founderExpectations = [
+  "Takes ownership",
+  "Clear, professional communication",
+  "Strong attention to detail",
+  "Calm coordination under multiple priorities",
+  "Practical problem solving",
+  "Reliable follow-through",
+] as const;
+
+export const founderCredentials = [
+  "Bachelor of Business Administration — Kenya Methodist University",
+  "Diploma in Event Management",
+  "Diploma in Leadership",
+  "Certificate in Wedding Planning",
+] as const;
+
 export const weddingFaqs = [
   {
     q: "Can you plan a wedding in Kenya if we live abroad?",

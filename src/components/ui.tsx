@@ -89,7 +89,7 @@ export function SectionHeading({
         </div>
       ) : null}
       <Tag
-        className={`font-display text-4xl leading-[1.08] text-balance md:text-5xl lg:text-[3.5rem] ${
+        className={`font-display leading-[1.08] text-balance text-[clamp(2.25rem,1.6rem+2.8vw,3.5rem)] ${
           light ? "text-obsidian" : "text-ivory"
         }`}
       >
@@ -123,11 +123,11 @@ export function ButtonLink({
 }) {
   const styles = {
     primary:
-      "bg-champagne text-obsidian hover:bg-champagne-soft",
+      "btn-sheen bg-champagne text-obsidian hover:bg-champagne-soft",
     secondary:
       "border border-ivory/35 text-ivory hover:border-champagne hover:text-champagne",
     "solid-dark":
-      "bg-obsidian text-ivory hover:bg-obsidian/90",
+      "btn-sheen bg-obsidian text-ivory hover:bg-obsidian/90",
     ghost:
       "text-champagne hover:gap-5",
     "ghost-dark":
@@ -140,13 +140,51 @@ export function ButtonLink({
     <Link
       href={href}
       onClick={onClick}
-      className={`inline-flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.2em] transition-all duration-300 ${
+      className={`inline-flex items-center justify-center gap-3 text-[11px] uppercase tracking-[0.2em] transition-all duration-300 active:scale-[0.98] ${
         isGhost ? "" : "px-7 py-3.5"
       } ${styles[variant]} ${className}`}
     >
       {children}
       {isGhost ? <span aria-hidden>→</span> : null}
     </Link>
+  );
+}
+
+export function IndexCard({
+  index,
+  title,
+  body,
+  delay = 0,
+}: {
+  index: number;
+  title: string;
+  body?: string;
+  delay?: number;
+}) {
+  const num = String(index).padStart(2, "0");
+
+  return (
+    <Reveal delay={delay}>
+      <div className="card-lift group relative overflow-hidden border border-white/10 px-6 py-8 hover:border-champagne/50">
+        <span
+          className="pointer-events-none absolute -right-2 -top-7 select-none font-display text-[5.5rem] leading-none text-white/[0.035] transition-colors duration-500 group-hover:text-champagne/10"
+          aria-hidden
+        >
+          {num}
+        </span>
+        <p className="relative text-[11px] tracking-[0.2em] text-champagne">
+          {num}
+        </p>
+        <p className="relative mt-4 font-display text-xl text-ivory md:text-2xl">
+          {title}
+        </p>
+        {body ? (
+          <p className="relative mt-3 text-sm leading-relaxed text-taupe">
+            {body}
+          </p>
+        ) : null}
+      </div>
+    </Reveal>
   );
 }
 
