@@ -50,6 +50,10 @@ export function EnquiryForm() {
   const [guests, setGuests] = useState("");
   const [budget, setBudget] = useState("");
   const [location, setLocation] = useState(initialLocation);
+  const [date, setDate] = useState("");
+  const [availability, setAvailability] = useState<
+    "idle" | "checking" | "available" | "busy" | "unknown"
+  >("idle");
   const [formError, setFormError] = useState("");
   const [copied, setCopied] = useState(false);
   const [stickyVisible, setStickyVisible] = useState(true);
@@ -66,6 +70,37 @@ export function EnquiryForm() {
     observer.observe(el);
     return () => observer.disconnect();
   }, []);
+
+  // Check Rose's calendar for the selected date. Debounced so we don't
+  // fire a request on every keystroke while the date input is being set.
+  useEffect(() => {
+    if (!date) {
+      setAvailability("idle");
+      return;
+    }
+    let cancelled = false;
+    setAvailability("checking");
+    const timer = window.setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `/api/availability?date=${encodeURIComponent(date)}`
+        );
+        const data = (await res.json()) as { status?: string };
+        if (!cancelled) {
+          const status = data.status;
+          setAvailability(
+            status === "available" || status === "busy" ? status : "unknown"
+          );
+        }
+      } catch {
+        if (!cancelled) setAvailability("unknown");
+      }
+    }, 450);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(timer);
+    };
+  }, [date]);
 
   function buildPayload(form: FormData) {
     return {
@@ -374,7 +409,30 @@ export function EnquiryForm() {
           name="date"
           type="date"
           min={localDateMin()}
+          value={date}
+          onChange={setDate}
         />
+        {date ? (
+          <p
+            className={`-mt-3 text-xs ${
+              availability === "busy"
+                ? "text-champagne"
+                : availability === "checking"
+                  ? "text-taupe"
+                  : "text-ivory/70"
+            }`}
+            role="status"
+            aria-live="polite"
+          >
+            {availability === "checking"
+              ? "Checking Rose's calendar…"
+              : availability === "available"
+                ? "That date looks open on Rose's calendar."
+                : availability === "busy"
+                  ? "Heads up — Rose already has something on that date. We'll confirm options when we reply."
+                  : null}
+          </p>
+        ) : null}
 
         <div
           className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
