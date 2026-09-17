@@ -112,7 +112,13 @@ export function Navbar() {
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:h-[4.75rem] md:px-8">
+      {!scrolled && !open ? (
+        <div
+          className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-obsidian/80 via-obsidian/35 to-transparent md:h-32"
+          aria-hidden
+        />
+      ) : null}
+      <div className="relative z-10 mx-auto flex h-16 max-w-7xl items-center justify-between px-5 md:h-[4.75rem] md:px-8">
         <Logo size="nav" priority />
 
         <nav
