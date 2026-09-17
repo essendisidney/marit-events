@@ -16,6 +16,11 @@ export const marit = {
   entranceDraped: local("entrance-draped.jpg"),
 } as const;
 
+/** Team portraits */
+export const team = {
+  roseKimonge: "/team/rose-kimonge.jpg",
+} as const;
+
 /** Site imagery — prefer Marit photos; keep a small destination set for Kenya landscapes. */
 export const images = {
   hero: marit.receptionRustic,
@@ -46,4 +51,5 @@ export const images = {
   floralDetail: marit.babyShower,
 
   ...marit,
+  ...team,
 } as const;

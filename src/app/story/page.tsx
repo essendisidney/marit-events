@@ -103,24 +103,40 @@ export default function StoryPage() {
 
       <section className="px-5 py-24 md:px-8 md:py-32">
         <div className="mx-auto max-w-7xl">
-          <Reveal>
-            <SectionHeading
-              eyebrow="Meet the Founder"
-              title="Rose Kimonge"
-              body="Event & Operations Consultant — I bring structure to moving parts, coordinate the people behind the work, and help important projects move from intention to execution."
-            />
-          </Reveal>
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,300px)_1fr] lg:items-start lg:gap-14">
+            <Reveal>
+              <div className="relative aspect-[4/5] max-w-sm overflow-hidden lg:max-w-none">
+                <Image
+                  src={images.roseKimonge}
+                  alt="Rose Kimonge, Event & Operations Consultant at Marit Events"
+                  fill
+                  className="object-cover object-top"
+                  sizes="(max-width: 1024px) 60vw, 300px"
+                />
+              </div>
+            </Reveal>
 
-          <Reveal delay={0.1} className="mt-8 max-w-3xl border-l border-champagne/40 pl-6 md:pl-10">
-            <p className="font-display text-2xl leading-snug text-ivory md:text-3xl">
-              <span className="text-champagne">“</span>With over seven years
-              of experience supporting executives, coordinating projects and
-              events, and managing stakeholders and suppliers, I keep complex
-              assignments moving under pressure — identifying what needs to
-              happen, who needs to make it happen, and following through
-              until the work is done.<span className="text-champagne">”</span>
-            </p>
-          </Reveal>
+            <div>
+              <Reveal>
+                <SectionHeading
+                  eyebrow="Meet the Founder"
+                  title="Rose Kimonge"
+                  body="Event & Operations Consultant — I bring structure to moving parts, coordinate the people behind the work, and help important projects move from intention to execution."
+                />
+              </Reveal>
+
+              <Reveal delay={0.1} className="mt-8 max-w-3xl border-l border-champagne/40 pl-6 md:pl-10">
+                <p className="font-display text-2xl leading-snug text-ivory md:text-3xl">
+                  <span className="text-champagne">“</span>With over seven years
+                  of experience supporting executives, coordinating projects and
+                  events, and managing stakeholders and suppliers, I keep complex
+                  assignments moving under pressure — identifying what needs to
+                  happen, who needs to make it happen, and following through
+                  until the work is done.<span className="text-champagne">”</span>
+                </p>
+              </Reveal>
+            </div>
+          </div>
 
           <div className="mt-14 grid gap-4 sm:grid-cols-2">
             {founderFocusAreas.map((area, i) => (
