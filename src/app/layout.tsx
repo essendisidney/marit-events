@@ -40,10 +40,12 @@ export const metadata: Metadata = {
   authors: [{ name: siteConfig.name }],
   creator: siteConfig.name,
   icons: {
-    // The full lockup (wordmark + tagline) turns to mush at favicon/home-screen
-    // sizes — use the square-cropped monogram instead.
-    icon: [{ url: "/marit-icon.png", type: "image/png" }],
-    apple: "/marit-apple-touch-icon.png",
+    // Square monogram only — full lockup turns to mush at favicon sizes.
+    icon: [
+      { url: "/favicon.png", type: "image/png" },
+      { url: "/marit-icon.png", type: "image/png", sizes: "192x192" },
+    ],
+    apple: [{ url: "/marit-apple-touch-icon.png", sizes: "180x180" }],
   },
   openGraph: {
     title: `${siteConfig.name} — ${siteConfig.slogan}`,

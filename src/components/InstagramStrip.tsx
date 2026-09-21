@@ -60,21 +60,34 @@ export function InstagramStrip() {
         <div className="flex flex-col items-start justify-between gap-8 md:flex-row md:items-end">
           <Reveal>
             <p className="text-[11px] uppercase tracking-[0.28em] text-champagne">
-              Instagram
+              From the portfolio
             </p>
             <h2 className="mt-4 max-w-xl font-display text-3xl text-ivory md:text-5xl">
-              Follow the craft behind the celebrations.
+              Moments from celebrations we&apos;ve orchestrated.
             </h2>
           </Reveal>
-          <Reveal delay={0.1}>
+          <Reveal delay={0.1} className="flex flex-col items-start gap-3 sm:flex-row sm:items-center">
+            <Link
+              href="/portfolio"
+              onClick={() =>
+                trackCtaClick({
+                  path: pathname,
+                  href: "/portfolio",
+                  source: "portfolio_strip",
+                })
+              }
+              className="inline-flex items-center gap-3 border border-champagne/50 px-6 py-3.5 text-[11px] uppercase tracking-[0.2em] text-champagne transition hover:bg-champagne hover:text-obsidian"
+            >
+              View portfolio
+              <span aria-hidden>→</span>
+            </Link>
             <a
               href={siteConfig.instagram}
               target="_blank"
               rel="noreferrer"
-              className="inline-flex items-center gap-3 border border-champagne/50 px-6 py-3.5 text-[11px] uppercase tracking-[0.2em] text-champagne transition hover:bg-champagne hover:text-obsidian"
+              className="text-[11px] uppercase tracking-[0.2em] text-taupe transition hover:text-champagne"
             >
-              @{handle}
-              <span aria-hidden>→</span>
+              @{handle} on Instagram
             </a>
           </Reveal>
         </div>
@@ -88,7 +101,7 @@ export function InstagramStrip() {
                   trackCtaClick({
                     path: pathname,
                     href: tile.href,
-                    source: "instagram_tile",
+                    source: "portfolio_tile",
                   })
                 }
                 className="group relative block aspect-square overflow-hidden"
@@ -126,7 +139,7 @@ export function InstagramStrip() {
                 trackCtaClick({
                   path: pathname,
                   href: enquire,
-                  source: "instagram_strip",
+                  source: "portfolio_strip",
                 })
               }
               className="text-ivory underline-offset-4 hover:text-champagne hover:underline"

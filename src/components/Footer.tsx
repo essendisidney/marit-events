@@ -115,6 +115,13 @@ export function Footer() {
         <p className="mt-16 text-xs tracking-[0.12em] text-taupe/60">
           © {new Date().getFullYear()} {siteConfig.name}
           <span className="mx-2 text-taupe/30">·</span>
+          <Link
+            href="/privacy"
+            className="transition hover:text-champagne"
+          >
+            Privacy
+          </Link>
+          <span className="mx-2 text-taupe/30">·</span>
           Digital solution by Pesara Limited
         </p>
       </div>

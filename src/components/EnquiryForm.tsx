@@ -588,6 +588,16 @@ export function EnquiryForm() {
         <p className="mt-4 hidden text-sm text-taupe md:block">
           {siteConfig.responseTime}
         </p>
+        <p className="mt-3 hidden max-w-md text-xs leading-relaxed text-taupe/70 md:block">
+          Your details stay with Marit Events so we can reply — see our{" "}
+          <a
+            href="/privacy"
+            className="text-taupe underline-offset-2 hover:text-champagne hover:underline"
+          >
+            privacy note
+          </a>
+          .
+        </p>
       </div>
 
       {stickyVisible ? (
@@ -608,6 +618,12 @@ export function EnquiryForm() {
             </button>
             <p className="text-center text-[10px] text-taupe">
               {siteConfig.responseTime}
+            </p>
+            <p className="text-center text-[10px] text-taupe/60">
+              Details stay with us ·{" "}
+              <a href="/privacy" className="underline-offset-2 hover:underline">
+                Privacy
+              </a>
             </p>
           </div>
         </div>
