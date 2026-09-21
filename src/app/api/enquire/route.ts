@@ -1,6 +1,13 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { siteConfig } from "@/lib/site";
+import {
+  enquireAutoReplyHtml,
+  enquireAutoReplyText,
+  enquireBriefText,
+  enquireNotifyHtml,
+  type EnquirePayload,
+} from "@/lib/enquire-email";
 
 export const runtime = "nodejs";
 
@@ -67,7 +74,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true, emailed: false, brief: "" });
   }
 
-  const payload = {
+  const payload: EnquirePayload = {
     type: clean(body.type, 80),
     location: clean(body.location, 120),
     date: clean(body.date, 40),
@@ -100,19 +107,7 @@ export async function POST(request: Request) {
     );
   }
 
-  const lines = [
-    `New Marit enquiry from ${payload.name}`,
-    `Type: ${payload.type}`,
-    `Location: ${payload.location}`,
-    `Date: ${payload.date}`,
-    `Guests: ${payload.guests}`,
-    `Budget: ${payload.budget}`,
-    `Vision: ${payload.vision}`,
-    `Email: ${payload.email}`,
-    `Phone/WhatsApp: ${payload.phone}`,
-    `Preferred handoff: ${payload.mode || "whatsapp"}`,
-  ].join("\n");
-
+  const lines = enquireBriefText(payload);
   const apiKey = process.env.RESEND_API_KEY;
   let emailed = false;
 
@@ -129,6 +124,7 @@ export async function POST(request: Request) {
         replyTo: payload.email,
         subject: `Marit enquiry — ${payload.type || "Event"} — ${payload.name}`,
         text: lines,
+        html: enquireNotifyHtml(payload),
       });
 
       if (error) {
@@ -141,6 +137,23 @@ export async function POST(request: Request) {
         });
       }
       emailed = true;
+
+      // Client confirmation — never block the enquiry if this fails
+      try {
+        const auto = await resend.emails.send({
+          from,
+          to: [payload.email],
+          replyTo: siteConfig.email,
+          subject: "We've received your Marit Events enquiry",
+          text: enquireAutoReplyText(payload),
+          html: enquireAutoReplyHtml(payload),
+        });
+        if (auto.error) {
+          console.error("[enquire] auto-reply error", auto.error);
+        }
+      } catch (autoErr) {
+        console.error("[enquire] auto-reply exception", autoErr);
+      }
     } catch (err) {
       console.error("[enquire] Resend exception", err);
       return NextResponse.json({
