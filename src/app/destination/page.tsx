@@ -38,14 +38,22 @@ export default function DestinationPage() {
               title="Get married in Kenya."
               body="Bring your people. We'll handle the rest — venues, guest logistics, styling and the quiet details that make destination celebrations feel effortless."
             />
-            <TrackedLink
-              href={enquireHref({ type: "Destination Event" })}
-              source="destination_hero"
-              className="mt-10 inline-flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-champagne"
-            >
-              Plan a destination event
-              <span aria-hidden>→</span>
-            </TrackedLink>
+            <div className="mt-10 flex flex-wrap items-center gap-4">
+              <TrackedLink
+                href={enquireHref({ type: "Destination Event" })}
+                source="destination_hero"
+                className="bg-champagne px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-obsidian transition hover:bg-champagne-soft"
+              >
+                Plan a destination event
+              </TrackedLink>
+              <TrackedLink
+                href="/destination/from-abroad"
+                source="destination_hero_abroad"
+                className="border border-ivory/35 px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-ivory transition hover:border-champagne hover:text-champagne"
+              >
+                Planning from abroad?
+              </TrackedLink>
+            </div>
           </Reveal>
         </div>
       </section>
@@ -144,11 +152,11 @@ export default function DestinationPage() {
 
       <PageCloser
         title="Ready for a Kenya celebration?"
-        body="Tell us the place you're dreaming of — we'll orchestrate the rest."
+        body="Tell us the place you're dreaming of — or if you're planning from abroad, we'll be your team on the ground."
         primaryHref={enquireHref({ type: "Destination Event" })}
         primaryLabel="Plan a destination event"
-        secondaryHref="/weddings"
-        secondaryLabel="Explore weddings"
+        secondaryHref="/destination/from-abroad"
+        secondaryLabel="Planning from abroad?"
       />
     </div>
   );

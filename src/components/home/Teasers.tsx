@@ -82,7 +82,7 @@ export function DestinationTeaser() {
           <SectionHeading
             eyebrow="Destination"
             title="Get married in Kenya."
-            body="Bring your people. We'll handle the rest. From Nairobi's sophisticated venues to the coast's tropical landscapes, Marit creates destination experiences that feel effortless for couples and their guests."
+            body="Bring your people — whether they fly in from abroad or live nearby. We'll handle venues, guest logistics and the quiet details that make destination celebrations feel effortless."
           />
           <div className="mt-8 flex flex-wrap items-center gap-6">
             <ButtonLink
@@ -98,8 +98,8 @@ export function DestinationTeaser() {
             >
               Plan a destination event
             </ButtonLink>
-            <ButtonLink href="/destination" variant="ghost">
-              Destination Kenya
+            <ButtonLink href="/destination/from-abroad" variant="ghost">
+              Planning from abroad?
             </ButtonLink>
           </div>
         </Reveal>

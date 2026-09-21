@@ -167,8 +167,8 @@ export default function WeddingsPage() {
         title="Ready to begin your wedding story?"
         primaryHref={enquireHref({ type: "Wedding" })}
         primaryLabel="Enquire for a wedding"
-        secondaryHref="/portfolio"
-        secondaryLabel="View portfolio"
+        secondaryHref="/destination/from-abroad"
+        secondaryLabel="Planning from abroad?"
       />
     </div>
   );

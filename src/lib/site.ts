@@ -302,6 +302,53 @@ export const destinationFaqs = [
   },
 ] as const;
 
+/** Conversion content for international couples planning Kenya celebrations remotely. */
+export const abroadPlanningSteps = [
+  {
+    number: "01",
+    title: "Share the vision",
+    description:
+      "Date window, guest count, budget band and the feeling you want — from Nairobi polish to coastal light or wilderness drama.",
+  },
+  {
+    number: "02",
+    title: "We map Kenya for you",
+    description:
+      "Venues, season, guest travel and the celebration shape. You stay abroad; we pressure-test what will actually work on the ground.",
+  },
+  {
+    number: "03",
+    title: "Design & confirm",
+    description:
+      "Styling, vendors, timeline and logistics — clear decisions, no chaos. Video calls and WhatsApp keep everything moving.",
+  },
+  {
+    number: "04",
+    title: "You arrive. It's ready.",
+    description:
+      "We orchestrate the days around the celebration so you — and your people — can be fully present.",
+  },
+] as const;
+
+export const abroadFaqs = [
+  {
+    q: "We live in the UK / US / UAE / South Africa — can you still plan for us?",
+    a: "Yes. Most of our destination work begins remotely. We become your team in Kenya — venues, vendors, guest flow and day-of orchestration — while you decide from home.",
+  },
+  {
+    q: "How do we work together across time zones?",
+    a: "Email for long briefs, WhatsApp for quick decisions, and scheduled video calls for design milestones. We reply within 24 hours.",
+  },
+  {
+    q: "What do you need from us in the first enquiry?",
+    a: "Rough date window, where you're flying from, estimated guests, preferred region (city, coast or wilderness) and anything non-negotiable. We'll guide the rest.",
+  },
+  {
+    q: "Do you only do weddings?",
+    a: "Weddings are our heart — we also orchestrate proposals, private celebrations and brand moments for international hosts in Kenya.",
+  },
+] as const;
+
 export const primaryNav = [
   { href: "/experiences", label: "Experiences" },
   { href: "/weddings", label: "Weddings" },
@@ -333,6 +380,8 @@ export function whatsappUrl(message?: string) {
 export function whatsappMessageForPath(pathname: string) {
   if (pathname.startsWith("/weddings"))
     return "Hello Marit — I'd like to talk about planning a wedding.";
+  if (pathname.startsWith("/destination/from-abroad"))
+    return "Hello Marit — I'm abroad and would like to plan a celebration in Kenya.";
   if (pathname.startsWith("/destination"))
     return "Hello Marit — I'd like to talk about a destination celebration in Kenya.";
   if (pathname.startsWith("/corporate"))
@@ -397,7 +446,7 @@ function enquiryTypeForJournalPath(
   if (!slug) return null;
   const bySlug: Record<string, (typeof enquiryTypes)[number]> = {
     "destination-wedding-venues-kenya": "Destination Event",
-    "planning-a-wedding-in-kenya-from-abroad": "Wedding",
+    "planning-a-wedding-in-kenya-from-abroad": "Destination Event",
     "nairobi-wedding-venues": "Wedding",
     "luxury-wedding-planners-kenya": "Wedding",
   };
