@@ -93,13 +93,20 @@ export default function ExperiencesPage() {
               </Reveal>
             ))}
           </div>
-          <Reveal className="mt-14">
+          <Reveal className="mt-14 flex flex-wrap items-center gap-6">
             <TrackedLink
               href={enquireHref()}
               source="experiences_mid"
               className="inline-block bg-obsidian px-8 py-4 text-[11px] uppercase tracking-[0.2em] text-ivory"
             >
               Plan Your Event →
+            </TrackedLink>
+            <TrackedLink
+              href="/consultation"
+              source="experiences_consultation"
+              className="text-[11px] uppercase tracking-[0.2em] text-obsidian/55 transition hover:text-obsidian"
+            >
+              Need advice only? Event consultation →
             </TrackedLink>
           </Reveal>
         </div>

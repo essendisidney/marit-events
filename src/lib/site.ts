@@ -357,6 +357,7 @@ export const primaryNav = [
 ] as const;
 
 export const moreNav = [
+  { href: "/consultation", label: "Consultation" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/story", label: "Our Story" },
   { href: "/journal", label: "Journal" },
@@ -367,7 +368,39 @@ export const enquiryTypes = [
   "Corporate Event",
   "Private Celebration",
   "Destination Event",
+  "Event Consultation",
   "Other",
+] as const;
+
+/** Standalone advisory — not full event management. */
+export const consultationIncludes = [
+  {
+    title: "Event assessment",
+    body: "A clear-eyed look at your plan, venue options, timeline and risk points.",
+  },
+  {
+    title: "Planning direction",
+    body: "Priorities, sequence and decisions that keep the celebration coherent.",
+  },
+  {
+    title: "Operational recommendations",
+    body: "Vendors, flow, guest experience and day-of practicalities — without taking over the brief.",
+  },
+] as const;
+
+export const consultationFaqs = [
+  {
+    q: "Is this the same as hiring Marit to plan the whole event?",
+    a: "No. Consultation is for hosts who want expert guidance — assessment, direction and operational recommendations — without engaging us for full event management.",
+  },
+  {
+    q: "What does the fee cover?",
+    a: "Consultation starts from KES 5,000. The scope (call, written notes, or a short review session) is agreed when you enquire so you know exactly what you're booking.",
+  },
+  {
+    q: "Can we hire Marit for full planning later?",
+    a: "Yes. Many clients begin with advice and later ask us to orchestrate. Consultation never obliges you to a full engagement.",
+  },
 ] as const;
 
 export function whatsappUrl(message?: string) {
@@ -386,6 +419,8 @@ export function whatsappMessageForPath(pathname: string) {
     return "Hello Marit — I'd like to talk about a destination celebration in Kenya.";
   if (pathname.startsWith("/corporate"))
     return "Hello Marit — I'd like to talk about a corporate event.";
+  if (pathname.startsWith("/consultation"))
+    return "Hello Marit — I'd like to book an event consultation (advice only, not full planning).";
   if (pathname.startsWith("/portfolio/")) {
     const type = enquiryTypeForPortfolioPath(pathname);
     if (type === "Wedding")
@@ -424,6 +459,8 @@ export function enquireHrefForPath(pathname: string) {
     return enquireHref({ type: "Destination Event" });
   if (pathname.startsWith("/corporate"))
     return enquireHref({ type: "Corporate Event" });
+  if (pathname.startsWith("/consultation"))
+    return enquireHref({ type: "Event Consultation" });
   if (pathname.startsWith("/portfolio/")) {
     const type = enquiryTypeForPortfolioPath(pathname);
     return enquireHref({ type: type ?? "Private Celebration" });
@@ -490,6 +527,7 @@ export function resolveEnquiryType(
   if (key.includes("wedding")) return "Wedding";
   if (key.includes("corporate")) return "Corporate Event";
   if (key.includes("destination")) return "Destination Event";
+  if (key.includes("consult")) return "Event Consultation";
   if (key.includes("private") || key.includes("celebration"))
     return "Private Celebration";
   return enquiryTypes[0];

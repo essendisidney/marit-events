@@ -22,7 +22,7 @@ const budgetChips = [
   "$15k–40k",
   "$40k+",
 ] as const;
-const locationChips = destinations.map((d) => d.name);
+const locationChips = [...destinations.map((d) => d.name), "Remote / advice only"];
 
 function localDateMin() {
   const d = new Date();
@@ -124,12 +124,20 @@ export function EnquiryForm() {
     const payload = buildPayload(new FormData(form));
 
     if (!payload.location) {
-      setFormError("Add where the celebration will take place.");
+      setFormError(
+        type === "Event Consultation"
+          ? "Add where the event is (or note “remote / advice only”)."
+          : "Add where the celebration will take place."
+      );
       return;
     }
 
     if (!payload.guests && !payload.budget) {
-      setFormError("Select an estimated guest count or budget to continue.");
+      setFormError(
+        type === "Event Consultation"
+          ? "Select a budget band (e.g. To discuss) or guest count to continue."
+          : "Select an estimated guest count or budget to continue."
+      );
       guestsGroupRef.current?.querySelector("button")?.focus();
       return;
     }
