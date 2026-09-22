@@ -111,7 +111,7 @@ export function enquireAutoReplyHtml(payload: EnquirePayload) {
       Dear ${escapeHtml(payload.name.split(" ")[0] || payload.name)},
     </p>
     <p style="margin:0 0 16px;font-size:15px;line-height:1.65;color:#4a433c;font-family:Arial,Helvetica,sans-serif;">
-      Thank you for writing to Marit Events. We've received your ${escapeHtml(payload.type || "celebration")} enquiry${payload.location ? ` for ${escapeHtml(payload.location)}` : ""} and will reply within 24 hours with a clear next step.
+      Thank you for writing to Marit Events. We've received your ${escapeHtml(payload.type || "celebration")} enquiry${payload.location ? ` for ${escapeHtml(payload.location)}` : ""} and will reply within 2–3 hours with a clear next step.
     </p>
     <p style="margin:0 0 24px;font-size:15px;line-height:1.65;color:#4a433c;font-family:Arial,Helvetica,sans-serif;">
       If anything is urgent, WhatsApp us anytime — we're happy to help.
@@ -134,7 +134,7 @@ export function enquireAutoReplyText(payload: EnquirePayload) {
   return [
     `Dear ${first},`,
     "",
-    `Thank you for writing to Marit Events. We've received your ${payload.type || "celebration"} enquiry${payload.location ? ` for ${payload.location}` : ""} and will reply within 24 hours with a clear next step.`,
+    `Thank you for writing to Marit Events. We've received your ${payload.type || "celebration"} enquiry${payload.location ? ` for ${payload.location}` : ""} and will reply within 2–3 hours with a clear next step.`,
     "",
     `If anything is urgent, WhatsApp us: ${siteConfig.phone}`,
     `Or email: ${siteConfig.email}`,

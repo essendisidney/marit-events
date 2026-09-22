@@ -41,7 +41,7 @@ export const journalPosts: JournalPost[] = [
       "Distance should not mean uncertainty. With the right partner on the ground in Kenya, planning from London, Dubai, New York or Johannesburg can feel clear and calm.",
       "Begin with vision and constraints: date window, guest numbers, budget band and the kind of experience you want people to feel — city elegance, coastal light or wilderness drama.",
       "Then lean on local orchestration: venues, vendors, timelines, guest logistics and the quiet details that make a destination wedding feel effortless for everyone flying in.",
-      "Your first message to Marit only needs the essentials — where you live now, where in Kenya you're drawn to, and what matters most. We reply within 24 hours with a clear next step.",
+      "Your first message to Marit only needs the essentials — where you live now, where in Kenya you're drawn to, and what matters most. We reply within 2–3 hours with a clear next step.",
       "Marit exists for exactly this: you imagine it from abroad. We orchestrate everything in Kenya.",
     ],
   },

@@ -12,7 +12,7 @@ import { TrackedMailto, TrackedWhatsApp } from "@/components/TrackedLink";
 export const metadata: Metadata = {
   title: "Plan Your Event",
   description:
-    "Tell Marit Events about your celebration. We'll be in touch within 24 hours.",
+    "Tell Marit Events about your celebration. We'll reply within 2–3 hours.",
   alternates: { canonical: canonical("/enquire") },
 };
 
@@ -49,12 +49,12 @@ export default function EnquirePage() {
                 as="h1"
                 eyebrow="Enquire"
                 title="Tell us about your celebration."
-                body="Share the essentials. We'll respond with care — and clarity — within 24 hours."
+                body="Share the essentials. We'll respond with care — and clarity — within 2–3 hours."
               />
             </div>
             <p className="hidden text-taupe md:block md:text-lg">
               Share the essentials. We&apos;ll respond with care — and clarity —
-              within 24 hours.
+              within 2–3 hours.
             </p>
             <ol className="mt-8 hidden space-y-3 text-sm text-taupe md:block">
               <li>
@@ -62,7 +62,7 @@ export default function EnquirePage() {
                 you&apos;re imagining
               </li>
               <li>
-                <span className="text-champagne">02</span> We reply within 24
+                <span className="text-champagne">02</span> We reply within 2–3
                 hours
               </li>
               <li>

@@ -235,8 +235,8 @@ export function EnquiryForm() {
             care.
           </li>
           <li>
-            <span className="text-champagne">02</span> You hear from us within 24
-            hours.
+            <span className="text-champagne">02</span> You hear from us within
+            2–3 hours.
           </li>
           <li>
             <span className="text-champagne">03</span> We propose a clear next

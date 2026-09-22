@@ -15,7 +15,9 @@ export const siteConfig = {
   phone: "+254115251888",
   whatsapp: "254115251888",
   instagram: "https://instagram.com/maritevents",
-  responseTime: "We'll be in touch within 24 hours.",
+  responseTime: "We'll reply within 2–3 hours.",
+  /** Short window for trust strip / FAQs */
+  responseWindow: "2–3 hours",
   /** Production URL — update when custom domain is connected */
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://maritevents.com",
   logo: "/marit-logo.png",
@@ -88,7 +90,7 @@ export const maritExperience = [
 
 /** Honest trust signals — swap in verified counts when available. */
 export const trustStats = [
-  { value: "24h", label: "Response Promise" },
+  { value: "2–3h", label: "Response Promise" },
   { value: "Nairobi", label: "Based In" },
   { value: "Kenya", label: "Destination Reach" },
   { value: "Full", label: "Day Orchestration" },
@@ -264,14 +266,14 @@ export const corporateFaqs = [
   },
   {
     q: "How quickly can you turn around a corporate enquiry?",
-    a: "We'll respond within 24 hours. Timeline depends on scale and date — share your brief and we'll propose a clear next step.",
+    a: "We'll respond within 2–3 hours. Timeline depends on scale and date — share your brief and we'll propose a clear next step.",
   },
 ] as const;
 
 export const enquireFaqs = [
   {
     q: "How soon will we hear back?",
-    a: "Within 24 hours on working days. Urgent dates — say so in your enquiry and WhatsApp us directly.",
+    a: "Within 2–3 hours on working days. Urgent dates — say so in your enquiry and WhatsApp us directly.",
   },
   {
     q: "Do we need a finished budget?",
@@ -337,7 +339,7 @@ export const abroadFaqs = [
   },
   {
     q: "How do we work together across time zones?",
-    a: "Email for long briefs, WhatsApp for quick decisions, and scheduled video calls for design milestones. We reply within 24 hours.",
+    a: "Email for long briefs, WhatsApp for quick decisions, and scheduled video calls for design milestones. We reply within 2–3 hours.",
   },
   {
     q: "What do you need from us in the first enquiry?",
