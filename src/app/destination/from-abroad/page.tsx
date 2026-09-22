@@ -205,7 +205,7 @@ export default function PlanningFromAbroadPage() {
 
       <PageCloser
         title="Ready to celebrate in Kenya?"
-        body="Share where you're flying from and what you're imagining. We'll reply within 2–3 hours with a clear next step."
+        body="Share where you're flying from and what you're imagining. We'll reply within 2 hours with a clear next step."
         primaryHref={enquire}
         primaryLabel="Start your Kenya enquiry"
         secondaryHref="/journal/planning-a-wedding-in-kenya-from-abroad"

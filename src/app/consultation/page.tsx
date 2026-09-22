@@ -147,7 +147,7 @@ export default function ConsultationPage() {
 
       <PageCloser
         title="Need advice, not a full planner?"
-        body="Tell us what you're working on. We'll reply within 2–3 hours with a clear consultation next step."
+        body="Tell us what you're working on. We'll reply within 2 hours with a clear consultation next step."
         primaryHref={enquire}
         primaryLabel="Book a consultation"
         secondaryHref="/experiences"
