@@ -57,6 +57,7 @@ export function EnquiryForm() {
   const [formError, setFormError] = useState("");
   const [copied, setCopied] = useState(false);
   const [stickyVisible, setStickyVisible] = useState(true);
+  const [attachment, setAttachment] = useState<File | null>(null);
   const guestsGroupRef = useRef<HTMLDivElement>(null);
   const formRef = useRef<HTMLFormElement>(null);
 
@@ -142,6 +143,11 @@ export function EnquiryForm() {
       return;
     }
 
+    if (attachment && attachment.size > 8 * 1024 * 1024) {
+      setFormError("Attachment must be under 8MB.");
+      return;
+    }
+
     setSending(true);
 
     const lines = [
@@ -154,7 +160,10 @@ export function EnquiryForm() {
       `Vision: ${payload.vision}`,
       `Email: ${payload.email}`,
       `Phone/WhatsApp: ${payload.phone}`,
-    ].join("\n");
+      attachment ? `Attachment: ${attachment.name}` : null,
+    ]
+      .filter(Boolean)
+      .join("\n");
 
     setBrief(lines);
     let emailed = false;
@@ -162,10 +171,15 @@ export function EnquiryForm() {
     let apiError = "";
 
     try {
+      const body = new FormData();
+      Object.entries({ ...payload, mode }).forEach(([key, value]) => {
+        body.set(key, value);
+      });
+      if (attachment) body.set("attachment", attachment);
+
       const res = await fetch("/api/enquire", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ ...payload, mode }),
+        body,
       });
       const data = (await res.json()) as {
         ok?: boolean;
@@ -526,6 +540,30 @@ export function EnquiryForm() {
           required
           placeholder="Atmosphere, people, places, anything that matters…"
         />
+        <div>
+          <label className="block">
+            <span className="text-[11px] uppercase tracking-[0.18em] text-taupe/80">
+              Moodboard or brief{" "}
+              <span className="normal-case tracking-normal text-taupe/50">
+                (optional)
+              </span>
+            </span>
+            <input
+              type="file"
+              name="attachment"
+              accept="application/pdf,image/jpeg,image/png,image/webp,image/heic,image/heif,.pdf,.jpg,.jpeg,.png,.webp"
+              className="mt-3 block w-full text-sm text-taupe file:mr-4 file:border file:border-white/15 file:bg-transparent file:px-4 file:py-2.5 file:text-[11px] file:uppercase file:tracking-[0.14em] file:text-ivory hover:file:border-champagne hover:file:text-champagne"
+              onChange={(e) => {
+                const file = e.target.files?.[0] ?? null;
+                setAttachment(file);
+              }}
+            />
+          </label>
+          <p className="mt-2 text-xs text-taupe/60">
+            PDF or image, max 8MB
+            {attachment ? ` · ${attachment.name}` : ""}
+          </p>
+        </div>
       </div>
 
       <div className="space-y-6">

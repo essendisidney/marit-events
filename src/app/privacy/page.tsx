@@ -13,7 +13,7 @@ export const metadata: Metadata = {
 const sections = [
   {
     title: "What we collect",
-    body: "When you enquire, we receive the details you choose to share — name, contact information, celebration type, location, date, guest count, budget band and vision notes. We also receive basic analytics about site visits (pages viewed, device type) via Vercel Analytics, without selling personal profiles.",
+    body: "When you enquire, we receive the details you choose to share — name, contact information, celebration type, location, date, guest count, budget band, vision notes and any optional file you attach (PDF or image). We also receive basic analytics about site visits (pages viewed, device type) via Vercel Analytics, without selling personal profiles.",
   },
   {
     title: "Why we use it",

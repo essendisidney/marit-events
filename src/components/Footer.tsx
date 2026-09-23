@@ -122,6 +122,13 @@ export function Footer() {
             Privacy
           </Link>
           <span className="mx-2 text-taupe/30">·</span>
+          <Link
+            href="/downloads"
+            className="transition hover:text-champagne"
+          >
+            Downloads
+          </Link>
+          <span className="mx-2 text-taupe/30">·</span>
           Digital solution by Pesara Limited
         </p>
       </div>

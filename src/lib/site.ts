@@ -360,6 +360,7 @@ export const primaryNav = [
 
 export const moreNav = [
   { href: "/consultation", label: "Consultation" },
+  { href: "/downloads", label: "Downloads" },
   { href: "/portfolio", label: "Portfolio" },
   { href: "/story", label: "Our Story" },
   { href: "/journal", label: "Journal" },

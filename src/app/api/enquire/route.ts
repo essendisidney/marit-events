@@ -11,7 +11,17 @@ import {
 
 export const runtime = "nodejs";
 
-type EnquiryBody = {
+const MAX_ATTACHMENT_BYTES = 8 * 1024 * 1024;
+const ALLOWED_TYPES = new Set([
+  "application/pdf",
+  "image/jpeg",
+  "image/png",
+  "image/webp",
+  "image/heic",
+  "image/heif",
+]);
+
+type EnquiryFields = {
   type?: string;
   location?: string;
   date?: string;
@@ -22,7 +32,7 @@ type EnquiryBody = {
   email?: string;
   phone?: string;
   mode?: string;
-  company?: string; // honeypot
+  company?: string;
 };
 
 const rateMap = new Map<string, { count: number; reset: number }>();
@@ -54,6 +64,63 @@ function rateLimited(key: string) {
   return entry.count > max;
 }
 
+async function parseBody(request: Request): Promise<{
+  fields: EnquiryFields;
+  attachment?: { filename: string; content: Buffer; contentType: string };
+  error?: string;
+}> {
+  const contentType = request.headers.get("content-type") || "";
+
+  if (contentType.includes("multipart/form-data")) {
+    const form = await request.formData();
+    const fields: EnquiryFields = {
+      type: String(form.get("type") ?? ""),
+      location: String(form.get("location") ?? ""),
+      date: String(form.get("date") ?? ""),
+      guests: String(form.get("guests") ?? ""),
+      budget: String(form.get("budget") ?? ""),
+      vision: String(form.get("vision") ?? ""),
+      name: String(form.get("name") ?? ""),
+      email: String(form.get("email") ?? ""),
+      phone: String(form.get("phone") ?? ""),
+      mode: String(form.get("mode") ?? ""),
+      company: String(form.get("company") ?? ""),
+    };
+
+    const file = form.get("attachment");
+    if (file && typeof file !== "string" && file.size > 0) {
+      if (file.size > MAX_ATTACHMENT_BYTES) {
+        return { fields, error: "Attachment must be under 8MB." };
+      }
+      const type = file.type || "application/octet-stream";
+      if (!ALLOWED_TYPES.has(type)) {
+        return {
+          fields,
+          error: "Attach a PDF or image (JPG, PNG, WebP).",
+        };
+      }
+      const buffer = Buffer.from(await file.arrayBuffer());
+      return {
+        fields,
+        attachment: {
+          filename: file.name || "attachment",
+          content: buffer,
+          contentType: type,
+        },
+      };
+    }
+
+    return { fields };
+  }
+
+  try {
+    const json = (await request.json()) as EnquiryFields;
+    return { fields: json };
+  } catch {
+    return { fields: {}, error: "Invalid request body" };
+  }
+}
+
 export async function POST(request: Request) {
   if (rateLimited(clientKey(request))) {
     return NextResponse.json(
@@ -62,12 +129,15 @@ export async function POST(request: Request) {
     );
   }
 
-  let body: EnquiryBody;
-  try {
-    body = (await request.json()) as EnquiryBody;
-  } catch {
-    return NextResponse.json({ ok: false, error: "Invalid JSON" }, { status: 400 });
+  const parsed = await parseBody(request);
+  if (parsed.error && !parsed.fields.name) {
+    return NextResponse.json({ ok: false, error: parsed.error }, { status: 400 });
   }
+  if (parsed.error) {
+    return NextResponse.json({ ok: false, error: parsed.error }, { status: 400 });
+  }
+
+  const body = parsed.fields;
 
   // Honeypot — bots fill hidden fields; accept silently
   if (clean(body.company, 80)) {
@@ -107,7 +177,11 @@ export async function POST(request: Request) {
     );
   }
 
-  const lines = enquireBriefText(payload);
+  const lines =
+    enquireBriefText(payload) +
+    (parsed.attachment
+      ? `\nAttachment: ${parsed.attachment.filename}`
+      : "");
   const apiKey = process.env.RESEND_API_KEY;
   let emailed = false;
 
@@ -125,11 +199,19 @@ export async function POST(request: Request) {
         subject: `Marit enquiry — ${payload.type || "Event"} — ${payload.name}`,
         text: lines,
         html: enquireNotifyHtml(payload),
+        attachments: parsed.attachment
+          ? [
+              {
+                filename: parsed.attachment.filename,
+                content: parsed.attachment.content,
+                contentType: parsed.attachment.contentType,
+              },
+            ]
+          : undefined,
       });
 
       if (error) {
         console.error("[enquire] Resend error", error);
-        // Soft-fail: client can still hand off via WhatsApp/email
         return NextResponse.json({
           ok: true,
           emailed: false,
@@ -138,7 +220,6 @@ export async function POST(request: Request) {
       }
       emailed = true;
 
-      // Client confirmation — never block the enquiry if this fails
       try {
         const auto = await resend.emails.send({
           from,
@@ -167,6 +248,7 @@ export async function POST(request: Request) {
       type: payload.type,
       name: payload.name,
       email: payload.email,
+      hasAttachment: Boolean(parsed.attachment),
     });
   }
 

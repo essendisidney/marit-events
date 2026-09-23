@@ -15,6 +15,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/destination",
     "/destination/from-abroad",
     "/consultation",
+    "/downloads",
     "/story",
     "/journal",
     "/enquire",
