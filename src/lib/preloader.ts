@@ -28,7 +28,7 @@ export function usePreloaderReady() {
     const onDone = () => setReady(true);
     window.addEventListener(PRELOADER_DONE_EVENT, onDone);
     // Safety if preloader skipped without signalling
-    const fallback = window.setTimeout(() => setReady(true), 4500);
+    const fallback = window.setTimeout(() => setReady(true), 7000);
     return () => {
       window.removeEventListener(PRELOADER_DONE_EVENT, onDone);
       window.clearTimeout(fallback);

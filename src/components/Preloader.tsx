@@ -11,15 +11,17 @@ import {
 
 const SESSION_KEY = PRELOADER_SESSION_KEY;
 
-/** Once per session — progress eases to 100, then curtains part. */
-const HOLD_MS = 1800;
-const EXIT_MS = 700;
+const EASE = [0.22, 1, 0.36, 1] as const;
+/** Rings settle, then the doors ease open onto the hero. */
+const HOLD_MS = 2400;
+const EXIT_MS = 1400;
+/** Let the photograph show through before the hero type arrives. */
+const REVEAL_PAGE_MS = 420;
 
 export function Preloader() {
   const reduce = useReducedMotion();
   const [show, setShow] = useState(false);
   const [exiting, setExiting] = useState(false);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     if (reduce) {
@@ -37,34 +39,24 @@ export function Preloader() {
     }
 
     setShow(true);
-    const start = performance.now();
-    let raf = 0;
-    let exitTimer = 0;
-
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / HOLD_MS);
-      const eased = 1 - Math.pow(1 - t, 2.4);
-      setProgress(Math.round(eased * 100));
-      if (t < 1) {
-        raf = requestAnimationFrame(tick);
-      } else {
-        setExiting(true);
-        try {
-          sessionStorage.setItem(SESSION_KEY, "1");
-        } catch {
-          /* ignore */
-        }
-        exitTimer = window.setTimeout(() => {
-          setShow(false);
-          signalPreloaderDone();
-        }, EXIT_MS);
+    const exitTimer = window.setTimeout(() => {
+      setExiting(true);
+      try {
+        sessionStorage.setItem(SESSION_KEY, "1");
+      } catch {
+        /* ignore */
       }
-    };
+    }, HOLD_MS);
+    const revealTimer = window.setTimeout(
+      () => signalPreloaderDone(),
+      HOLD_MS + REVEAL_PAGE_MS
+    );
+    const hideTimer = window.setTimeout(() => setShow(false), HOLD_MS + EXIT_MS);
 
-    raf = requestAnimationFrame(tick);
     return () => {
-      cancelAnimationFrame(raf);
       window.clearTimeout(exitTimer);
+      window.clearTimeout(revealTimer);
+      window.clearTimeout(hideTimer);
     };
   }, [reduce]);
 
@@ -81,109 +73,141 @@ export function Preloader() {
     <AnimatePresence>
       {show ? (
         <motion.div
-          className="fixed inset-0 z-[200] overflow-hidden"
+          className={`fixed inset-0 z-[200] overflow-hidden ${exiting ? "pointer-events-none" : ""}`}
           initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.35 }}
-          aria-hidden
+          exit={{ opacity: 1 }}
+          transition={{ duration: 0.01 }}
+          role="status"
+          aria-live="polite"
+          aria-label="Opening Marit Events"
         >
-          <div
-            className="pointer-events-none absolute inset-0"
-            style={{
-              background:
-                "radial-gradient(ellipse 70% 50% at 50% 42%, rgba(201,169,110,0.14), transparent 68%)",
-            }}
+          <motion.div
+            className="absolute inset-y-0 left-0 z-0 w-1/2 bg-obsidian will-change-transform"
+            initial={{ x: 0 }}
+            animate={exiting ? { x: "-100%" } : { x: 0 }}
+            transition={{ duration: 1.25, ease: [0.76, 0, 0.24, 1], delay: exiting ? 0.12 : 0 }}
+          />
+          <motion.div
+            className="absolute inset-y-0 right-0 z-0 w-1/2 bg-obsidian will-change-transform"
+            initial={{ x: 0 }}
+            animate={exiting ? { x: "100%" } : { x: 0 }}
+            transition={{ duration: 1.25, ease: [0.76, 0, 0.24, 1], delay: exiting ? 0.12 : 0 }}
           />
 
-          {/* Curtain panels */}
           <motion.div
-            className="absolute inset-x-0 top-0 z-0 h-[52%] bg-obsidian"
-            initial={{ y: 0 }}
-            animate={exiting ? { y: "-110%" } : { y: 0 }}
-            transition={{ duration: 0.85, ease: [0.76, 0, 0.24, 1] }}
-          />
-          <motion.div
-            className="absolute inset-x-0 bottom-0 z-0 h-[52%] bg-obsidian"
-            initial={{ y: 0 }}
-            animate={exiting ? { y: "110%" } : { y: 0 }}
-            transition={{ duration: 0.85, ease: [0.76, 0, 0.24, 1] }}
-          />
-
-          {/* Gold seam */}
-          <motion.div
-            className="absolute inset-x-0 top-1/2 z-20 h-px -translate-y-1/2 bg-champagne"
-            initial={{ scaleX: 0, opacity: 0 }}
+            className="absolute inset-y-[18%] left-1/2 z-20 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-champagne/80 to-transparent"
+            initial={{ scaleY: 0, opacity: 0 }}
             animate={
               exiting
-                ? {
-                    scaleX: [0, 1, 1],
-                    opacity: [0, 1, 0],
-                    transition: { duration: 0.75, times: [0, 0.3, 1] },
-                  }
-                : { scaleX: 0, opacity: 0 }
+                ? { scaleY: 1, opacity: [0, 0.9, 0] }
+                : { scaleY: 0.35, opacity: 0.35 }
             }
+            transition={{ duration: exiting ? 1.05 : 1.4, ease: EASE }}
           />
 
           <motion.div
             className="relative z-10 flex h-full flex-col items-center justify-center px-6"
+            initial={{ opacity: 0 }}
             animate={
               exiting
-                ? { opacity: 0, scale: 1.03, filter: "blur(6px)" }
-                : { opacity: 1, scale: 1, filter: "blur(0px)" }
+                ? { opacity: 0, y: -18 }
+                : { opacity: 1, y: 0 }
             }
-            transition={{ duration: 0.45 }}
+            transition={{ duration: exiting ? 0.55 : 0.8, ease: EASE }}
           >
+            <div className="relative mb-7 h-16 w-36">
+              <Ring side="left" />
+              <Ring side="right" />
+              <motion.span
+                className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-champagne"
+                initial={{ opacity: 0, scale: 0.4 }}
+                animate={exiting ? { opacity: 0, scale: 1 } : { opacity: 1, scale: 1 }}
+                transition={{ delay: exiting ? 0 : 1.05, duration: 0.7, ease: EASE }}
+              />
+            </div>
+
             <motion.div
-              initial={{ opacity: 0, scale: 0.94, filter: "blur(8px)" }}
-              animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ opacity: 0, y: 12 }}
+              animate={exiting ? { opacity: 0, y: -8 } : { opacity: 1, y: 0 }}
+              transition={{ delay: exiting ? 0 : 0.72, duration: 0.9, ease: EASE }}
               className="flex flex-col items-center"
             >
-              {/* Monogram mark, not the full lockup — the wordmark/tagline
-                  baked into the full logo image is illegible at this size,
-                  so the brand name below is live text instead. */}
               <Image
                 src={siteConfig.mark}
                 alt=""
                 width={172}
                 height={100}
                 priority
-                className="h-14 w-auto object-contain md:h-16"
+                className="h-12 w-auto object-contain md:h-14"
               />
-              <p className="mt-5 font-display text-xl uppercase tracking-[0.2em] text-ivory md:text-2xl">
+              <p className="mt-4 font-display text-xl uppercase tracking-[0.22em] text-ivory md:text-2xl">
                 {siteConfig.name}
               </p>
             </motion.div>
 
             <motion.p
-              className="mt-8 max-w-sm text-center text-[10px] uppercase tracking-[0.28em] text-taupe md:tracking-[0.34em]"
+              className="mt-5 font-display text-lg italic text-champagne md:text-xl"
               initial={{ opacity: 0, y: 8 }}
-              animate={{
-                opacity: progress > 28 ? 1 : 0,
-                y: progress > 28 ? 0 : 8,
-              }}
-              transition={{ duration: 0.55 }}
+              animate={exiting ? { opacity: 0 } : { opacity: 1, y: 0 }}
+              transition={{ delay: exiting ? 0 : 1.15, duration: 0.8, ease: EASE }}
             >
-              {siteConfig.slogan}
+              Two rings. One moment.
             </motion.p>
 
-            <div className="mt-12 w-48 md:w-56">
-              <div className="flex items-end justify-between text-[10px] uppercase tracking-[0.24em] text-taupe/70">
-                <span>Loading</span>
-                <span className="tabular-nums text-champagne">
-                  {String(progress).padStart(2, "0")}
-                </span>
-              </div>
-              <div className="mt-3 h-px overflow-hidden bg-white/10">
-                <div
-                  className="h-full origin-left bg-gradient-to-r from-champagne/40 via-champagne to-champagne-soft transition-[width] duration-75"
-                  style={{ width: `${progress}%` }}
-                />
-              </div>
+            <div className="mt-10 h-px w-40 overflow-hidden bg-white/10 md:w-48">
+              <motion.div
+                className="h-full origin-left bg-gradient-to-r from-transparent via-champagne to-champagne-soft"
+                initial={{ scaleX: 0 }}
+                animate={{ scaleX: exiting ? 1 : 1 }}
+                transition={{ duration: 2.15, ease: EASE, delay: 0.35 }}
+              />
             </div>
           </motion.div>
         </motion.div>
       ) : null}
     </AnimatePresence>
+  );
+}
+
+function Ring({ side }: { side: "left" | "right" }) {
+  const from = side === "left" ? -28 : 28;
+  const to = side === "left" ? 14 : -14;
+
+  return (
+    <motion.svg
+      width="72"
+      height="72"
+      viewBox="0 0 72 72"
+      className="absolute top-0"
+      style={{ left: side === "left" ? 0 : undefined, right: side === "right" ? 0 : undefined }}
+      aria-hidden
+      initial={{ x: from, opacity: 0 }}
+      animate={{ x: to, opacity: 1 }}
+      transition={{ duration: 1.55, ease: EASE }}
+    >
+      <motion.circle
+        cx="36"
+        cy="36"
+        r="20"
+        fill="none"
+        stroke="#C9A96E"
+        strokeWidth="1.1"
+        strokeLinecap="round"
+        initial={{ pathLength: 0, opacity: 0.2 }}
+        animate={{ pathLength: 1, opacity: 1 }}
+        transition={{ duration: 1.35, ease: EASE }}
+      />
+      <motion.circle
+        cx="36"
+        cy="36"
+        r="24"
+        fill="none"
+        stroke="rgba(212,188,138,0.4)"
+        strokeWidth="0.6"
+        initial={{ pathLength: 0 }}
+        animate={{ pathLength: 1 }}
+        transition={{ duration: 1.5, delay: 0.18, ease: EASE }}
+      />
+    </motion.svg>
   );
 }

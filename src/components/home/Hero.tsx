@@ -50,7 +50,7 @@ export function Hero() {
           <motion.div
             initial={enter ? { opacity: 0, y: 18 } : false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 1, delay: 0.05, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.15, delay: 0.12, ease: [0.22, 1, 0.36, 1] }}
           >
             <Logo size="hero" href={null} priority />
           </motion.div>
@@ -58,7 +58,7 @@ export function Hero() {
           <motion.h1
             initial={enter ? { opacity: 0, y: 14 } : false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.9, delay: 0.25, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 1.05, delay: 0.32, ease: [0.22, 1, 0.36, 1] }}
             className="mt-8 max-w-xl font-display text-[clamp(1.5rem,3.2vw,2.35rem)] leading-snug text-ivory/92"
           >
             Where extraordinary celebrations come to life.
@@ -67,7 +67,7 @@ export function Hero() {
           <motion.div
             initial={enter ? { opacity: 0, y: 10 } : false}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.45 }}
+            transition={{ duration: 0.95, delay: 0.5, ease: [0.22, 1, 0.36, 1] }}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
             <Link
