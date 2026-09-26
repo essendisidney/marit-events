@@ -1,0 +1,2 @@
+/** Runs during HTML parse so the first frame is the intro, not the page. */
+export const INTRO_BOOT_SCRIPT = `(function(){try{var seen=sessionStorage.getItem("marit-preloader-seen");if(seen){document.documentElement.classList.remove("marit-intro")}else{setTimeout(function(){document.documentElement.classList.remove("marit-intro")},12000)}}catch(e){document.documentElement.classList.remove("marit-intro")}})();`;

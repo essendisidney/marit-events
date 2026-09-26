@@ -16,6 +16,21 @@
   --ease-editorial: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+/* First-paint veil for the wedding intro. Removed when the doors open. */
+html.marit-intro,
+html.marit-intro body {
+  overflow: hidden;
+  background: #0b0b0b;
+}
+
+html.marit-intro::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 180;
+  background: #0b0b0b;
+}
+
 @layer base {
   html {
     scroll-behavior: smooth;

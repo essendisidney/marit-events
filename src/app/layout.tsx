@@ -4,6 +4,7 @@ import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
 import { siteConfig } from "@/lib/site";
+import { INTRO_BOOT_SCRIPT } from "@/lib/intro-boot";
 import { SiteChrome } from "@/components/SiteChrome";
 import { JsonLd } from "@/components/JsonLd";
 
@@ -84,8 +85,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-KE" className={`${display.variable} ${sans.variable}`}>
+    <html lang="en-KE" className={`${display.variable} ${sans.variable} marit-intro`}>
       <body className="min-h-screen overflow-x-hidden">
+        <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT_SCRIPT }} />
         <JsonLd />
         <SiteChrome>{children}</SiteChrome>
         <Analytics />
