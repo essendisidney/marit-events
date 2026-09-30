@@ -10,17 +10,18 @@ import {
 } from "@/lib/preloader";
 
 /** Hold on the rings, then part the doors onto the hero. */
-const HOLD_MS = 2200;
-const EXIT_MS = 1400;
-const REVEAL_PAGE_MS = 360;
+const HOLD_MS = 1600;
+const EXIT_MS = 1100;
+const REVEAL_PAGE_MS = 300;
 
 function liftVeil() {
   document.documentElement.classList.remove("marit-intro");
 }
 
 /**
- * First visit of a tab: two rings meet, then the panels open onto the page.
- * Later navigations in the same tab skip it.
+ * First visit of a tab to the homepage: two rings meet, then the panels open
+ * onto the page. Deep links and later navigations skip it, so a guest arriving
+ * on /weddings from Instagram or Google sees content on the first frame.
  */
 export function Preloader() {
   const reduce = useReducedMotion();
@@ -38,7 +39,7 @@ export function Preloader() {
       seen = true;
     }
 
-    if (seen) {
+    if (seen || window.location.pathname !== "/") {
       liftVeil();
       signalPreloaderDone();
       setShow(false);

@@ -15,13 +15,29 @@ type EnquiryType = (typeof enquiryTypes)[number];
 type SubmitMode = "whatsapp" | "email";
 
 const guestChips = ["Under 50", "50–100", "100–200", "200+"] as const;
-const budgetChips = [
-  "To discuss",
-  "Under $5k",
-  "$5k–15k",
-  "$15k–40k",
-  "$40k+",
-] as const;
+/**
+ * Budget bands in the currency the host actually thinks in. The KES bands are
+ * rounded equivalents of the USD bands (not live FX) — they only need to be
+ * close enough to start a conversation.
+ */
+type BudgetCurrency = "KES" | "USD";
+const budgetBands: Record<BudgetCurrency, readonly string[]> = {
+  KES: ["Under KES 650k", "KES 650k–2M", "KES 2M–5M", "KES 5M+"],
+  USD: ["Under $5k", "$5k–15k", "$15k–40k", "$40k+"],
+};
+const BUDGET_OPEN = "To discuss";
+
+/** Kenya-based visitors see KES first; everyone else sees USD. */
+function defaultBudgetCurrency(): BudgetCurrency {
+  try {
+    const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const langs = navigator.languages ?? [navigator.language];
+    if (tz === "Africa/Nairobi" || langs.some((l) => /-KE$/i.test(l))) return "KES";
+  } catch {
+    /* fall through */
+  }
+  return "USD";
+}
 const locationChips = [...destinations.map((d) => d.name), "Remote / advice only"];
 
 function localDateMin() {
@@ -49,6 +65,17 @@ export function EnquiryForm() {
   const [mode, setMode] = useState<SubmitMode>("whatsapp");
   const [guests, setGuests] = useState("");
   const [budget, setBudget] = useState("");
+  const [currency, setCurrency] = useState<BudgetCurrency>("USD");
+
+  useEffect(() => {
+    setCurrency(defaultBudgetCurrency());
+  }, []);
+
+  function switchCurrency(next: BudgetCurrency) {
+    setCurrency(next);
+    // A band from the other currency no longer matches what's on screen.
+    setBudget((b) => (b === BUDGET_OPEN ? b : ""));
+  }
   const [location, setLocation] = useState(initialLocation);
   const [date, setDate] = useState("");
   const [availability, setAvailability] = useState<
@@ -503,18 +530,41 @@ export function EnquiryForm() {
         </div>
 
         <div>
-          <p
-            id="budget-label"
-            className="text-[11px] uppercase tracking-[0.18em] text-taupe/80"
-          >
-            Estimated budget
-          </p>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <p
+              id="budget-label"
+              className="text-[11px] uppercase tracking-[0.18em] text-taupe/80"
+            >
+              Estimated budget
+            </p>
+            <div
+              className="flex border border-white/15"
+              role="group"
+              aria-label="Budget currency"
+            >
+              {(["KES", "USD"] as const).map((c) => (
+                <button
+                  key={c}
+                  type="button"
+                  aria-pressed={currency === c}
+                  onClick={() => switchCurrency(c)}
+                  className={`min-h-6 px-3 py-1 text-[10px] uppercase tracking-[0.16em] transition ${
+                    currency === c
+                      ? "bg-champagne text-obsidian"
+                      : "text-taupe hover:text-ivory"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
+          </div>
           <div
             className="mt-3 flex flex-wrap gap-2"
             role="group"
             aria-labelledby="budget-label"
           >
-            {budgetChips.map((chip) => (
+            {[BUDGET_OPEN, ...budgetBands[currency]].map((chip) => (
               <button
                 key={chip}
                 type="button"
@@ -585,7 +635,7 @@ export function EnquiryForm() {
           label="WhatsApp / Phone"
           name="phone"
           required
-          placeholder="+254…"
+          placeholder="With country code, e.g. +254 7… or +44 7…"
           autoComplete="tel"
           inputMode="tel"
         />

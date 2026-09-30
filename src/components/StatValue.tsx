@@ -24,14 +24,12 @@ export function StatValue({ value }: { value: string }) {
     return () => observer.disconnect();
   }, []);
 
-  const [n, setN] = useState(0);
+  // Start at the real value so server HTML, crawlers and no-JS visitors see
+  // "2h", not "0h". The count-up only replays once the stat scrolls into view.
+  const [n, setN] = useState(target ?? 0);
 
   useEffect(() => {
-    if (!shown || target === null) return;
-    if (reduceMotion) {
-      setN(target);
-      return;
-    }
+    if (!shown || target === null || reduceMotion || target < 10) return;
     let frame = 0;
     const frames = 40;
     const id = window.setInterval(() => {
@@ -46,7 +44,7 @@ export function StatValue({ value }: { value: string }) {
     <p ref={ref} className="font-display text-5xl text-champagne md:text-6xl">
       {target !== null ? (
         <>
-          {shown ? n : 0}
+          {n}
           {suffix}
         </>
       ) : (

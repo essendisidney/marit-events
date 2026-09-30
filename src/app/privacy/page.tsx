@@ -10,26 +10,33 @@ export const metadata: Metadata = {
   alternates: { canonical: canonical("/privacy") },
 };
 
+/** Bump this when the policy text changes — never derive it from the clock. */
+const LAST_UPDATED = "30 September 2026";
+
 const sections = [
   {
+    title: "Who we are",
+    body: `${siteConfig.name} (Nairobi, Kenya) is responsible for the personal data you share through this website. Contact us at ${siteConfig.email} or ${siteConfig.phone} for anything on this page.`,
+  },
+  {
     title: "What we collect",
-    body: "When you enquire, we receive the details you choose to share — name, contact information, celebration type, location, date, guest count, budget band, vision notes and any optional file you attach (PDF or image). We also receive basic analytics about site visits (pages viewed, device type) via Vercel Analytics, without selling personal profiles.",
+    body: "When you enquire, we receive the details you choose to share — name, email, phone or WhatsApp number, celebration type, location, date, guest count, budget band, vision notes and any optional file you attach (PDF or image). We also receive anonymous, cookie-free visit statistics (pages viewed, device type, country) via Vercel Web Analytics. We do not use advertising cookies or tracking pixels.",
   },
   {
     title: "Why we use it",
-    body: "Enquiry details are used only to reply to you, understand your celebration and plan next steps. We do not sell your information or use it for unrelated marketing lists.",
+    body: "Enquiry details are used only to reply to you, understand your celebration and plan next steps with you — the lawful basis is your consent and taking steps toward a contract at your request. We do not sell your information or add you to marketing lists.",
   },
   {
-    title: "How we store it",
-    body: `Messages reach us by email (${siteConfig.email}) and/or WhatsApp (${siteConfig.phone}). They are kept in the tools we already use to run Marit Events — not on a separate marketing database.`,
+    title: "Who processes it for us",
+    body: "Our website is hosted by Vercel; enquiry emails are delivered by Resend; date checks, where enabled, read our Google Calendar. These providers may process data outside Kenya, including in the United States, under their own security and data-protection commitments. Messages you send us by WhatsApp are handled by WhatsApp under its terms.",
   },
   {
     title: "How long we keep it",
-    body: "We keep enquiry conversations for as long as we need them to serve you and our business records, then delete or archive them in the ordinary course of work.",
+    body: "We keep enquiry conversations while we are discussing or delivering your event, and for as long as our business and tax records require afterwards. Enquiries that do not proceed are deleted or archived within 24 months.",
   },
   {
-    title: "Your choices",
-    body: `Email or WhatsApp us anytime to ask what we hold, correct something, or request deletion of an enquiry that is no longer needed. We'll respond within a few business days.`,
+    title: "Your rights",
+    body: "Under Kenya's Data Protection Act, 2019 — and the EU and UK GDPR where they apply to you — you can ask what we hold about you, have it corrected or deleted, object to its use, or withdraw consent at any time. Email or WhatsApp us and we will respond within 14 days. If you are unhappy with our response, you can complain to Kenya's Office of the Data Protection Commissioner (odpc.go.ke) or your local data-protection authority.",
   },
 ];
 
@@ -81,7 +88,7 @@ export default function PrivacyPage() {
               </Link>
             </p>
             <p className="mt-6 text-xs tracking-[0.12em] text-taupe/60">
-              Last updated {new Date().getFullYear()}
+              Last updated {LAST_UPDATED}
             </p>
           </Reveal>
         </div>

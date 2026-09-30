@@ -147,7 +147,7 @@ export function Testimonials() {
           Begin your enquiry
           <span aria-hidden>→</span>
         </Link>
-        <div className="mt-10 flex items-center justify-center gap-2">
+        <div className="mt-10 flex items-center justify-center gap-1">
           {testimonials.map((_, i) => (
             <button
               key={i}
@@ -155,12 +155,18 @@ export function Testimonials() {
               aria-label={`Show testimonial ${i + 1}`}
               aria-current={i === active}
               onClick={() => setActive(i)}
-              className={`h-1.5 transition-all ${
-                i === active
-                  ? "w-8 bg-champagne"
-                  : "w-3 bg-white/25 hover:bg-white/40"
-              }`}
-            />
+              className="group flex h-6 min-w-6 items-center justify-center px-1"
+            >
+              {/* Slim visual bar inside a 24px hit area (WCAG 2.2 target size). */}
+              <span
+                aria-hidden
+                className={`block h-1.5 transition-all ${
+                  i === active
+                    ? "w-8 bg-champagne"
+                    : "w-3 bg-white/25 group-hover:bg-white/40"
+                }`}
+              />
+            </button>
           ))}
         </div>
       </div>

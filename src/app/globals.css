@@ -34,6 +34,8 @@ html.marit-intro::before {
 @layer base {
   html {
     scroll-behavior: smooth;
+    /* Reserve the scrollbar lane so lifting the intro veil never reflows the page. */
+    scrollbar-gutter: stable;
   }
 
   @media (prefers-reduced-motion: reduce) {

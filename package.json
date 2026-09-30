@@ -27,5 +27,13 @@
     "eslint-config-next": "^15.2.0",
     "tailwindcss": "^4.0.9",
     "typescript": "5.8.2"
-  }
+  },
+  "browserslist": [
+    "chrome >= 109",
+    "edge >= 109",
+    "firefox >= 115",
+    "safari >= 15.4",
+    "ios_saf >= 15.4",
+    "samsung >= 21"
+  ]
 }

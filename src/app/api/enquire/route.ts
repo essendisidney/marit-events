@@ -170,6 +170,22 @@ export async function POST(request: Request) {
     );
   }
 
+  // Pragmatic check: one @, a dotted domain, no spaces. Catches the typos
+  // that would otherwise leave Rose with no way to reply.
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(payload.email)) {
+    return NextResponse.json(
+      { ok: false, error: "Please check your email address." },
+      { status: 400 }
+    );
+  }
+
+  if (payload.phone.replace(/[^\d]/g, "").length < 7) {
+    return NextResponse.json(
+      { ok: false, error: "Please include a phone or WhatsApp number with country code." },
+      { status: 400 }
+    );
+  }
+
   if (!payload.guests && !payload.budget) {
     return NextResponse.json(
       { ok: false, error: "Please select guests or budget" },

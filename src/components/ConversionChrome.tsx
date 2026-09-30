@@ -19,7 +19,7 @@ export function WhatsAppFloat() {
       href={whatsappUrl(whatsappMessageForPath(pathname))}
       target="_blank"
       rel="noreferrer"
-      aria-label="Chat with Marit Events on WhatsApp"
+      aria-label="Let's talk — chat with Marit Events on WhatsApp"
       onClick={() => trackWhatsAppClick({ path: pathname })}
       className="fixed bottom-8 right-6 z-40 hidden items-center gap-2 border border-champagne/40 bg-obsidian/85 px-4 py-2.5 text-[11px] uppercase tracking-[0.18em] text-champagne shadow-[0_12px_40px_rgba(0,0,0,0.35)] backdrop-blur-md transition duration-300 hover:border-champagne hover:bg-champagne hover:text-obsidian md:flex"
     >
@@ -63,7 +63,7 @@ export function MobileStickyBar() {
         href={whatsappUrl(whatsappMessageForPath(pathname))}
         target="_blank"
         rel="noreferrer"
-        aria-label="Chat with Marit Events on WhatsApp"
+        aria-label="WhatsApp — chat with Marit Events"
         onClick={() => trackWhatsAppClick({ path: pathname })}
         className="py-3.5 text-center text-[11px] uppercase tracking-[0.18em] text-ivory active:bg-white/5"
       >

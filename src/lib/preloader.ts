@@ -16,7 +16,10 @@ export function usePreloaderReady() {
 
   useEffect(() => {
     try {
-      if (sessionStorage.getItem(PRELOADER_SESSION_KEY)) {
+      if (
+        window.location.pathname !== "/" ||
+        sessionStorage.getItem(PRELOADER_SESSION_KEY)
+      ) {
         setReady(true);
         return;
       }
@@ -28,7 +31,7 @@ export function usePreloaderReady() {
     const onDone = () => setReady(true);
     window.addEventListener(PRELOADER_DONE_EVENT, onDone);
     // Safety if preloader skipped without signalling
-    const fallback = window.setTimeout(() => setReady(true), 7000);
+    const fallback = window.setTimeout(() => setReady(true), 3500);
     return () => {
       window.removeEventListener(PRELOADER_DONE_EVENT, onDone);
       window.clearTimeout(fallback);

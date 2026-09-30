@@ -21,10 +21,11 @@ const sizes = {
   },
   mark: { width: 172, height: 100, src: siteConfig.mark, className: "h-12 w-auto" },
   // Full lockup (arc + monogram + wordmark + tagline) — has room to breathe.
-  footer: { width: 180, height: 68, src: siteConfig.logo, className: "h-14 w-auto" },
+  // Declared at the lockup's true 985×669 ratio so srcset picks the right file.
+  footer: { width: 83, height: 56, src: siteConfig.logo, className: "h-14 w-auto" },
   hero: {
-    width: 280,
-    height: 106,
+    width: 165,
+    height: 112,
     src: siteConfig.logo,
     className: "h-16 w-auto md:h-24 lg:h-28",
   },

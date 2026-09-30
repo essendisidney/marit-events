@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, DM_Sans } from "next/font/google";
+import localFont from "next/font/local";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import "./globals.css";
@@ -8,18 +8,28 @@ import { INTRO_BOOT_SCRIPT } from "@/lib/intro-boot";
 import { SiteChrome } from "@/components/SiteChrome";
 import { JsonLd } from "@/components/JsonLd";
 
-const display = Cormorant_Garamond({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+// Self-hosted (SIL OFL) so builds never depend on reaching Google Fonts.
+const display = localFont({
+  src: [
+    { path: "../fonts/cormorant-garamond-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/cormorant-garamond-latin-400-italic.woff2", weight: "400", style: "italic" },
+    { path: "../fonts/cormorant-garamond-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "../fonts/cormorant-garamond-latin-600-normal.woff2", weight: "600", style: "normal" },
+  ],
   variable: "--font-cormorant",
   display: "swap",
+  fallback: ["Georgia", "serif"],
 });
 
-const sans = DM_Sans({
-  subsets: ["latin"],
-  weight: ["400", "500", "600"],
+const sans = localFont({
+  src: [
+    { path: "../fonts/dm-sans-latin-400-normal.woff2", weight: "400", style: "normal" },
+    { path: "../fonts/dm-sans-latin-500-normal.woff2", weight: "500", style: "normal" },
+    { path: "../fonts/dm-sans-latin-600-normal.woff2", weight: "600", style: "normal" },
+  ],
   variable: "--font-dm",
   display: "swap",
+  fallback: ["ui-sans-serif", "system-ui", "sans-serif"],
 });
 
 export const metadata: Metadata = {
@@ -85,7 +95,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en-KE" className={`${display.variable} ${sans.variable} marit-intro`}>
+    <html lang="en-KE" className={`${display.variable} ${sans.variable}`} suppressHydrationWarning>
       <body className="min-h-screen overflow-x-hidden">
         <script dangerouslySetInnerHTML={{ __html: INTRO_BOOT_SCRIPT }} />
         <JsonLd />

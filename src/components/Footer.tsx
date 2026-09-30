@@ -112,23 +112,23 @@ export function Footer() {
           </div>
         </div>
 
-        <p className="mt-16 text-xs tracking-[0.12em] text-taupe/60">
+        <p className="mt-16 text-xs tracking-[0.12em] text-taupe">
           © {new Date().getFullYear()} {siteConfig.name}
-          <span className="mx-2 text-taupe/30">·</span>
+          <span className="mx-2 text-taupe/50" aria-hidden>·</span>
           <Link
             href="/privacy"
             className="transition hover:text-champagne"
           >
             Privacy
           </Link>
-          <span className="mx-2 text-taupe/30">·</span>
+          <span className="mx-2 text-taupe/50" aria-hidden>·</span>
           <Link
             href="/downloads"
             className="transition hover:text-champagne"
           >
             Downloads
           </Link>
-          <span className="mx-2 text-taupe/30">·</span>
+          <span className="mx-2 text-taupe/50" aria-hidden>·</span>
           Digital solution by Pesara Limited
         </p>
       </div>
