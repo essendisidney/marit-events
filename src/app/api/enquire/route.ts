@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { Resend } from "resend";
 import { siteConfig } from "@/lib/site";
+import { checkFormToken } from "@/lib/form-token";
 import {
   enquireAutoReplyHtml,
   enquireAutoReplyText,
@@ -33,6 +34,7 @@ type EnquiryFields = {
   phone?: string;
   mode?: string;
   company?: string;
+  formToken?: string;
 };
 
 const rateMap = new Map<string, { count: number; reset: number }>();
@@ -85,6 +87,7 @@ async function parseBody(request: Request): Promise<{
       phone: String(form.get("phone") ?? ""),
       mode: String(form.get("mode") ?? ""),
       company: String(form.get("company") ?? ""),
+      formToken: String(form.get("formToken") ?? ""),
     };
 
     const file = form.get("attachment");
@@ -141,6 +144,21 @@ export async function POST(request: Request) {
 
   // Honeypot — bots fill hidden fields; accept silently
   if (clean(body.company, 80)) {
+    return NextResponse.json({ ok: true, emailed: false, brief: "" });
+  }
+
+  // Signed form token — scripts posting straight to this endpoint have none,
+  // and nobody completes the form in under three seconds. Accept silently so
+  // bots learn nothing. The real form never submits without a token.
+  const token = checkFormToken(clean(body.formToken, 200));
+  if (token.status === "expired") {
+    return NextResponse.json(
+      { ok: false, error: "This page has been open a long time — please refresh and send again." },
+      { status: 400 }
+    );
+  }
+  if (token.status !== "ok" && token.status !== "disabled") {
+    console.info("[enquire] dropped unverified submission", { reason: token.status });
     return NextResponse.json({ ok: true, emailed: false, brief: "" });
   }
 

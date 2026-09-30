@@ -27,6 +27,22 @@ const budgetBands: Record<BudgetCurrency, readonly string[]> = {
 };
 const BUDGET_OPEN = "To discuss";
 
+/** Signed anti-spam token from our own API; null if the server can't be reached. */
+async function fetchFormToken(): Promise<string | null> {
+  try {
+    const res = await fetch("/api/enquire/token", { cache: "no-store" });
+    if (!res.ok) return null;
+    const data = (await res.json()) as { token?: string | null };
+    // null token = verification disabled on this deployment (local dev)
+    return data.token ?? "";
+  } catch {
+    return null;
+  }
+}
+
+/** Mirrors the server's minimum age so a just-fetched token is never rejected. */
+const TOKEN_MIN_AGE_MS = 3_200;
+
 /** Kenya-based visitors see KES first; everyone else sees USD. */
 function defaultBudgetCurrency(): BudgetCurrency {
   try {
@@ -70,6 +86,30 @@ export function EnquiryForm() {
   useEffect(() => {
     setCurrency(defaultBudgetCurrency());
   }, []);
+
+  const formToken = useRef<{ value: string; at: number } | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchFormToken().then((value) => {
+      if (!cancelled && value !== null) formToken.current = { value, at: Date.now() };
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  /** Returns a token old enough to pass the server's speed check, or null. */
+  async function readyFormToken(): Promise<string | null> {
+    if (!formToken.current) {
+      const value = await fetchFormToken();
+      if (value === null) return null;
+      formToken.current = { value, at: Date.now() };
+    }
+    const wait = TOKEN_MIN_AGE_MS - (Date.now() - formToken.current.at);
+    if (wait > 0) await new Promise((r) => window.setTimeout(r, wait));
+    return formToken.current.value;
+  }
 
   function switchCurrency(next: BudgetCurrency) {
     setCurrency(next);
@@ -198,10 +238,14 @@ export function EnquiryForm() {
     let apiError = "";
 
     try {
+      const token = await readyFormToken();
+      if (token === null) throw new Error("no-form-token");
+
       const body = new FormData();
       Object.entries({ ...payload, mode }).forEach(([key, value]) => {
         body.set(key, value);
       });
+      if (token) body.set("formToken", token);
       if (attachment) body.set("attachment", attachment);
 
       const res = await fetch("/api/enquire", {
@@ -217,7 +261,10 @@ export function EnquiryForm() {
       if (data.brief) setBrief(data.brief);
       emailed = Boolean(data.emailed);
       ok = Boolean(data.ok) && res.ok;
-      if (!ok) apiError = data.error || "Something went wrong. Please try again.";
+      if (!ok) {
+        apiError = data.error || "Something went wrong. Please try again.";
+        formToken.current = null; // e.g. expired — the retry fetches a fresh one
+      }
       if (ok) setServerReceived(true);
     } catch {
       apiError =
