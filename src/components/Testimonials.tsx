@@ -129,7 +129,17 @@ export function Testimonials() {
           </motion.blockquote>
         </AnimatePresence>
         <p className="mt-8 text-sm tracking-[0.12em] text-taupe">
-          — {item.name}
+          — {item.client ? (
+            <span className="text-ivory">{item.client}</span>
+          ) : (
+            item.name
+          )}
+          {item.from ? (
+            <>
+              <span className="mx-2 text-champagne/60">·</span>
+              Celebrating from {item.from}
+            </>
+          ) : null}
           <span className="mx-2 text-champagne/60">·</span>
           {item.detail}
         </p>

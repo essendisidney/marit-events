@@ -11,13 +11,24 @@ export const siteConfig = {
     "Premium event experiences, beautifully orchestrated — weddings, destination celebrations and corporate events from Nairobi, Kenya.",
   location: "Nairobi, Kenya",
   locationLine: "Nairobi, Kenya · Creating experiences wherever your celebration takes us",
-  email: "maritevents@gmail.com",
+  /**
+   * Public contact address. Set NEXT_PUBLIC_CONTACT_EMAIL=hello@maritevents.com
+   * in Vercel once that mailbox receives mail; until then the Gmail inbox stays.
+   */
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "maritevents@gmail.com",
   phone: "+254115251888",
   whatsapp: "254115251888",
   instagram: "https://instagram.com/maritevents",
-  responseTime: "We'll reply within 2 hours max.",
+  responseTime: "We'll reply within 2 hours, 8am–8pm Nairobi time (EAT).",
   /** Short window for trust strip / FAQs */
   responseWindow: "2 hours max",
+  /** Hours the 2-hour reply promise covers, in Nairobi time (EAT, UTC+3, no DST). */
+  replyHours: { open: 8, close: 20, timeZone: "Africa/Nairobi", label: "EAT" },
+  /**
+   * Video-call booking page (Cal.com or Calendly), e.g. https://cal.com/maritevents/30min.
+   * When unset, the booking section falls back to WhatsApp so nothing breaks.
+   */
+  bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || "",
   /** Production URL — update when custom domain is connected */
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://maritevents.com",
   logo: "/marit-logo.png",
@@ -88,12 +99,16 @@ export const maritExperience = [
   },
 ] as const;
 
-/** Honest trust signals — swap in verified counts when available. */
+/**
+ * Honest trust signals — every one is true of how Marit works today. When Rose
+ * has verified counts (events delivered, years, client countries), swap them
+ * in here, e.g. { value: "120+", label: "Events Delivered" }.
+ */
 export const trustStats = [
-  { value: "2h", label: "Response Promise" },
-  { value: "Nairobi", label: "Based In" },
-  { value: "Kenya", label: "Destination Reach" },
-  { value: "Full", label: "Day Orchestration" },
+  { value: "2h", label: "Reply Promise · 8am–8pm EAT" },
+  { value: "5", label: "Kenya Regions · City, Coast, Wild" },
+  { value: "Free", label: "30-Minute Video Call" },
+  { value: "USD", label: "& KES Pricing · No Surprises" },
 ] as const;
 
 export const destinations = [
@@ -133,7 +148,22 @@ export const corporateTypes = [
   "Brand Activations",
 ] as const;
 
-export const testimonials = [
+/**
+ * Client words. `client` and `from` are optional: add them only with the
+ * client's permission (e.g. client: "Amina & James", from: "London, UK").
+ * Named testimonials are shown with the client's name and published as
+ * schema.org Reviews; unnamed ones fall back to the event title.
+ */
+export type Testimonial = {
+  quote: string;
+  name: string;
+  detail: string;
+  image: string;
+  client?: string;
+  from?: string;
+};
+
+export const testimonials: readonly Testimonial[] = [
   {
     quote:
       "Marit didn't just plan our wedding. They gave us the freedom to actually enjoy it.",
@@ -155,7 +185,7 @@ export const testimonials = [
     detail: "Corporate · Nairobi",
     image: images.celebrationGold,
   },
-] as const;
+];
 
 export const storyPillars = [
   {
@@ -339,7 +369,7 @@ export const abroadFaqs = [
   },
   {
     q: "How do we work together across time zones?",
-    a: "Email for long briefs, WhatsApp for quick decisions, and scheduled video calls for design milestones. We reply within 2 hours.",
+    a: "Email for long briefs, WhatsApp for quick decisions, and scheduled video calls for design milestones. We reply within 2 hours between 8am and 8pm Nairobi time (EAT, UTC+3) — that's 6am–6pm in London for most of the year, and 1am–1pm in New York. Messages sent overnight are answered first thing.",
   },
   {
     q: "What do you need from us in the first enquiry?",
@@ -359,6 +389,7 @@ export const primaryNav = [
 ] as const;
 
 export const moreNav = [
+  { href: "/packages", label: "Packages & Prices" },
   { href: "/consultation", label: "Consultation" },
   { href: "/downloads", label: "Downloads" },
   { href: "/portfolio", label: "Portfolio" },
@@ -476,6 +507,7 @@ export function enquireHrefForPath(pathname: string) {
   if (pathname.startsWith("/journal")) return "/enquire";
   if (pathname.startsWith("/experiences")) return "/enquire";
   if (pathname.startsWith("/story")) return "/enquire";
+  if (pathname.startsWith("/packages")) return "/enquire";
   return "/enquire";
 }
 
@@ -487,6 +519,7 @@ function enquiryTypeForJournalPath(
   const bySlug: Record<string, (typeof enquiryTypes)[number]> = {
     "destination-wedding-venues-kenya": "Destination Event",
     "planning-a-wedding-in-kenya-from-abroad": "Destination Event",
+    "how-to-legally-marry-in-kenya-as-a-foreigner": "Destination Event",
     "nairobi-wedding-venues": "Wedding",
     "luxury-wedding-planners-kenya": "Wedding",
   };

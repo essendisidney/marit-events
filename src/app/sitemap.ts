@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/corporate",
     "/destination",
     "/destination/from-abroad",
+    "/packages",
     "/consultation",
     "/downloads",
     "/story",
@@ -37,7 +38,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
 
   const journalRoutes = journalPosts.map((post) => ({
     url: `${base}/journal/${post.slug}`,
-    lastModified: new Date(post.date),
+    lastModified: new Date(post.updated ?? post.date),
     changeFrequency: "monthly" as const,
     priority: 0.5,
   }));
