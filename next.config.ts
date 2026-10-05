@@ -17,6 +17,8 @@ const csp = [
   "img-src 'self' data: blob:",
   "font-src 'self'",
   "connect-src 'self' https://vitals.vercel-insights.com https://va.vercel-scripts.com",
+  // Video-call booking embed (NEXT_PUBLIC_BOOKING_URL) — see components/BookCall.tsx.
+  "frame-src https://cal.com https://app.cal.com https://calendly.com",
   "frame-ancestors 'none'",
   "form-action 'self'",
   "base-uri 'self'",

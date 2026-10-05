@@ -50,7 +50,7 @@ export default async function JournalPostPage({ params }: Props) {
       ? post.image
       : `${siteConfig.url}${post.image}`,
     datePublished: post.date,
-    dateModified: post.date,
+    dateModified: post.updated ?? post.date,
     mainEntityOfPage: {
       "@type": "WebPage",
       "@id": canonical(`/journal/${post.slug}`),
@@ -98,13 +98,21 @@ export default async function JournalPostPage({ params }: Props) {
       </div>
 
       <div className="mx-auto max-w-3xl px-5 py-16 md:px-8 md:py-24">
-        {post.content.map((paragraph, i) => (
-          <Reveal key={i} delay={0.04 * i}>
-            <p className="mb-6 text-lg leading-relaxed text-ivory/85">
-              {paragraph}
-            </p>
-          </Reveal>
-        ))}
+        {post.content.map((block, i) =>
+          block.startsWith("## ") ? (
+            <Reveal key={i}>
+              <h2 className="mb-5 mt-14 font-display text-3xl text-ivory md:text-4xl">
+                {block.slice(3)}
+              </h2>
+            </Reveal>
+          ) : (
+            <Reveal key={i} delay={Math.min(0.04 * i, 0.2)}>
+              <p className="mb-6 text-lg leading-relaxed text-ivory/85">
+                {block}
+              </p>
+            </Reveal>
+          )
+        )}
         <Reveal className="mt-12 border-t border-white/10 pt-10">
           <TrackedLink
             href={enquireHref({ type: enquireType })}

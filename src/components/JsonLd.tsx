@@ -1,7 +1,16 @@
-import { siteConfig } from "@/lib/site";
+import { siteConfig, testimonials } from "@/lib/site";
 
 export function JsonLd() {
   const base = siteConfig.url.replace(/\/$/, "");
+  // Only real, named clients become schema.org Reviews — Google ignores (and
+  // can penalise) anonymous ones.
+  const reviews = testimonials
+    .filter((t) => t.client)
+    .map((t) => ({
+      "@type": "Review",
+      reviewBody: t.quote,
+      author: { "@type": "Person", name: t.client },
+    }));
   const logoUrl = `${base}${siteConfig.logo}`;
   const data = {
     "@context": "https://schema.org",
@@ -34,6 +43,7 @@ export function JsonLd() {
           { "@type": "Place", name: "East Africa" },
         ],
         slogan: siteConfig.slogan,
+        ...(reviews.length ? { review: reviews } : {}),
         priceRange: "$$$",
         sameAs: [siteConfig.instagram],
         founder: {
@@ -68,6 +78,7 @@ export function JsonLd() {
             ["Corporate events", "/corporate"],
             ["Private celebrations", "/experiences"],
             ["Event consultation", "/consultation"],
+            ["Packages & starting prices", "/packages"],
           ].map(([name, path]) => ({
             "@type": "Offer",
             itemOffered: { "@type": "Service", name, url: `${base}${path}` },

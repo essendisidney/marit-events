@@ -8,6 +8,7 @@ import { images } from "@/lib/images";
 import { Reveal, SectionHeading } from "@/components/ui";
 import { Faq } from "@/components/Faq";
 import { TrackedMailto, TrackedWhatsApp } from "@/components/TrackedLink";
+import { NairobiTime } from "@/components/NairobiTime";
 
 export const metadata: Metadata = {
   title: "Plan Your Event",
@@ -56,6 +57,7 @@ export default function EnquirePage() {
               Share the essentials. We&apos;ll respond with care — and clarity —
               within 2 hours max.
             </p>
+            <NairobiTime className="mt-4" />
             <ol className="mt-8 hidden space-y-3 text-sm text-taupe md:block">
               <li>
                 <span className="text-champagne">01</span> Tell us what

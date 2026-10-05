@@ -12,6 +12,7 @@ import { Reveal, SectionHeading } from "@/components/ui";
 import { PageCloser } from "@/components/PageCloser";
 import { Faq } from "@/components/Faq";
 import { TrackedLink } from "@/components/TrackedLink";
+import { BookCall } from "@/components/BookCall";
 
 const enquire = enquireHref({ type: "Destination Event" });
 
@@ -64,12 +65,18 @@ export default function PlanningFromAbroadPage() {
               >
                 Start your Kenya enquiry
               </TrackedLink>
-              <TrackedLink
-                href="/destination"
-                source="abroad_hero_destinations"
+              <a
+                href="#book-a-call"
                 className="border border-ivory/35 px-7 py-3.5 text-[11px] uppercase tracking-[0.2em] text-ivory transition hover:border-champagne hover:text-champagne"
               >
-                Explore destinations
+                Book a video call
+              </a>
+              <TrackedLink
+                href="/packages"
+                source="abroad_hero_packages"
+                className="px-2 py-3.5 text-[11px] uppercase tracking-[0.2em] text-ivory/80 transition hover:text-champagne"
+              >
+                See starting prices →
               </TrackedLink>
             </div>
             <p className="mt-6 text-sm text-ivory/65">
@@ -198,6 +205,8 @@ export default function PlanningFromAbroadPage() {
         </div>
       </section>
 
+      <BookCall />
+
       <Faq
         items={[...abroadFaqs]}
         title="Planning from abroad — answered"
@@ -208,8 +217,8 @@ export default function PlanningFromAbroadPage() {
         body="Share where you're flying from and what you're imagining. We'll reply within 2 hours with a clear next step."
         primaryHref={enquire}
         primaryLabel="Start your Kenya enquiry"
-        secondaryHref="/journal/planning-a-wedding-in-kenya-from-abroad"
-        secondaryLabel="Read the abroad guide"
+        secondaryHref="/journal/how-to-legally-marry-in-kenya-as-a-foreigner"
+        secondaryLabel="How to legally marry in Kenya"
       />
     </div>
   );
