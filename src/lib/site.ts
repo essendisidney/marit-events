@@ -11,7 +11,11 @@ export const siteConfig = {
     "Premium event experiences, beautifully orchestrated — weddings, destination celebrations and corporate events from Nairobi, Kenya.",
   location: "Nairobi, Kenya",
   locationLine: "Nairobi, Kenya · Creating experiences wherever your celebration takes us",
-  email: "maritevents@gmail.com",
+  /**
+   * Public contact address. Set NEXT_PUBLIC_CONTACT_EMAIL=hello@maritevents.com
+   * in Vercel once that mailbox receives mail; until then the Gmail inbox stays.
+   */
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "maritevents@gmail.com",
   phone: "+254115251888",
   whatsapp: "254115251888",
   instagram: "https://instagram.com/maritevents",
@@ -95,12 +99,16 @@ export const maritExperience = [
   },
 ] as const;
 
-/** Honest trust signals — swap in verified counts when available. */
+/**
+ * Honest trust signals — every one is true of how Marit works today. When Rose
+ * has verified counts (events delivered, years, client countries), swap them
+ * in here, e.g. { value: "120+", label: "Events Delivered" }.
+ */
 export const trustStats = [
-  { value: "2h", label: "Response Promise" },
-  { value: "Nairobi", label: "Based In" },
-  { value: "Kenya", label: "Destination Reach" },
-  { value: "Full", label: "Day Orchestration" },
+  { value: "2h", label: "Reply Promise · 8am–8pm EAT" },
+  { value: "5", label: "Kenya Regions · City, Coast, Wild" },
+  { value: "Free", label: "30-Minute Video Call" },
+  { value: "USD", label: "& KES Pricing · No Surprises" },
 ] as const;
 
 export const destinations = [
