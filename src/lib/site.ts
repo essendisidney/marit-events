@@ -520,6 +520,7 @@ function enquiryTypeForJournalPath(
     "destination-wedding-venues-kenya": "Destination Event",
     "planning-a-wedding-in-kenya-from-abroad": "Destination Event",
     "how-to-legally-marry-in-kenya-as-a-foreigner": "Destination Event",
+    "best-time-of-year-for-a-kenya-wedding": "Destination Event",
     "nairobi-wedding-venues": "Wedding",
     "luxury-wedding-planners-kenya": "Wedding",
   };
