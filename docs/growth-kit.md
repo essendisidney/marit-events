@@ -157,7 +157,7 @@ Each new guide goes in `src/lib/journal.ts` (use `"## "` for section headings).
 
 1. Kenya wedding cost breakdown (USD) — once real price data is confirmed
 2. ~~Best time of year for a Kenya wedding~~ — published (`/journal/best-time-of-year-for-a-kenya-wedding`)
-3. Diani vs Zanzibar vs Mauritius for a beach wedding
+3. ~~Diani vs Zanzibar vs Mauritius for a beach wedding~~ — published (`/journal/diani-vs-zanzibar-vs-mauritius-beach-wedding`)
 4. A Kenyan traditional ceremony (ruracio / koito / ngurario) for diaspora couples
 5. Guest travel guide: visas (eTA), flights and stays for a Kenya wedding
 6. Safari wedding in the Maasai Mara: what's possible and what it costs
