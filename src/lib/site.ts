@@ -522,6 +522,7 @@ function enquiryTypeForJournalPath(
     "how-to-legally-marry-in-kenya-as-a-foreigner": "Destination Event",
     "best-time-of-year-for-a-kenya-wedding": "Destination Event",
     "diani-vs-zanzibar-vs-mauritius-beach-wedding": "Destination Event",
+    "planning-a-kenyan-traditional-ceremony-from-abroad": "Wedding",
     "nairobi-wedding-venues": "Wedding",
     "luxury-wedding-planners-kenya": "Wedding",
   };
