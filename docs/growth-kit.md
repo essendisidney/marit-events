@@ -159,5 +159,5 @@ Each new guide goes in `src/lib/journal.ts` (use `"## "` for section headings).
 2. ~~Best time of year for a Kenya wedding~~ — published (`/journal/best-time-of-year-for-a-kenya-wedding`)
 3. ~~Diani vs Zanzibar vs Mauritius for a beach wedding~~ — published (`/journal/diani-vs-zanzibar-vs-mauritius-beach-wedding`)
 4. ~~A Kenyan traditional ceremony (ruracio / koito / ngurario) for diaspora couples~~ — published (`/journal/planning-a-kenyan-traditional-ceremony-from-abroad`); ask Rose / a family elder to review
-5. Guest travel guide: visas (eTA), flights and stays for a Kenya wedding
+5. ~~Guest travel guide: visas (eTA), flights and stays for a Kenya wedding~~ — published (`/journal/kenya-wedding-guest-travel-guide`)
 6. Safari wedding in the Maasai Mara: what's possible and what it costs
