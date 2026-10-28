@@ -523,6 +523,7 @@ function enquiryTypeForJournalPath(
     "best-time-of-year-for-a-kenya-wedding": "Destination Event",
     "diani-vs-zanzibar-vs-mauritius-beach-wedding": "Destination Event",
     "kenya-wedding-guest-travel-guide": "Destination Event",
+    "maasai-mara-safari-wedding-guide": "Destination Event",
     "planning-a-kenyan-traditional-ceremony-from-abroad": "Wedding",
     "nairobi-wedding-venues": "Wedding",
     "luxury-wedding-planners-kenya": "Wedding",
