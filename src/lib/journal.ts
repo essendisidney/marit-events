@@ -1,4 +1,9 @@
 import { images } from "@/lib/images";
+import { formatKES, formatUSD, packages } from "@/lib/packages";
+
+/** Prices in guides come from the packages list so they never disagree with /packages. */
+const safari = packages.find((p) => p.slug === "vows-and-safari")!;
+const destination = packages.find((p) => p.slug === "destination-wedding")!;
 
 export type JournalPost = {
   slug: string;
@@ -15,6 +20,45 @@ export type JournalPost = {
 };
 
 export const journalPosts: JournalPost[] = [
+  {
+    slug: "maasai-mara-safari-wedding-guide",
+    title: "A safari wedding in the Maasai Mara: what's possible and what it costs",
+    excerpt:
+      "Vows on the open plains, sundowners by the river and a hot-air balloon at dawn — how a Mara wedding works, where it can happen, and what shapes the budget.",
+    category: "Destination",
+    date: "2026-10-28",
+    updated: "2026-10-28",
+    readTime: "9 min",
+    image: images.maraBalloon,
+    content: [
+      "Few places on earth feel as cinematic as the Maasai Mara. Golden grass to the horizon, acacia trees in silhouette, elephants moving slowly in the distance, and a sky that turns every colour at sunset. For couples who want a wedding nobody will ever forget, it is hard to imagine a more extraordinary setting.",
+      "A safari wedding is also different from a city or beach celebration. Guest numbers, travel, park rules and the rhythm of camp life all shape what is possible. Here is how it works.",
+      "## The feel of a Mara wedding",
+      "Most Mara weddings are intimate. Safari camps and lodges are deliberately small, and many hold somewhere between a dozen and a few dozen guests. That intimacy is the magic: a ceremony on a ridge overlooking the plains, dinner under the stars around a long table, and a few days of game drives together that turn guests into lifelong friends.",
+      "Larger celebrations are possible by combining neighbouring camps or taking a lodge on exclusive use, but if you are imagining two hundred guests, a Nairobi or coast wedding followed by a smaller safari may suit you better.",
+      "## Reserve or conservancy?",
+      "The Maasai Mara National Reserve is the heart of the ecosystem and home to the famous river crossings of the Great Migration. Around it lie private conservancies, created in partnership with Maasai landowners, where visitor numbers are limited.",
+      "For weddings, conservancies often offer more freedom: fewer vehicles, more privacy, and activities such as walking safaris, bush breakfasts and night drives that are not allowed everywhere in the reserve. Many couples hold the ceremony at a conservancy camp and still visit the reserve for game drives. Each camp and conservancy has its own rules on ceremonies and set-up, so this is one of the first things we confirm.",
+      "## Moments that make it unforgettable",
+      "A dawn hot-air balloon flight over the plains, often followed by a champagne breakfast in the bush. A sundowner ceremony with the sun dropping behind the escarpment. A bush dinner lit by lanterns and firelight. Game drives between celebrations, so guests see lions, elephants and giraffes as part of the weekend. And, where the community welcomes it, a Maasai blessing, songs or beadwork that connect the day to the land and its people.",
+      "When Maasai culture is part of a celebration, it should be arranged respectfully and through community partnerships that pay fairly. We work with camps and conservancies that do this well.",
+      "## When to go",
+      "The dry seasons, roughly late June to October and January to March, are the most reliable. July to October usually brings the Great Migration, with dramatic river crossings often peaking in August and September, which is also when camps are busiest and rates are highest. April and May are the wettest months, and some camps close.",
+      "## Getting guests there",
+      "Most guests fly from Nairobi's Wilson Airport to one of the Mara's airstrips, a light-aircraft flight of roughly an hour. The drive from Nairobi takes most of a day. Light aircraft have strict luggage limits, often around 15 kg per person in soft bags, so guests usually leave extra luggage in Nairobi.",
+      "Plan for at least three nights in the Mara: one to arrive and settle, one for the wedding, and one to enjoy it all with nothing to organise.",
+      "## What shapes the cost",
+      "A safari wedding is priced very differently from a wedding at home, because guests are usually staying in full-board camps where meals and game drives are included. The main drivers are the number of guests and nights; the camp or lodge level; whether you take exclusive use; flights to and from the Mara; daily park or conservancy fees for every guest, which can be significant in peak season; and the celebration itself — ceremony set-up, décor, music, photography and special experiences such as balloon flights.",
+      "Many couples cover the ceremony, dinner and celebration, while guests pay for their own flights and accommodation. Others host everything. Either works; what matters is deciding early and telling guests clearly.",
+      "## Our starting point",
+      `Marit's Vows & Safari celebrations start from ${formatUSD(safari.fromUSD)} (about ${formatKES(safari.fromKES)}) for up to ${safari.guests.toLowerCase().replace(/^up to /, "")}, covering planning, design and orchestration of the celebration with a safari stay coordinated with your choice of lodge. For comparison, our Destination Wedding package on the coast starts from ${formatUSD(destination.fromUSD)}. Every proposal is tailored to your guest list, dates and camp, and we will show you clearly what is included and what guests pay for themselves.`,
+      "## Respecting the wild",
+      "Weddings in the Mara follow the rules of the place. No confetti, balloons or plastics that can harm wildlife. Drones are generally not permitted in parks and reserves without special authorisation. Ceremonies are timed around wildlife and park hours. These are not limitations so much as part of the experience: a celebration that leaves the land exactly as you found it.",
+      "## How Marit helps",
+      "We find the right camp or conservancy for your guest list and season, confirm what is permitted, coordinate flights and transfers, design a ceremony that belongs to the landscape, and orchestrate every moment from the first sundowner to the last game drive. If you want to start your celebration in Nairobi or finish on the coast, we plan the whole journey together.",
+      "Park fees, camp rates and rules change from season to season. Use this guide to plan, and we will confirm current details for your dates.",
+    ],
+  },
   {
     slug: "kenya-wedding-guest-travel-guide",
     title: "Guest travel guide for a Kenya wedding: visas, flights and stays",
