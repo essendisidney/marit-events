@@ -393,6 +393,7 @@ export const moreNav = [
   { href: "/consultation", label: "Consultation" },
   { href: "/downloads", label: "Downloads" },
   { href: "/portfolio", label: "Portfolio" },
+  { href: "/concepts", label: "Vision to Venue" },
   { href: "/story", label: "Our Story" },
   { href: "/journal", label: "Journal" },
 ] as const;
@@ -455,6 +456,8 @@ export function whatsappMessageForPath(pathname: string) {
     return "Hello Marit — I'd like to talk about a corporate event.";
   if (pathname.startsWith("/consultation"))
     return "Hello Marit — I'd like to book an event consultation (advice only, not full planning).";
+  if (pathname.startsWith("/concepts"))
+    return "Hello Marit — I have a vision for a celebration and would love you to design the concept.";
   if (pathname.startsWith("/portfolio/")) {
     const type = enquiryTypeForPortfolioPath(pathname);
     if (type === "Wedding")
@@ -508,6 +511,8 @@ export function enquireHrefForPath(pathname: string) {
   if (pathname.startsWith("/experiences")) return "/enquire";
   if (pathname.startsWith("/story")) return "/enquire";
   if (pathname.startsWith("/packages")) return "/enquire";
+  if (pathname.startsWith("/concepts"))
+    return enquireHref({ type: "Private Celebration" });
   return "/enquire";
 }
 
