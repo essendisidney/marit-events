@@ -36,8 +36,8 @@ export const concepts: Concept[] = [
     },
     board: {
       src: "/concepts/fifty-golden-years-board.webp",
-      width: 606,
-      height: 1027,
+      width: 600,
+      height: 810,
       alt: "Fifty Golden Years concept board showing the backdrop, seating, welcome sign, cake, print and colour palette",
     },
     elements: [
